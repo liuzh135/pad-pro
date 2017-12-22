@@ -5,14 +5,16 @@
  */
 
 import React from "react";
-import {Card, Col, Icon, Row,Timeline} from 'antd';
+import {Col, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import BreadcrumbCustom from '../BreadcrumbCustom';
-import EchartsViews from '../dashboard/EchartsViews';
-import EchartsProjects from '../dashboard/EchartsProjects';
 import {fetchData, receiveData} from '@/action';
-import b1 from '../../style/imgs/b1.jpg';
+import BaseTableData from "../data/BaseTableData";
+import ExtBaseicTable from "../tables/ExtBaseicTable";
+import Bacecomstyle from "../Bacecomstyle";
+import BaseEcharView from "../bar/BaseEcharView";
+import EcharCom from "../bar/EcharCom";
+import EcharBar from "../bar/EcharBar";
 
 class StatisticalAirData extends React.Component {
 
@@ -57,160 +59,61 @@ class StatisticalAirData extends React.Component {
     }
 
     render() {
+        let tableComs = new BaseTableData();
+        let echarCom = new EcharCom();
+        let echarCom1 = new EcharCom();
+
+        let datalist = [];
+        let datalist1 = [];
+        let xlist = ["1点", "2点", "3点", "4点", "5点", "6点", "7点", "8点", "9点", "10点",];
+
+        datalist.push(new EcharBar('PM2.5', 'line', 'circle', 4, [120, 300, 402, 180, 590, 620, 200, 190, 220, 500], '#35C9CB', 20));
+        datalist1.push(new EcharBar('PM2.5', 'bar', 'circle', 4, [100, 100, 202, 180, 590, 520, 300, 290, 220, 500], '#35C9CB', 20));
+
+        //刷新2次  解决echars 的宽度问题
+        let first = this.state.first || false;
+        let ecahrs = !first ? "" :
+            <BaseEcharView title="深圳过去24小时空气质量指数趋势" option={echarCom.option} xAxis={xlist} data={datalist}
+                           style={{ height: '310px', width: '100%', border: '#E9E9E9 solid 1px' }}/>;
+
+        let ecahrs1 = !first ? "" :
+            <BaseEcharView title="深圳过去21天空气质量指数趋势" option={echarCom1.option} xAxis={xlist} data={datalist1}
+                           style={{ height: '310px', width: '100%', border: '#E9E9E9 solid 1px' }}/>;
         return (
-            <div className="gutter-example button-demo">
-                <BreadcrumbCustom/>
+            <div className="gutter-example button-demo" style={{  backgroundColor:'#fff'}}>
 
                 <Row gutter={10}>
-                    <Col className="gutter-row" md={4}>
-                        <div className="gutter-box">
-                            <Card bordered={false}>
-                                <div className="clear y-center">
-                                    <div className="pull-left mr-m">
-                                        <Icon type="heart" className="text-2x text-danger"/>
-                                    </div>
-                                    <div className="clear">
-                                        <div className="text-muted">收藏</div>
-                                        <h2>301</h2>
-                                    </div>
+                    <Col className="gutter-row" md={24}
+                         style={{ paddingRight: '30px', borderBottom: '#E9E9E9 solid 1px' ,height:"400px"}}>
+                        <div className="gutter-box ">
+                            <div className="gutter-box" style={{ padding: '2px 15px' }}>
+                                <div className="text-title">
+                                    <span style={{ marginLeft: "15px" }}>采集点实时数据</span>
                                 </div>
-                            </Card>
-                        </div>
-                        <div className="gutter-box">
-                            <Card bordered={false}>
-                                <div className="clear y-center">
-                                    <div className="pull-left mr-m">
-                                        <Icon type="cloud" className="text-2x"/>
-                                    </div>
-                                    <div className="clear">
-                                        <div className="text-muted">云数据</div>
-                                        <h2>30122</h2>
-                                    </div>
-                                </div>
-                            </Card>
+                                <ExtBaseicTable {...tableComs.pmTabledata} />
+                            </div>
                         </div>
                     </Col>
-                    <Col className="gutter-row" md={4}>
-                        <div className="gutter-box">
-                            <Card bordered={false}>
-                                <div className="clear y-center">
-                                    <div className="pull-left mr-m">
-                                        <Icon type="camera" className="text-2x text-info"/>
-                                    </div>
-                                    <div className="clear">
-                                        <div className="text-muted">照片</div>
-                                        <h2>802</h2>
-                                    </div>
-                                </div>
-                            </Card>
-                        </div>
-                        <div className="gutter-box">
-                            <Card bordered={false}>
-                                <div className="clear y-center">
-                                    <div className="pull-left mr-m">
-                                        <Icon type="mail" className="text-2x text-success"/>
-                                    </div>
-                                    <div className="clear">
-                                        <div className="text-muted">邮件</div>
-                                        <h2>102</h2>
-                                    </div>
-                                </div>
-                            </Card>
+                    <Col className="gutter-row" md={24} style={{ paddingRight: '30px' }}>
+                        <div className="gutter-box" style={{ padding: '2px 15px' }}>
+                            <div className="text-title" style={{ paddingTop: '2px' }}>
+                                <span style={{ marginLeft: "15px" }}>空气质量趋势</span>
+                            </div>
+                            {ecahrs}
                         </div>
                     </Col>
-                    <Col className="gutter-row" md={16}>
-                        <div className="gutter-box">
-                            <Card bordered={false} className={'no-padding'}>
-                                <EchartsProjects/>
-                            </Card>
-                        </div>
-                    </Col>
-                    <Col className="gutter-row" md={8}>
-                        <div className="gutter-box">
-                            <Card bordered={false}>
-                                <div className="pb-m">
-                                    <h3>任务</h3>
-                                    <small>10个已经完成，2个待完成，1个正在进行中</small>
-                                </div>
-                                <a className="card-tool"><Icon type="sync"/></a>
-                                <Timeline>
-                                    <Timeline.Item color="green">新版本迭代会</Timeline.Item>
-                                    <Timeline.Item color="green">完成网站设计初版</Timeline.Item>
-                                    <Timeline.Item color="red">
-                                        <p>联调接口</p>
-                                        <p>功能验收</p>
-                                    </Timeline.Item>
-
-                                    <Timeline.Item color="#108ee9">
-                                        <p>登录功能设计</p>
-                                        <p>权限验证</p>
-                                        <p>页面排版</p>
-                                    </Timeline.Item>
-                                </Timeline>
-                            </Card>
-                        </div>
-                    </Col>
-                    <Col className="gutter-row" md={8}>
-                        <div className="gutter-box">
-                            <Card bordered={false}>
-                                <div className="pb-m">
-                                    <h3>消息栏</h3>
-                                </div>
-                                <a className="card-tool"><Icon type="sync"/></a>
-                                <ul className="list-group no-border">
-                                    <li className="list-group-item">
-                                        <a href="" className="pull-left w-40 mr-m">
-                                            <img src={b1} className="img-responsive img-circle" alt="test"/>
-                                        </a>
-                                        <div className="clear">
-                                            <a href="" className="block">鸣人</a>
-                                            <span className="text-muted">终于当上火影了！</span>
-                                        </div>
-                                    </li>
-                                    <li className="list-group-item">
-                                        <a href="" className="pull-left w-40 mr-m">
-                                            <img src={b1} className="img-responsive img-circle" alt="test"/>
-                                        </a>
-                                        <div className="clear">
-                                            <a href="" className="block">佐助</a>
-                                            <span className="text-muted">吊车尾~~</span>
-                                        </div>
-                                    </li>
-                                    <li className="list-group-item">
-                                        <a href="" className="pull-left w-40 mr-m">
-                                            <img src={b1} className="img-responsive img-circle" alt="test"/>
-                                        </a>
-                                        <div className="clear">
-                                            <a href="" className="block">小樱</a>
-                                            <span className="text-muted">佐助，你好帅！</span>
-                                        </div>
-                                    </li>
-                                    <li className="list-group-item">
-                                        <a href="" className="pull-left w-40 mr-m">
-                                            <img src={b1} className="img-responsive img-circle" alt="test"/>
-                                        </a>
-                                        <div className="clear">
-                                            <a href="" className="block">雏田</a>
-                                            <span className="text-muted">鸣人君。。。那个。。。我。。喜欢你..</span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </Card>
-                        </div>
-                    </Col>
-                    <Col className="gutter-row" md={8}>
-                        <div className="gutter-box">
-                            <Card bordered={false}>
-                                <div className="pb-m">
-                                    <h3>访问量统计</h3>
-                                    <small>最近7天用户访问量</small>
-                                </div>
-                                <a className="card-tool"><Icon type="sync"/></a>
-                                <EchartsViews/>
-                            </Card>
+                    <Col className="gutter-row" md={24} style={{ paddingRight: '30px' }}>
+                        <div className="gutter-box" style={{ padding: '2px 15px' }}>
+                            <div className="text-title" style={{ paddingTop: '2px' }}>
+                                <span style={{ marginLeft: "15px" }}>月空气质量</span>
+                            </div>
+                            {ecahrs1}
                         </div>
                     </Col>
                 </Row>
+                {
+                    Bacecomstyle
+                }
             </div>
         )
     }

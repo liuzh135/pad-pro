@@ -1,9 +1,10 @@
 /**
  * Created by hao.cheng on 2017/4/13.
  */
-import React, { Component } from 'react';
-import { Layout, Menu, Icon } from 'antd';
-import { Link } from 'react-router';
+import React, {Component} from 'react';
+import {Layout, Menu, Icon} from 'antd';
+import {Link} from 'react-router';
+
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -37,10 +38,11 @@ class BaseSideCustom extends Component {
     }
 
     setMenuOpen = props => {
-        const {path} = props;
+        const { path } = props;
         this.setState({
             // openKey: path.substr(0, path.lastIndexOf('/')),
-            openKey: ['/app/ui','/app/table'],
+            openKey: ['/app/airdata', '/app/device'],
+            openKey: ['/app/airdata', '/app/device'],
             selectedKey: path
         });
     };
@@ -65,7 +67,7 @@ class BaseSideCustom extends Component {
         console.log(v);
         this.setState({
             // openKey: v[v.length - 1],
-            openKey: ['/app/ui','/app/table'],
+            openKey: ['/app/airdata', '/app/device'],
             firstHide: false,
         })
     };
@@ -77,7 +79,7 @@ class BaseSideCustom extends Component {
         if (v != null) {
             for (var index in v) {
                 let menuitem = v[index];
-                let icon = menuitem.icon || "book" ;
+                let icon = menuitem.icon || "book";
 
                 if (menuitem.submenu != null) {
                     submenu = menuitem.submenu;
@@ -89,11 +91,12 @@ class BaseSideCustom extends Component {
                     }
                     this.menu.push(<SubMenu
                         key={menuitem.menu}
-                        title={<span><Icon type={icon} /><span className="nav-text">{menuitem.title}</span></span>}
+                        title={<span><Icon type={icon}/><span className="nav-text">{menuitem.title}</span></span>}
                     >{submenuView}</SubMenu>);
                 } else {
                     this.menu.push(<Menu.Item key={menuitem.menu}>
-                        <Link to={menuitem.menu}><Icon type={icon}/><span className="nav-text">{menuitem.title}</span></Link>
+                        <Link to={menuitem.menu}><Icon type={icon}/><span
+                            className="nav-text">{menuitem.title}</span></Link>
                     </Menu.Item>);
                 }
             }
@@ -102,16 +105,20 @@ class BaseSideCustom extends Component {
     };
 
     render() {
-        const {menus} = this.props;
+        const { menus } = this.props;
 
         console.log("openKey=" + this.state.openKey);
         let baseMenuView = this.createMenu(menus);
         return (
             <Sider
                 trigger={null}
-                breakpoint="lg"
+                breakpoint="xl"
+                width= {220}
                 collapsed={this.props.collapsed}
-                style={{overflowY: 'auto',background:"#ffffff"}}
+                style={{
+                    overflowY: 'auto',
+                    background: "#ffffff",
+                }}
             >
                 {/*<div className="logo"/>*/}
 

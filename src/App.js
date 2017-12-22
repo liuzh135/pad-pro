@@ -19,6 +19,10 @@ class App extends Component {
         const { receiveData } = this.props;
         const user = JSON.parse(localStorage.getItem('user'));
         user && receiveData(user, 'auth');
+        const { router } = this.props;
+        if (user == null) {
+            router.push('/');
+        }
         // receiveData({a: 213}, 'auth');
         // fetchData({funcName: 'admin', stateName: 'auth'});
         this.getClientWidth();
@@ -62,10 +66,10 @@ class App extends Component {
                 <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} user={auth.data || {}}
                               router={router} path={this.props.location.pathname}/>
 
-                <Layout style={{ height: "90%" }}>
+                <Layout style={{ height: "100%" }}>
                     {side_view}
                     <Layout>
-                        <Content style={{ margin: '0 10px', overflow: 'initial', height: '100%' }}>
+                        <Content style={{ margin: '0 10px', backgroundColor:'#fff', overflow: 'initial', height: '100%' }}>
                             {this.props.children}
                         </Content>
 
