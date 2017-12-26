@@ -73,7 +73,7 @@ class HeaderCustom extends Component {
                     onClick={this.props.toggle}
                 />
                 <Dropdown overlay={this.menu} trigger={['click']}>
-                    <a className="ant-dropdown-link" href="#" style={{color:"#fff",fontSize:'14px',padding:'5px',marginLeft:'15px'}}>
+                    <a className="ant-dropdown-link" href="#" style={{color:"#fff",fontSize:'14px',padding:'5px',marginLeft:'5px'}}>
                         平板采集方案 <Icon type="caret-down" style={{color:"#fff"}}/>
                     </a>
                 </Dropdown>
