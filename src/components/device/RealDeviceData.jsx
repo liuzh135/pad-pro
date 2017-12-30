@@ -96,13 +96,13 @@ class RealDeviceData extends React.Component {
                         paddingRight: '20px',
                         background: 'linear-gradient(to right bottom, #9326B7, #4C1DA6 80%, #3322A8)', width: '80%'
                     }}>
-                        <Col className="gutter-row " md={10}
+                        <Col className="gutter-row " md={6}
                              style={{ padding: '30px' }}>
                             <ProgressStyle className='progress_index' width={250} height={250} progress="0.59"
                                            proressValue="RH: 59%" value="59"/>
                         </Col>
-                        <Col className="gutter-row" md={14}
-                             style={{}}>
+                        <Col className="gutter-row" md={16}
+                             style={{float:'right'}}>
                             <div className='flex-center' style={{
                                 justifyContent: 'space-around', marginTop: '70px', marginBottom: '20px',
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '8px', borderRadius: '5px'

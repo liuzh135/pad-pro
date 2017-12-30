@@ -106,7 +106,7 @@ class StatisticalDeviceData extends React.Component {
                                             <RadioButton value="d">30天</RadioButton>
                                         </RadioGroup>
                                     </div>
-                                    <div>
+                                    <div className='pull-left'>
                                         <RangePicker style={{ margin: 5, marginLeft: 10 }}
                                                      defaultValue={[moment('2015/01/01', dateFormat), moment('2017/01/01', dateFormat)]}
                                                      format={dateFormat}/>

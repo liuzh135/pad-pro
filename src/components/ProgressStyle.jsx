@@ -35,23 +35,26 @@ export class ProgressStyle extends React.Component {
 
 
     render() {
-        const { proressValue, className,value } = this.props;
+        const { proressValue, className, value, height, width } = this.props;
         let percentage = this.getPrograssPercentage();
         let percentStyle = 'rotate(' + percentage + 'deg)';
         console.log(" =====> percentage :" + percentage);
         return (
-            <div className="row">
-                <div className={className + " flex-center point3"}>
-                    <div className="point2"
+            <div className="row" style={{}}>
+                <div className={className + " point3"} style={{ margin:'0 auto',width: width ,height: height }}>
+                    <div className="point2 contentY"
                          style={{ height: '100px', width: '100px', backgroundColor: "#9239B9", borderRadius: "100px" }}>
                     </div>
 
-                    <div className="point2 point4"
+                    <div className="point2 point4 contentY"
                          style={{
-                             height: '80px', width: '80px', margin: '0',
-                             transform: percentStyle, backgroundColor: "#9CDCE1"
+                             height: '80px',
+                             width: '80px',
+                             margin: '0',
+                             transform: 'transform: translateY(-50%) translateX(-50%) ' + percentStyle,
+                             backgroundColor: "#9CDCE1"
                          }}/>
-                    <div className="point2 text-center"
+                    <div className="point2 text-center contentY"
                          style={{
                              height: '90px',
                              width: '90px',

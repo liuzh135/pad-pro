@@ -3,16 +3,23 @@
  */
 import React from 'react';
 import {Form, Icon, Input, Button, Checkbox} from 'antd';
+import {Layout} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 
 const FormItem = Form.Item;
+const { Footer } = Layout;
 
 class Login extends React.Component {
     componentWillMount() {
         const { receiveData } = this.props;
         receiveData(null, 'auth');
+        const user = JSON.parse(localStorage.getItem('user'));
+        const { router } = this.props;
+        // if (user != null) {
+        //     router.push('/pageIndex/homepage');
+        // }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -48,49 +55,53 @@ class Login extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="login">
-                <div className="login-form">
-                    <div className="login-logo">
-                        <span>React Admin</span>
-                    </div>
-                    <Form onSubmit={this.handleSubmit} style={{ maxWidth: '300px' }}>
-                        <FormItem>
-                            {getFieldDecorator('userName', {
-                                rules: [{ required: true, message: '请输入用户名!' }],
-                            })(
-                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }}/>}
-                                       placeholder="管理员输入admin, 游客输入guest"/>
-                            )}
-                        </FormItem>
-                        <FormItem>
-                            {getFieldDecorator('password', {
-                                rules: [{ required: true, message: '请输入密码!' }],
-                            })(
-                                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }}/>} type="password"
-                                       placeholder="管理员输入admin, 游客输入guest"/>
-                            )}
-                        </FormItem>
-                        <FormItem>
-                            {getFieldDecorator('remember', {
-                                valuePropName: 'checked',
-                                initialValue: true,
-                            })(
-                                <Checkbox>记住我</Checkbox>
-                            )}
-                            <a className="login-form-forgot" href="" style={{ float: 'right' }}>忘记密码</a>
-                            <Button type="primary" htmlType="submit" className="login-form-button"
-                                    style={{ width: '100%' }}>
-                                登录
-                            </Button>
-                            或 <a href="">现在就去注册!</a>
-                            <p>
-                                <Icon type="github" onClick={this.gitHub}/>(第三方登录)
-                            </p>
-                        </FormItem>
-                    </Form>
-                </div>
-            </div>
+            <Layout className="login_layout">
+                <div className="wrap" style={{ height: '100%' }}>
+                    <div className="login">
+                        <div className="login-form">
+                            <div className="login-logo">
+                                <span>空气检测仪管理系统</span>
+                            </div>
 
+                            <Form onSubmit={this.handleSubmit} style={{ maxWidth: '400px' }}>
+                                <FormItem>
+                                    {getFieldDecorator('userName', {
+                                        rules: [{ required: true, message: '请输入用户名!' }],
+                                    })(
+                                        <Input prefix={<Icon type="user" style={{ fontSize: 13 }}/>}
+                                               placeholder="管理员输入admin, 游客输入guest"/>
+                                    )}
+                                </FormItem>
+                                <FormItem>
+                                    {getFieldDecorator('password', {
+                                        rules: [{ required: true, message: '请输入密码!' }],
+                                    })(
+                                        <Input prefix={<Icon type="lock" style={{ fontSize: 13 }}/>} type="password"
+                                               placeholder="管理员输入admin, 游客输入guest"/>
+                                    )}
+                                </FormItem>
+                                <FormItem>
+                                    {getFieldDecorator('remember', {
+                                        valuePropName: 'checked',
+                                        initialValue: true,
+                                    })(
+                                        <Checkbox>记住我</Checkbox>
+                                    )}
+                                    <a className="login-form-forgot" href="" style={{ float: 'right' }}>忘记密码</a>
+                                    <Button type="primary" htmlType="submit" className="login-form-button"
+                                            style={{ width: '100%' }}>
+                                        登录
+                                    </Button>
+                                </FormItem>
+                            </Form>
+                        </div>
+                    </div>
+                    <Footer style={{ height: 80, textAlign: 'center', color: '#fff', background: "transparent" }}>
+                        V1.0.0 ©2017 Created by wyzk
+                    </Footer>
+                </div>
+
+            </Layout>
         );
     }
 }

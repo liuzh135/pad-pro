@@ -73,20 +73,15 @@ class HeaderCustom extends Component {
                     onClick={this.props.toggle}
                 />
                 <Dropdown overlay={this.menu} trigger={['click']}>
-                    <a className="ant-dropdown-link" href="#" style={{color:"#fff",fontSize:'14px',padding:'5px',marginLeft:'5px'}}>
-                        平板采集方案 <Icon type="caret-down" style={{color:"#fff"}}/>
+                    <a className="ant-dropdown-link" href="#"
+                       style={{ color: "#fff", fontSize: '14px', padding: '5px', marginLeft: '5px' }}>
+                        平板采集方案 <Icon type="caret-down" style={{ color: "#fff" }}/>
                     </a>
                 </Dropdown>
                 <Menu
                     mode="horizontal"
                     style={{ lineHeight: '64px', float: 'right' }}
-                    onClick={this.menuClick}
-                >
-                    <Menu.Item key="1">
-                        <Badge count={25} overflowCount={10} style={{ marginLeft: 10 }}>
-                            <Icon type="notification"/>
-                        </Badge>
-                    </Menu.Item>
+                    onClick={this.menuClick}>
                     <SubMenu title={<span className="avatar"><img src={avater} alt="头像"/><i
                         className="on bottom b-white"/></span>}>
                         <MenuItemGroup title="用户中心">

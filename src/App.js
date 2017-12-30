@@ -40,9 +40,10 @@ class App extends Component {
         receiveData({ isMobile: clientWidth <= 992 }, 'responsive');
     };
     toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed,
-        });
+        //收起侧边栏先屏蔽
+        // this.setState({
+        //     collapsed: !this.state.collapsed,
+        // });
     };
 
     render() {

@@ -5,12 +5,12 @@
  */
 
 import React from "react";
-import {Card, Col, Row} from 'antd';
+import {Col, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
-import BreadcrumbCustom from '../BreadcrumbCustom';
 import EchartsEffectScatter from '../charts/EchartsEffectScatter';
+import Mqtt from 'mqtt';
 
 class RealDataAir extends React.Component {
 
@@ -26,7 +26,36 @@ class RealDataAir extends React.Component {
                 'statisDate': d.getFullYear() + "" + (d.getMonth() + 1) + "" + d.getDate(),//查询日期默认当天
                 'userType': 1,//
             }
-        }
+        };
+
+        // let clientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8);
+        // let options = {
+        //     keepalive: 10,
+        //     port: 8083,
+        //     host: '120.77.252.48',
+        //     protocol: 'mqtt',
+        //     clientId: clientId,
+        //     protocolId: 'MQTT',
+        //     protocolVersion: 4,
+        //     clean: true,
+        //     reconnectPeriod: 1000,
+        //     connectTimeout: 30 * 1000,
+        //     will: {
+        //         topic: 'WillMsg',
+        //         payload: 'Connection Closed abnormally..!',
+        //         qos: 0,
+        //         retain: false
+        //     },
+        //     username: 'admin',
+        //     password: 'public',
+        //     rejectUnauthorized: false
+        // };
+        //
+        // let client = Mqtt.connect(options);
+        // client.on('connect', function () {
+        //     client.subscribe('presence');
+        //     client.publish('presence', 'Hello mqtt')
+        // });
     }
 
     //调用action中的ajax方法，获取数据
@@ -47,6 +76,7 @@ class RealDataAir extends React.Component {
                 first: true
             });
         }
+
     }
 
     //获取网络数据 渲染UI

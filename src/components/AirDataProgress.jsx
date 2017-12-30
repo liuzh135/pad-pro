@@ -35,8 +35,8 @@ export class AirDataProgress extends React.Component {
                 <div style={{ margin: '3px 3px' }}>{pmValue != null ?
                     <span><span style={{ fontSize: '30px', color: color }}>{pmValue}</span><span
                         style={{ fontSize: '8px', marginLeft: '3px' }}>μg/m3</span></span> : ""}</div>
-                <div className={className + " flex-center point3"}>
-                    <div className="loader loader5 loader5-green duration-3s-after point2"
+                <div className={className + " point3"}>
+                    <div className="loader loader5 loader5-green duration-3s-after point2 contentY"
                          style={{ height: '90px', width: '90px', margin: '0' }}>
                         <div className="pointer"></div>
                     </div>

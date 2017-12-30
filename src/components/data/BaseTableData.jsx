@@ -254,7 +254,7 @@ class BaseTableData {
         data: this.device_data,
         bordered: true,
         pagination: { pageSize: 8 ,showQuickJumper:true},
-        style: { padding: '0 10px' }
+        style: { padding: '0 10px' ,clear:'both' }
     };
 
 
