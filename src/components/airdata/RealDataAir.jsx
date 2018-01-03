@@ -10,7 +10,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 import EchartsEffectScatter from '../charts/EchartsEffectScatter';
-import Mqtt from 'mqtt';
 
 class RealDataAir extends React.Component {
 
@@ -27,43 +26,12 @@ class RealDataAir extends React.Component {
                 'userType': 1,//
             }
         };
-
-        // let clientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8);
-        // let options = {
-        //     keepalive: 10,
-        //     port: 8083,
-        //     host: '120.77.252.48',
-        //     protocol: 'mqtt',
-        //     clientId: clientId,
-        //     protocolId: 'MQTT',
-        //     protocolVersion: 4,
-        //     clean: true,
-        //     reconnectPeriod: 1000,
-        //     connectTimeout: 30 * 1000,
-        //     will: {
-        //         topic: 'WillMsg',
-        //         payload: 'Connection Closed abnormally..!',
-        //         qos: 0,
-        //         retain: false
-        //     },
-        //     username: 'admin',
-        //     password: 'public',
-        //     rejectUnauthorized: false
-        // };
-        //
-        // let client = Mqtt.connect(options);
-        // client.on('connect', function () {
-        //     client.subscribe('presence');
-        //     client.publish('presence', 'Hello mqtt')
-        // });
     }
 
     //调用action中的ajax方法，获取数据
     componentWillMount() {
         const { receiveData } = this.props;
         receiveData(null, 'auth');
-        console.log("auth +++++" + JSON.stringify(this.props.auth));
-
         const { fetchData } = this.props;
         //调用 http请求 获取网络数据
         //fetchData({funcName: 'admin', stateName: 'auth'});
@@ -102,7 +70,7 @@ class RealDataAir extends React.Component {
 
 const mapStateToPorps = state => {
     const { auth } = state.httpData;
-    return { auth };
+    return {auth};
 };
 
 const mapDispatchToProps = dispatch => ({

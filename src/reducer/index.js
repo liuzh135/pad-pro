@@ -10,6 +10,10 @@ const handleData = (state = {isFetching: true, data: {}}, action) => {
             return {...state, isFetching: true};
         case type.RECEIVE_DATA:
             return {...state, isFetching: false, data: action.data};
+        case type.MQTT_DATA:
+            return {...state, mqdata: action.data};
+        case type.MQTT_CLIENT:
+            return {...state, client: action.data};
         default:
             return {...state};
     }
@@ -18,6 +22,8 @@ const httpData = (state = {}, action) => {
     switch (action.type) {
         case type.RECEIVE_DATA:
         case type.REQUEST_DATA:
+        case type.MQTT_DATA:
+        case type.MQTT_CLIENT:
             return {
                 ...state,
                 [action.category]: handleData(state[action.category], action)

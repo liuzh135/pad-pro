@@ -13,19 +13,21 @@ export default class BarStyleProgress extends React.Component {
         this.state = {}
     }
 
-    getProString(percent){
-        console.log("11111111 percent :" + percent)
-        return (percent);
+    getProString(percent) {
+        return (percent) * 1000;
     }
+
     render() {
         const { airName, prosName1, prosgress1, prosName2, prosgress2 } = this.props;
         return (
             <div className=" pd-2x">
                 <div><span style={{ fontSize: '20px', margin: '5px' }}>{airName}</span></div>
                 <div><span style={{ margin: '5px' }}>{prosName1}</span></div>
-                <Progress style={{ margin: '5px' }} percent={prosgress1} status="active" format={this.getProString}/>
+                <Progress style={{ margin: '5px' }} percent={parseInt(prosgress1)/1000} status="active"
+                          format={this.getProString}/>
                 <div><span style={{ margin: '5px' }}>{prosName2}</span></div>
-                <Progress style={{ margin: '5px' }} percent={prosgress2} status="active" format={this.getProString}/>
+                <Progress style={{ margin: '5px' }} percent={parseInt(prosgress2)/1000} status="active"
+                          format={this.getProString}/>
             </div>
         );
     }

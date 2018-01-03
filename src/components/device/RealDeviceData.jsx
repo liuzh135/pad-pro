@@ -8,10 +8,12 @@ import React from "react";
 import {Button, Col, Dropdown, Menu, message, Row, Icon, Radio, Progress} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {fetchData, receiveData} from '@/action';
+import {fetchData, receiveData,mqttConnect} from '@/action';
 import {ProgressStyle} from "../ProgressStyle";
 import {AirDataProgress} from "../AirDataProgress";
 import BarStyleProgress from "../BarStyleProgress";
+import mqttC from 'mqtt';
+import {getDeivceList} from '../../axios';
 
 class RealDeviceData extends React.Component {
 
@@ -21,21 +23,18 @@ class RealDeviceData extends React.Component {
         this.state = {
             echartsFlag: false,
             mac: '设备MAC',
-            menuJson: [
-                { key: "1", value: "aabbccdd" },
-                { key: "2", value: "11223344" },
-                { key: "3", value: "55667788" },
-                { key: "4", value: "88996622" },
-            ],
-        }
+            devicelist: [],
+            pagination: {},
+            loading: false,
+            uuid: '',
+            renderData: {}
+        };
     }
 
     //调用action中的ajax方法，获取数据
     componentWillMount() {
         const { receiveData } = this.props;
-        receiveData(null, 'auth');
-        console.log("auth +++++" + JSON.stringify(this.props.auth));
-
+        //receiveData(null, 'auth');
         const { fetchData } = this.props;
         //调用 http请求 获取网络数据
         //fetchData({funcName: 'admin', stateName: 'auth'});
@@ -43,34 +42,112 @@ class RealDeviceData extends React.Component {
 
     //获取网络数据 渲染UI
     componentWillReceiveProps(nextProps) {
-
+        const {connect} = this.props;
+        console.log("mqtt connect===connect=============》" + connect);
+        //接受数据  渲染UI
+        if (connect && connect.mqdata != null) {
+            console.log("mqtt connect===Client=============》" + connect.client);
+            console.log("mqtt connect===data=============》" + JSON.parse(connect.mqdata).data);
+            console.log("mqtt connect===UUID=============》" + this.state.uuid);
+            console.log("mqtt connect===dataUUID=============》" + (JSON.parse(connect.mqdata).data).uuid);
+            this.setState({
+                renderData: JSON.parse(connect.mqdata).data
+            });
+        }
     }
 
+    getDevices = (params = {})=> {
+        this.setState({loading: true});
+        getDeivceList(params).then(data => {
+            if (data.rows != null && data.rows.length > 1) {
+                this.setState({
+                    loading: false,
+                    devicelist: data.rows,
+                    mac: data.rows[0].deviceName,
+                    uuid: "/device/air/airmonitor/" + data.rows[0].uuid,
+                    pagination: {
+                        total: data.total,
+                        page: data.page,
+                        records: data.records
+                    }
+                });
+                const {connect} = this.props;
+                if (connect.client != null) {
+                    connect.client.unsubscribe("airmonitordata");
+                    console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + data.rows[0].uuid);
+                    connect.client.subscribe("/device/air/airmonitor/" + data.rows[0].uuid);
+                }
+            }
+        }).catch(err => {
+            this.setState({
+                loading: false
+            });
+            console.log(err)
+        });
+    };
 
     handleMenuClick = (e) => {
-        message.info('device Mac :' + this.state.menuJson[e.key - 1].value);
-        console.log('click', this.state.menuJson[e.key - 1].value);
+        message.info('device Mac :' + this.state.devicelist[e.key].deviceName);
+        console.log('click', this.state.devicelist[e.key].deviceName);
+        const {connect} = this.props;
+        if (connect.client != null) {
+            connect.client.unsubscribe("/device/air/airmonitor/" + this.state.uuid);
+            console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + this.state.devicelist[e.key].uuid);
+            connect.client.subscribe("/device/air/airmonitor/" + this.state.devicelist[e.key].uuid);
+        }
         this.setState({
-            mac: this.state.menuJson[e.key - 1].value
+            mac: this.state.devicelist[e.key].deviceName,
+            uuid: this.state.devicelist[e.key].uuid
         });
     };
 
     componentDidMount() {
+        //接受mqtt消息
+        //this.client.on('message', function (topic, message) {
+        //    // message is Buffer
+        //    console.log("topic:" + topic.toString() + "### message:" + message.toString());
+        //
+        //
+        //})
+        this.getDevices({
+            rows: 10,
+            page: 1
+        });
+    }
+
+    componentWillUnmount() {
+        //this.client && this.client.end();
     }
 
     getMenuJon() {
         let menus = [];
-        this.state.menuJson.map(function (data) {
-            menus.push(<Menu.Item key={data.key}>{data.value}</Menu.Item>)
+        this.state.devicelist.map(function (data, index) {
+            menus.push(<Menu.Item key={index}>{data.deviceName}</Menu.Item>)
         });
         return <Menu onClick={this.handleMenuClick}>{menus}</Menu>;
     }
 
-
     render() {
-
         let mac = this.state.mac;
         let menu = this.getMenuJon() || '';
+        let renderData = this.state.renderData || {};
+        let uuid = this.state.uuid;
+        let dataUid = renderData.uuid;
+        if (uuid != dataUid) {
+            renderData = {}
+        }
+        let temp = renderData.mcu ? renderData.mcu.t : '0';
+        let rh = renderData.mcu ? renderData.mcu.rh : '0';
+        let pm25 = renderData.mcu ? renderData.mcu.pm2_5 : '0';
+        let pm10 = renderData.mcu ? renderData.mcu.pm10 : '0';
+        let pm1 = renderData.mcu ? renderData.mcu.pm1 : '0';
+        let eco2 = renderData.mcu ? renderData.mcu.eco2 : '0';
+        let eco2_mg = renderData.mcu ? renderData.mcu.eco2_mg : '0';
+        let hcho = renderData.mcu ? renderData.mcu.hcho : '0';
+        let hcho_ug = renderData.mcu ? renderData.mcu.hcho_ug : '0';
+        let tvoc = renderData.mcu ? renderData.mcu.tvoc : '0';
+        let tvoc_ug = renderData.mcu ? renderData.mcu.tvoc_ug : '0';
+
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff', height: "100%" }}>
 
@@ -98,8 +175,9 @@ class RealDeviceData extends React.Component {
                     }}>
                         <Col className="gutter-row " md={6}
                              style={{ padding: '30px' }}>
-                            <ProgressStyle className='progress_index' width={250} height={250} progress="0.59"
-                                           proressValue="RH: 59%" value="59"/>
+                            <ProgressStyle className='progress_index' width={250} height={250}
+                                           progress={(parseInt(temp)/10000)}
+                                           proressValue={"RH: " + (parseInt(rh)/100)+"%"} value={parseInt(temp)/100}/>
                         </Col>
                         <Col className="gutter-row" md={16}
                              style={{float:'right'}}>
@@ -108,29 +186,32 @@ class RealDeviceData extends React.Component {
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '8px', borderRadius: '5px'
                             }}>
                                 <AirDataProgress color='#C54AD1' className='progress_a' width={150} height={150}
-                                                 progress="0.3"
-                                                 pm="PM1" pmValue="38"/>
+                                                 progress={parseInt(pm1)/100}
+                                                 pm="PM1" pmValue={pm1}/>
                                 <AirDataProgress color='#ADF5F3' className='progress_b' width={150} height={150}
-                                                 progress="0.5"
-                                                 pm="PM2.5" pmValue="43"/>
+                                                 progress={parseInt(pm25)/100}
+                                                 pm="PM2.5" pmValue={pm25}/>
                                 <AirDataProgress color='#CB3FF7' className='progress_c' width={150} height={150}
-                                                 progress="0.3"
-                                                 pm="PM10" pmValue="38"/>
+                                                 progress={parseInt(pm10)/100}
+                                                 pm="PM10" pmValue={pm10}/>
                             </div>
 
                         </Col>
                         <Col className="gutter-row flex-center" md={8}>
-                            <BarStyleProgress airName='TVOG' prosName1='ppb' prosName2='μg/m3' prosgress1={50}
-                                              prosgress2={20}/>
+                            <BarStyleProgress airName='TVOG' prosName1='ppb' prosName2='μg/m3'
+                                              prosgress1={parseInt(tvoc)}
+                                              prosgress2={parseInt(tvoc_ug)}/>
                         </Col>
                         <Col className="gutter-row flex-center" md={8}>
-                            <BarStyleProgress airName='HCHO' prosName1='ppb' prosName2='μg/m3' prosgress1={50}
-                                              prosgress2={30}/>
+                            <BarStyleProgress airName='HCHO' prosName1='ppb' prosName2='μg/m3'
+                                              prosgress1={parseInt(hcho)}
+                                              prosgress2={parseInt(hcho_ug)}/>
 
                         </Col>
                         <Col className="gutter-row flex-center" md={8}>
-                            <BarStyleProgress airName='ECO2' prosName1='ppm' prosName2='μg/m3' prosgress1={50}
-                                              prosgress2={40}/>
+                            <BarStyleProgress airName='ECO2' prosName1='ppm' prosName2='μg/m3'
+                                              prosgress1={parseInt(eco2)}
+                                              prosgress2={parseInt(eco2_mg)}/>
                         </Col>
                     </Row>
 
@@ -142,13 +223,13 @@ class RealDeviceData extends React.Component {
 }
 
 const mapStateToPorps = state => {
-    const { auth } = state.httpData;
-    return { auth };
+    const { auth,connect={data: {}} } = state.httpData;
+    return {auth, connect};
 };
 
 const mapDispatchToProps = dispatch => ({
     fetchData: bindActionCreators(fetchData, dispatch),
-    receiveData: bindActionCreators(receiveData, dispatch)
+    receiveData: bindActionCreators(receiveData, dispatch),
 });
 
 

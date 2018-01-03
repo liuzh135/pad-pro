@@ -11,21 +11,16 @@ import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 import BaseTableData from "../data/BaseTableData";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
+import {getDeivceList} from '../../axios';
 
 class DeviceManager extends React.Component {
 
     constructor(props) {
         super(props);
-        let d = new Date();
         this.state = {
-            echartsFlag: false,
-            first: false,
-            expand: false,
-            queryParam: {
-                'activityId': 1,//活动ID
-                'statisDate': d.getFullYear() + "" + (d.getMonth() + 1) + "" + d.getDate(),//查询日期默认当天
-                'userType': 1,//
-            }
+            devicelist: [],
+            pagination: {},
+            loading: false
         }
     }
 
@@ -33,29 +28,55 @@ class DeviceManager extends React.Component {
     componentWillMount() {
         const { receiveData } = this.props;
         receiveData(null, 'auth');
-        console.log("auth +++++" + JSON.stringify(this.props.auth));
-
         const { fetchData } = this.props;
         //调用 http请求 获取网络数据
         //fetchData({funcName: 'admin', stateName: 'auth'});
     }
 
-    componentDidMount() {
-        let first = this.state.first || false;
-        if (!first) {
+    getDevices = (params = {})=> {
+        this.setState({ loading: true });
+        getDeivceList(params).then(data => {
             this.setState({
-                first: true
+                loading: false,
+                devicelist: data.rows,
+                pagination:{
+                    total:data.total,
+                    page:data.page,
+                    records:data.records
+                }
             });
-        }
-    }
+        }).catch(err => {
+            this.setState({
+                loading: false
+            });
+            console.log(err)
+        });;
+    };
 
-    //获取网络数据 渲染UI
-    componentWillReceiveProps(nextProps) {
+    handleTableChange = (pagination, filters, sorter) => {
+        const pager = {...this.state.pagination};
+        pager.page = pagination.page;
+        this.setState({
+            pagination: pager
+        });
+        this.getDevices({
+            rows: pagination.records,
+            page: pagination.page,
+            ...filters
+        });
+    };
 
+    componentDidMount() {
+        this.getDevices({
+            rows: 10,
+            page: 1
+        });
     }
 
     render() {
         let tableComs = new BaseTableData();
+        let devices = this.state.devicelist || [];
+        console.log("devicelist :" + JSON.stringify(devices));
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
 
@@ -67,7 +88,13 @@ class DeviceManager extends React.Component {
                                 <div className="text-title">
                                     <span style={{ marginLeft: "15px" }}>设备管理</span>
                                 </div>
-                                <ExtBaseicTable {...tableComs.deviceTabledata} />
+                                <ExtBaseicTable columns={tableComs.device_columns}
+                                                rowKey={record => record.registered}
+                                                dataSource={devices}
+                                                data={devices}
+                                                pagination={this.state.pagination}
+                                                loading={this.state.loading}
+                                                onChange={this.handleTableChange}/>
                             </div>
                         </div>
                     </Col>
@@ -118,7 +145,7 @@ class DeviceManager extends React.Component {
 
 const mapStateToPorps = state => {
     const { auth } = state.httpData;
-    return { auth };
+    return {auth};
 };
 
 const mapDispatchToProps = dispatch => ({

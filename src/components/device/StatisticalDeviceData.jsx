@@ -13,6 +13,10 @@ import BaseTableData from "../data/BaseTableData";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
 import {DatePicker} from 'antd';
 import moment from 'moment';
+import Bacecomstyle from "../Bacecomstyle";
+import BaseEcharView from "../bar/BaseEcharView";
+import EcharCom from "../bar/EcharCom";
+import EcharBar from "../bar/EcharBar";
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -26,17 +30,27 @@ class StatisticalDeviceData extends React.Component {
         this.state = {
             echartsFlag: false,
             mac: '设备MAC',
+            first: false,
             menuJson: [
-                { key: "1", value: "aabbccdd" },
-                { key: "2", value: "11223344" },
-                { key: "3", value: "55667788" },
-                { key: "4", value: "88996622" },
+                {key: "1", value: "aabbccdd"},
+                {key: "2", value: "11223344"},
+                {key: "3", value: "55667788"},
+                {key: "4", value: "88996622"},
             ],
             queryParam: {
                 'activityId': 1,//活动ID
                 'statisDate': d.getFullYear() + "" + (d.getMonth() + 1) + "" + d.getDate(),//查询日期默认当天
                 'userType': 1,//
             }
+        }
+    }
+
+    componentDidMount() {
+        let first = this.state.first || false;
+        if (!first) {
+            this.setState({
+                first: true
+            });
         }
     }
 
@@ -79,12 +93,22 @@ class StatisticalDeviceData extends React.Component {
         let menu = this.getMenuJon() || '';
         let dateFormat = 'YYYY/MM/DD';
         let monthFormat = 'YYYY/MM';
+
+        let echarCom = new EcharCom();
+        let datalist = [];
+        let xlist = ["1点", "2点", "3点", "4点", "5点", "6点", "7点", "8点", "9点", "10点",];
+        datalist.push(new EcharBar('PM2.5', 'line', 'circle', 4, [120, 300, 402, 180, 590, 620, 200, 190, 220, 500], '#35C9CB', 20));
+        //刷新2次  解决echars 的宽度问题
+        let first = this.state.first || false;
+        let ecahrs = !first ? "" :
+            <BaseEcharView title="设备历史数据" option={echarCom.option} xAxis={xlist} data={datalist}
+                           style={{ height: '310px', width: '100%', border: '#E9E9E9 solid 1px' }}/>;
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
 
                 <Row gutter={10}>
                     <Col className="gutter-row" md={24}
-                         style={{ paddingRight: '30px', borderBottom: '#E9E9E9 solid 1px' }}>
+                         style={{ paddingRight: '30px' }}>
                         <div className="gutter-box ">
                             <div className="gutter-box" style={{ padding: '2px 15px' }}>
                                 <div className="text-title">
@@ -112,8 +136,13 @@ class StatisticalDeviceData extends React.Component {
                                                      format={dateFormat}/>
                                     </div>
                                 </div>
-                                <ExtBaseicTable {...tableComs.deviceTabledata} />
                             </div>
+                        </div>
+                    </Col>
+
+                    <Col className="gutter-row" md={24} style={{ paddingRight: '30px' }}>
+                        <div className="gutter-box" style={{ padding: '2px 15px' }}>
+                            {ecahrs}
                         </div>
                     </Col>
                 </Row>
@@ -163,7 +192,7 @@ class StatisticalDeviceData extends React.Component {
 
 const mapStateToPorps = state => {
     const { auth } = state.httpData;
-    return { auth };
+    return {auth};
 };
 
 const mapDispatchToProps = dispatch => ({

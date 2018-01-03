@@ -149,37 +149,47 @@ class BaseTableData {
         columns: this.comIssue_columns,
         data: this.pm_data,
         bordered: true,
-        pagination: { pageSize: 5 },
-        style: { padding: '0 10px' }
+        pagination: {pageSize: 5},
+        style: {padding: '0 10px'}
     };
 
 
     //默认表头 适配
     device_columns = [
         {
-            title: '设备标识',
+            title: '设备ID',
             dataIndex: 'deviceId',
             width: 150,
             render: this.renderContent
         }, {
-            title: '接入时间',
-            dataIndex: 'bindtime',
+            title: '设备名称',
+            dataIndex: 'deviceName',
+            width: 150,
+            render: this.renderContent
+        },{
+            title: '设备类型',
+            dataIndex: 'typeName',
             width: 150,
             render: this.renderContent
         }, {
-            title: '在线时长',
-            dataIndex: 'onlineTime',
+            title: 'UUID',
+            dataIndex: 'uuid',
             width: 150,
             render: this.renderContent
         }, {
-            title: '设备状态',
-            dataIndex: 'devicestate',
+            title: '创建时间',
             width: 150,
+            dataIndex: 'updateTime',
             render: this.renderContent
         }, {
-            title: '设备位置',
+            title: '设备地址',
             width: 150,
-            dataIndex: 'devicepos',
+            dataIndex: 'address',
+            render: this.renderContent
+        }, {
+            title: '在线状态',
+            width: 150,
+            dataIndex: 'deviceOnline',
             render: this.renderContent
         }
     ];
@@ -253,8 +263,8 @@ class BaseTableData {
         columns: this.device_columns,
         data: this.device_data,
         bordered: true,
-        pagination: { pageSize: 8 ,showQuickJumper:true},
-        style: { padding: '0 10px' ,clear:'both' }
+        pagination: {pageSize: 8, showQuickJumper: true},
+        style: {padding: '0 10px', clear: 'both'}
     };
 
 

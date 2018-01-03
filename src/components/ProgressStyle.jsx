@@ -25,6 +25,11 @@ export class ProgressStyle extends React.Component {
 
         $loader.setProgress(progress);
         $loader.setValue("Temp");
+        let percentage = progress * 315 + 160;
+        window.jQuery('.roratedata').css({
+                "transform": 'translateY(-50%) translateX(-50%) rotate(' + percentage + 'deg)'
+            }
+        );
     }
 
     getPrograssPercentage() {
@@ -37,8 +42,7 @@ export class ProgressStyle extends React.Component {
     render() {
         const { proressValue, className, value, height, width } = this.props;
         let percentage = this.getPrograssPercentage();
-        let percentStyle = 'rotate(' + percentage + 'deg)';
-        console.log(" =====> percentage :" + percentage);
+        let percentStyle = 'translateY(-50%) translateX(-50%) ' + 'rotate(' + percentage + 'deg)';
         return (
             <div className="row" style={{}}>
                 <div className={className + " point3"} style={{ margin:'0 auto',width: width ,height: height }}>
@@ -46,19 +50,18 @@ export class ProgressStyle extends React.Component {
                          style={{ height: '100px', width: '100px', backgroundColor: "#9239B9", borderRadius: "100px" }}>
                     </div>
 
-                    <div className="point2 point4 contentY"
+                    <div className="point2 point4 contentY roratedata"
                          style={{
                              height: '80px',
                              width: '80px',
                              margin: '0',
-                             transform: 'transform: translateY(-50%) translateX(-50%) ' + percentStyle,
                              backgroundColor: "#9CDCE1"
                          }}/>
                     <div className="point2 text-center contentY"
                          style={{
                              height: '90px',
                              width: '90px',
-                             backgroundColor: "#9CDCE1",
+                             backgroundColor: "#9CDCsE1",
                              borderRadius: "100px",
                              zIndex: '10'
                          }}>

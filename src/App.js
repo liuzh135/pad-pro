@@ -4,7 +4,7 @@ import './style/index.less';
 import BaseSideCustom from './components/BaseSideCustom';
 import HeaderCustom from './components/HeaderCustom';
 import DecisionsModel from './menu/DecisionsModel';
-import {receiveData} from './action';
+import {mqttConnect, receiveData} from '@/action';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
@@ -27,17 +27,20 @@ class App extends Component {
         // fetchData({funcName: 'admin', stateName: 'auth'});
         this.getClientWidth();
         window.onresize = () => {
-            console.log('屏幕变化了');
             this.getClientWidth();
             // console.log(document.body.clientWidth);
         }
     }
 
+    componentDidMount() {
+        const { mqttConnect } = this.props;
+        mqttConnect("connect");
+    }
+
     getClientWidth = () => {    // 获取当前浏览器宽度并设置responsive管理响应式
         const { receiveData } = this.props;
         const clientWidth = document.body.clientWidth;
-        console.log("111111" + clientWidth);
-        receiveData({ isMobile: clientWidth <= 992 }, 'responsive');
+        receiveData({isMobile: clientWidth <= 992}, 'responsive');
     };
     toggle = () => {
         //收起侧边栏先屏蔽
@@ -47,8 +50,6 @@ class App extends Component {
     };
 
     render() {
-        console.log("auth 1 = " + JSON.stringify(this.props.auth));
-        console.log(this.props.responsive);
         const { auth, router, responsive } = this.props;
 
         let de = new DecisionsModel();
@@ -62,15 +63,16 @@ class App extends Component {
         }
 
         return (
-            <Layout>
+            <Layout >
 
                 <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} user={auth.data || {}}
                               router={router} path={this.props.location.pathname}/>
 
-                <Layout style={{ height: "100%" }}>
+                <Layout style={{ height: "100%"}}>
                     {side_view}
                     <Layout>
-                        <Content style={{ margin: '0 10px', backgroundColor:'#fff', overflow: 'initial', height: '100%' }}>
+                        <Content
+                            style={{ margin: '0 10px', backgroundColor:'#fff', overflow: 'initial', height: '100%' }}>
                             {this.props.children}
                         </Content>
 
@@ -101,11 +103,12 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-    const { auth = { data: {} }, responsive = { data: {} } } = state.httpData;
-    return { auth, responsive };
+    const { connect={client: {}} ,auth = {data: {}}, responsive = {data: {}} } = state.httpData;
+    return {connect, auth, responsive};
 };
 const mapDispatchToProps = dispatch => ({
-    receiveData: bindActionCreators(receiveData, dispatch)
+    receiveData: bindActionCreators(receiveData, dispatch),
+    mqttConnect: bindActionCreators(mqttConnect, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
