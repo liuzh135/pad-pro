@@ -32,7 +32,6 @@ class BaseSideCustom extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
         this.onCollapse(nextProps.collapsed);
         this.setMenuOpen(nextProps)
     }
@@ -48,7 +47,6 @@ class BaseSideCustom extends Component {
     };
 
     onCollapse = (collapsed) => {
-        console.log(collapsed);
         this.setState({
             collapsed,
             firstHide: collapsed,
@@ -59,7 +57,6 @@ class BaseSideCustom extends Component {
         this.setState({
             selectedKey: e.key
         });
-        console.log(this.state);
         const { popoverHide } = this.props;     // 响应式布局控制小屏幕点击菜单时隐藏菜单操作
         popoverHide && popoverHide();
     };
@@ -106,8 +103,6 @@ class BaseSideCustom extends Component {
 
     render() {
         const { menus } = this.props;
-
-        console.log("openKey=" + this.state.openKey);
         let baseMenuView = this.createMenu(menus);
         return (
             <Sider

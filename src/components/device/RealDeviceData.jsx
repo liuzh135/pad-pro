@@ -8,7 +8,7 @@ import React from "react";
 import {Button, Col, Dropdown, Menu, message, Row, Icon, Radio, Progress} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {fetchData, receiveData,mqttConnect} from '@/action';
+import {fetchData, receiveData, mqttConnect} from '@/action';
 import {ProgressStyle} from "../ProgressStyle";
 import {AirDataProgress} from "../AirDataProgress";
 import BarStyleProgress from "../BarStyleProgress";
@@ -34,7 +34,6 @@ class RealDeviceData extends React.Component {
     //调用action中的ajax方法，获取数据
     componentWillMount() {
         const { receiveData } = this.props;
-        //receiveData(null, 'auth');
         const { fetchData } = this.props;
         //调用 http请求 获取网络数据
         //fetchData({funcName: 'admin', stateName: 'auth'});
@@ -42,7 +41,7 @@ class RealDeviceData extends React.Component {
 
     //获取网络数据 渲染UI
     componentWillReceiveProps(nextProps) {
-        const {connect} = this.props;
+        const { connect } = this.props;
         console.log("mqtt connect===connect=============》" + connect);
         //接受数据  渲染UI
         if (connect && connect.mqdata != null) {
@@ -56,24 +55,30 @@ class RealDeviceData extends React.Component {
         }
     }
 
-    getDevices = (params = {})=> {
-        this.setState({loading: true});
+    componentDidMount() {
+        this.getDevices({
+            rows: 10,
+            page: 1
+        });
+    }
+
+    getDevices = (params = {}) => {
+        this.setState({ loading: true });
         getDeivceList(params).then(data => {
             if (data.rows != null && data.rows.length > 1) {
                 this.setState({
                     loading: false,
                     devicelist: data.rows,
                     mac: data.rows[0].deviceName,
-                    uuid: "/device/air/airmonitor/" + data.rows[0].uuid,
+                    uuid: data.rows[0].uuid,
                     pagination: {
                         total: data.total,
                         page: data.page,
                         records: data.records
                     }
                 });
-                const {connect} = this.props;
+                const { connect } = this.props;
                 if (connect.client != null) {
-                    connect.client.unsubscribe("airmonitordata");
                     console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + data.rows[0].uuid);
                     connect.client.subscribe("/device/air/airmonitor/" + data.rows[0].uuid);
                 }
@@ -86,12 +91,31 @@ class RealDeviceData extends React.Component {
         });
     };
 
+
+    isEmpty = (obj) => {
+        if (obj === null) return true;
+        if (typeof obj === 'undefined') {
+            return true;
+        }
+        if (typeof obj === 'string') {
+            if (obj === "") {
+                return true;
+            }
+            var reg = new RegExp("^([ ]+)|([　]+)$");
+            return reg.test(obj);
+        }
+        return false;
+    };
+
     handleMenuClick = (e) => {
         message.info('device Mac :' + this.state.devicelist[e.key].deviceName);
         console.log('click', this.state.devicelist[e.key].deviceName);
-        const {connect} = this.props;
+        const { connect } = this.props;
+        let uuid = this.state.uuid;
         if (connect.client != null) {
-            connect.client.unsubscribe("/device/air/airmonitor/" + this.state.uuid);
+            if (this.isEmpty(uuid)) {
+                connect.client.unsubscribe("/device/air/airmonitor/" + this.state.uuid);
+            }
             console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + this.state.devicelist[e.key].uuid);
             connect.client.subscribe("/device/air/airmonitor/" + this.state.devicelist[e.key].uuid);
         }
@@ -100,24 +124,6 @@ class RealDeviceData extends React.Component {
             uuid: this.state.devicelist[e.key].uuid
         });
     };
-
-    componentDidMount() {
-        //接受mqtt消息
-        //this.client.on('message', function (topic, message) {
-        //    // message is Buffer
-        //    console.log("topic:" + topic.toString() + "### message:" + message.toString());
-        //
-        //
-        //})
-        this.getDevices({
-            rows: 10,
-            page: 1
-        });
-    }
-
-    componentWillUnmount() {
-        //this.client && this.client.end();
-    }
 
     getMenuJon() {
         let menus = [];
@@ -133,7 +139,7 @@ class RealDeviceData extends React.Component {
         let renderData = this.state.renderData || {};
         let uuid = this.state.uuid;
         let dataUid = renderData.uuid;
-        if (uuid != dataUid) {
+        if (uuid !== dataUid) {
             renderData = {}
         }
         let temp = renderData.mcu ? renderData.mcu.t : '0';
@@ -176,23 +182,24 @@ class RealDeviceData extends React.Component {
                         <Col className="gutter-row " md={6}
                              style={{ padding: '30px' }}>
                             <ProgressStyle className='progress_index' width={250} height={250}
-                                           progress={(parseInt(temp)/10000)}
-                                           proressValue={"RH: " + (parseInt(rh)/100)+"%"} value={parseInt(temp)/100}/>
+                                           progress={(parseInt(temp) / 10000)}
+                                           proressValue={"RH: " + (parseInt(rh) / 100) + "%"}
+                                           value={parseInt(temp) / 100}/>
                         </Col>
                         <Col className="gutter-row" md={16}
-                             style={{float:'right'}}>
+                             style={{ float: 'right' }}>
                             <div className='flex-center' style={{
                                 justifyContent: 'space-around', marginTop: '70px', marginBottom: '20px',
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '8px', borderRadius: '5px'
                             }}>
                                 <AirDataProgress color='#C54AD1' className='progress_a' width={150} height={150}
-                                                 progress={parseInt(pm1)/100}
+                                                 progress={parseInt(pm1) / 100}
                                                  pm="PM1" pmValue={pm1}/>
                                 <AirDataProgress color='#ADF5F3' className='progress_b' width={150} height={150}
-                                                 progress={parseInt(pm25)/100}
+                                                 progress={parseInt(pm25) / 100}
                                                  pm="PM2.5" pmValue={pm25}/>
                                 <AirDataProgress color='#CB3FF7' className='progress_c' width={150} height={150}
-                                                 progress={parseInt(pm10)/100}
+                                                 progress={parseInt(pm10) / 100}
                                                  pm="PM10" pmValue={pm10}/>
                             </div>
 
@@ -223,8 +230,8 @@ class RealDeviceData extends React.Component {
 }
 
 const mapStateToPorps = state => {
-    const { auth,connect={data: {}} } = state.httpData;
-    return {auth, connect};
+    const { auth, connect = { data: {} } } = state.httpData;
+    return { auth, connect };
 };
 
 const mapDispatchToProps = dispatch => ({

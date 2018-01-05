@@ -36,9 +36,6 @@ class StatisticalAirData extends React.Component {
     //调用action中的ajax方法，获取数据
     componentWillMount() {
         const { receiveData } = this.props;
-        receiveData(null, 'auth');
-        console.log("auth +++++" + JSON.stringify(this.props.auth));
-
         const { fetchData } = this.props;
         //调用 http请求 获取网络数据
         //fetchData({funcName: 'admin', stateName: 'auth'});

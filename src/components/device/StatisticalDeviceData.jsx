@@ -5,15 +5,12 @@
  */
 
 import React from "react";
-import {Button, Col, Dropdown, Menu, message, Row, Icon, Radio} from 'antd';
+import {Button, Col, DatePicker, Dropdown, Icon, Menu, message, Radio, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 import BaseTableData from "../data/BaseTableData";
-import ExtBaseicTable from "../tables/ExtBaseicTable";
-import {DatePicker} from 'antd';
 import moment from 'moment';
-import Bacecomstyle from "../Bacecomstyle";
 import BaseEcharView from "../bar/BaseEcharView";
 import EcharCom from "../bar/EcharCom";
 import EcharBar from "../bar/EcharBar";
@@ -57,9 +54,6 @@ class StatisticalDeviceData extends React.Component {
     //调用action中的ajax方法，获取数据
     componentWillMount() {
         const { receiveData } = this.props;
-        receiveData(null, 'auth');
-        console.log("auth +++++" + JSON.stringify(this.props.auth));
-
         const { fetchData } = this.props;
         //调用 http请求 获取网络数据
         //fetchData({funcName: 'admin', stateName: 'auth'});

@@ -27,44 +27,10 @@ class DeviceManager extends React.Component {
     //调用action中的ajax方法，获取数据
     componentWillMount() {
         const { receiveData } = this.props;
-        receiveData(null, 'auth');
         const { fetchData } = this.props;
         //调用 http请求 获取网络数据
         //fetchData({funcName: 'admin', stateName: 'auth'});
     }
-
-    getDevices = (params = {})=> {
-        this.setState({ loading: true });
-        getDeivceList(params).then(data => {
-            this.setState({
-                loading: false,
-                devicelist: data.rows,
-                pagination:{
-                    total:data.total,
-                    page:data.page,
-                    records:data.records
-                }
-            });
-        }).catch(err => {
-            this.setState({
-                loading: false
-            });
-            console.log(err)
-        });;
-    };
-
-    handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...this.state.pagination};
-        pager.page = pagination.page;
-        this.setState({
-            pagination: pager
-        });
-        this.getDevices({
-            rows: pagination.records,
-            page: pagination.page,
-            ...filters
-        });
-    };
 
     componentDidMount() {
         this.getDevices({
@@ -72,6 +38,41 @@ class DeviceManager extends React.Component {
             page: 1
         });
     }
+
+
+    getDevices = (params = {}) => {
+        this.setState({ loading: true });
+        getDeivceList(params).then(data => {
+            this.setState({
+                loading: false,
+                devicelist: data.rows,
+                pagination: {
+                    total: data.records,
+                    pageSize: 10,
+                    current: data.page
+                }
+            });
+        }).catch(err => {
+            this.setState({
+                loading: false
+            });
+            console.log(err)
+        });
+        ;
+    };
+
+    handleTableChange = (pagination, filters, sorter) => {
+        const pager = { ...this.state.pagination };
+        pager.page = pagination.page;
+        this.setState({
+            pagination: pager
+        });
+        this.getDevices({
+            rows: pagination.pageSize,
+            page: pagination.current,
+            ...filters
+        });
+    };
 
     render() {
         let tableComs = new BaseTableData();
@@ -82,18 +83,23 @@ class DeviceManager extends React.Component {
 
                 <Row gutter={10}>
                     <Col className="gutter-row" md={24}
-                         style={{ paddingRight: '30px', borderBottom: '#E9E9E9 solid 1px'}}>
+                         style={{ paddingRight: '30px', borderBottom: '#E9E9E9 solid 1px' }}>
                         <div className="gutter-box ">
                             <div className="gutter-box" style={{ padding: '2px 15px' }}>
                                 <div className="text-title">
                                     <span style={{ marginLeft: "15px" }}>设备管理</span>
                                 </div>
                                 <ExtBaseicTable columns={tableComs.device_columns}
-                                                rowKey={record => record.registered}
-                                                dataSource={devices}
                                                 data={devices}
+                                                rowKey={rowkey => {
+                                                    if (rowkey.deviceOnline === 1) rowkey.deviceOnline = '在线';
+                                                    if (rowkey.deviceOnline === 0) rowkey.deviceOnline = '离线';
+                                                    return rowkey.deviceId;
+                                                }}
                                                 pagination={this.state.pagination}
                                                 loading={this.state.loading}
+                                                bordered={true}
+                                                style={{ padding: '0 10px', clear: 'both' }}
                                                 onChange={this.handleTableChange}/>
                             </div>
                         </div>
@@ -145,7 +151,7 @@ class DeviceManager extends React.Component {
 
 const mapStateToPorps = state => {
     const { auth } = state.httpData;
-    return {auth};
+    return { auth };
 };
 
 const mapDispatchToProps = dispatch => ({

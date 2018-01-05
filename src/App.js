@@ -8,7 +8,7 @@ import {mqttConnect, receiveData} from '@/action';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 
 class App extends Component {
     state = {
@@ -37,10 +37,19 @@ class App extends Component {
         mqttConnect("connect");
     }
 
+    componentWillUnmount() {
+        console.log("+++++++APP++++componentWillUnmount+++++");
+        const {connect} = this.props;
+        //接受数据  渲染UI
+        if (connect && connect.client != null) {
+            connect.client.end();
+        }
+    }
+
     getClientWidth = () => {    // 获取当前浏览器宽度并设置responsive管理响应式
         const { receiveData } = this.props;
         const clientWidth = document.body.clientWidth;
-        receiveData({isMobile: clientWidth <= 992}, 'responsive');
+        receiveData({ isMobile: clientWidth <= 992 }, 'responsive');
     };
     toggle = () => {
         //收起侧边栏先屏蔽
@@ -52,6 +61,7 @@ class App extends Component {
     render() {
         const { auth, router, responsive } = this.props;
 
+        console.log("auth ---->" + JSON.stringify(auth));
         let de = new DecisionsModel();
 
         //左侧栏 decision 特殊处理
@@ -63,16 +73,16 @@ class App extends Component {
         }
 
         return (
-            <Layout >
+            <Layout>
 
                 <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} user={auth.data || {}}
                               router={router} path={this.props.location.pathname}/>
 
-                <Layout style={{ height: "100%"}}>
+                <Layout style={{ height: "100%" }}>
                     {side_view}
                     <Layout>
                         <Content
-                            style={{ margin: '0 10px', backgroundColor:'#fff', overflow: 'initial', height: '100%' }}>
+                            style={{ margin: '0 10px', backgroundColor: '#fff', overflow: 'initial', height: '100%' }}>
                             {this.props.children}
                         </Content>
 
@@ -103,8 +113,8 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-    const { connect={client: {}} ,auth = {data: {}}, responsive = {data: {}} } = state.httpData;
-    return {connect, auth, responsive};
+    const { connect = { client: {} }, auth = { data: {} }, responsive = { data: {} } } = state.httpData;
+    return { connect, auth, responsive };
 };
 const mapDispatchToProps = dispatch => ({
     receiveData: bindActionCreators(receiveData, dispatch),

@@ -36,11 +36,6 @@ import RealDataAir from '../components/airdata/RealDataAir';
 import StatisticalAirData from '../components/airdata/StatisticalAirData';
 
 
-const Wysiwyg = (location, cb) => {     // 按需加载富文本配置
-    require.ensure([], require => {
-        cb(null, require('../components/ui/Wysiwyg').default);
-    }, 'Wysiwyg');
-};
 
 export default class CRouter extends Component {
     requireAuth = (permission, component) => {
@@ -85,7 +80,6 @@ export default class CRouter extends Component {
                             <Route path={'notifications'} component={Notifications} />
                             <Route path={'tabs'} component={Tabs} />
                             <Route path={'banners'} component={Banners} />
-                            <Route path={'wysiwyg'} getComponent={Wysiwyg} />
                             <Route path={'drags'} component={Drags} />
                             <Route path={'gallery'} component={Gallery} />
                         </Route>
