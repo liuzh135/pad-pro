@@ -5,14 +5,13 @@
  */
 
 import React from "react";
-import {Button, Col, Dropdown, Menu, message, Row, Icon, Radio, Progress} from 'antd';
+import {Button, Col, Dropdown, Icon, Menu, message, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {fetchData, receiveData, mqttConnect} from '@/action';
+import {fetchData, mqttConnect, receiveData} from '@/action';
 import {ProgressStyle} from "../ProgressStyle";
 import {AirDataProgress} from "../AirDataProgress";
 import BarStyleProgress from "../BarStyleProgress";
-import mqttC from 'mqtt';
 import {getDeivceList} from '../../axios';
 
 class RealDeviceData extends React.Component {
@@ -72,9 +71,9 @@ class RealDeviceData extends React.Component {
                     mac: data.rows[0].deviceName,
                     uuid: data.rows[0].uuid,
                     pagination: {
-                        total: data.total,
-                        page: data.page,
-                        records: data.records
+                        total: data.records,
+                        pageSize: 10,
+                        current: data.page
                     }
                 });
                 const { connect } = this.props;
@@ -108,7 +107,7 @@ class RealDeviceData extends React.Component {
     };
 
     handleMenuClick = (e) => {
-        message.info('device Mac :' + this.state.devicelist[e.key].deviceName);
+        // message.info('device Mac :' + this.state.devicelist[e.key].deviceName);
         console.log('click', this.state.devicelist[e.key].deviceName);
         const { connect } = this.props;
         let uuid = this.state.uuid;

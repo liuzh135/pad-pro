@@ -39,7 +39,7 @@ class App extends Component {
 
     componentWillUnmount() {
         console.log("+++++++APP++++componentWillUnmount+++++");
-        const {connect} = this.props;
+        const { connect } = this.props;
         //接受数据  渲染UI
         if (connect && connect.client != null) {
             connect.client.end();
@@ -60,8 +60,7 @@ class App extends Component {
 
     render() {
         const { auth, router, responsive } = this.props;
-
-        console.log("auth ---->" + JSON.stringify(auth));
+        // console.log("auth ---->" + JSON.stringify(auth));
         let de = new DecisionsModel();
 
         //左侧栏 decision 特殊处理

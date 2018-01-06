@@ -4,7 +4,6 @@
  *
  * 基础数据类型
  */
-import echarts from 'echarts';
 
 class EcharsLine {
     constructor(name, type, symbol, symbolSize, data, color) {

@@ -387,7 +387,7 @@ const geoCoordMap = {
     '廊坊': [116.7, 39.53],
     '菏泽': [115.480656, 35.23375],
     '合肥': [117.27, 31.86],
-    '武汉': [114.31, 30.52],
+    '武汉1': [114.31, 30.52],
     '大庆': [125.03, 46.58]
 };
 
@@ -405,112 +405,114 @@ const convertData = function (data) {
     return res;
 };
 
-const option = {
-    backgroundColor: '#404a59',
-    title: {
-        text: '全国主要城市空气质量',
-        subtext: 'data from PM25.in',
-        sublink: 'http://www.pm25.in',
-        left: 'center',
-        textStyle: {
-            color: '#fff'
-        }
-    },
-    tooltip: {
-        trigger: 'item'
-    },
-    legend: {
-        orient: 'vertical',
-        y: 'bottom',
-        x: 'right',
-        data: ['pm2.5'],
-        textStyle: {
-            color: '#fff'
-        }
-    },
-    geo: {
-        map: 'china',
-        zoom :'1.2',
-        label: {
-            emphasis: {
-                show: false
-            }
-        },
-        roam: true,
-        itemStyle: {
-            normal: {
-                areaColor: '#1E4886',
-                borderColor: '#111'
-            },
-            emphasis: {
-                areaColor: '#6A2858'
-            }
-        }
-    },
-    series: [
-        {
-            name: 'pm2.5',
-            type: 'scatter',
-            coordinateSystem: 'geo',
-            data: convertData(data),
-            symbolSize: function (val) {
-                return val[2] / 10;
-            },
-            label: {
-                normal: {
-                    formatter: '{b}',
-                    position: 'right',
-                    show: false
-                },
-                emphasis: {
-                    show: true
-                }
-            },
-            itemStyle: {
-                normal: {
-                    color: '#ddb926'
-                }
-            }
-        },
-        {
-            name: 'Top 5',
-            type: 'effectScatter',
-            coordinateSystem: 'geo',
-            data: convertData(data.sort(function (a, b) {
-                return b.value - a.value;
-            }).slice(0, 6)),
-            symbolSize: function (val) {
-                return val[2] / 10;
-            },
-            showEffectOn: 'render',
-            rippleEffect: {
-                brushType: 'stroke'
-            },
-            hoverAnimation: true,
-            label: {
-                normal: {
-                    formatter: '{b}',
-                    position: 'right',
-                    show: true
-                }
-            },
-            itemStyle: {
-                normal: {
-                    color: '#f4e925',
-                    shadowBlur: 10,
-                    shadowColor: '#333'
-                }
-            },
-            zlevel: 1
-        }
-    ]
-};
-
 class EchartsEffectScatter extends Component {
     render() {
+        const { title, } = this.props;
+        const dataOption = {
+            backgroundColor: '#404a59',
+            title: {
+                text: title,
+                subtext: 'data from PM25.in',
+                left: 'center',
+                textStyle: {
+                    color: '#fff'
+                }
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                y: 'bottom',
+                x: 'right',
+                data: ['pm2.5'],
+                textStyle: {
+                    color: '#fff'
+                }
+            },
+            geo: {
+                map: 'china',
+                zoom: '1.2',
+                label: {
+                    emphasis: {
+                        show: false
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#1E4886',
+                        borderColor: '#111'
+                    },
+                    emphasis: {
+                        areaColor: '#6A2858'
+                    }
+                }
+            },
+            // series: data,
+            series: [
+                {
+                    name: 'pm2.5',
+                    type: 'scatter',
+                    coordinateSystem: 'geo',
+                    data: convertData(data),
+                    symbolSize: function (val) {
+                        return val[2] / 10;
+                    },
+                    label: {
+                        normal: {
+                            formatter: '{b}',
+                            position: 'right',
+                            show: false
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#ddb926'
+                        }
+                    }
+                },
+                {
+                    name: 'Top 5',
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    data: convertData(data.sort(function (a, b) {
+                        return b.value - a.value;
+                    }).slice(0, 6)),
+                    symbolSize: function (val) {
+                        return val[2] / 10;
+                    },
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    hoverAnimation: true,
+                    label: {
+                        normal: {
+                            formatter: '{b}',
+                            position: 'right',
+                            show: true
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#f4e925',
+                            shadowBlur: 10,
+                            shadowColor: '#333'
+                        }
+                    },
+                    zlevel: 1
+                }
+            ]
+        };
+
+        console.log("dataOption===>" + JSON.stringify(dataOption));
         return (
             <ReactEcharts
-                option={option}
+                option={dataOption}
                 style={{ height: '100%', width: '100%' }}
                 className={'react_for_echarts'}
             />

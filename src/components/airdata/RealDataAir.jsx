@@ -10,6 +10,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 import EchartsEffectScatter from '../charts/EchartsEffectScatter';
+import {getDeviceMapList} from '../../axios';
 
 class RealDataAir extends React.Component {
 
@@ -17,23 +18,18 @@ class RealDataAir extends React.Component {
         super(props);
         let d = new Date();
         this.state = {
-            echartsFlag: false,
+            deviceId: 0,
             first: false,
-            expand: false,
-            queryParam: {
-                'activityId': 1,//活动ID
-                'statisDate': d.getFullYear() + "" + (d.getMonth() + 1) + "" + d.getDate(),//查询日期默认当天
-                'userType': 1,//
-            }
+            devicelist: [],
+            pagination: {},
+            loading: false,
         };
     }
 
     //调用action中的ajax方法，获取数据
     componentWillMount() {
-        const { receiveData } = this.props;
-        const { fetchData } = this.props;
         //调用 http请求 获取网络数据
-        //fetchData({funcName: 'admin', stateName: 'auth'});
+        this.getDeviceMap();
     }
 
     componentDidMount() {
@@ -43,7 +39,6 @@ class RealDataAir extends React.Component {
                 first: true
             });
         }
-
     }
 
     //获取网络数据 渲染UI
@@ -51,10 +46,40 @@ class RealDataAir extends React.Component {
 
     }
 
+    getDeviceMap = () => {
+        this.setState({ loading: true });
+        getDeviceMapList().then(data => {
+            if (data.rows != null && data.rows.length > 1) {
+                this.setState({
+                    loading: false,
+                    devicelist: data.rows,
+                    mac: data.rows[0].deviceName,
+                    deviceId: data.rows[0].deviceId,
+                    pagination: {
+                        total: data.records,
+                        pageSize: 10,
+                        current: data.page
+                    }
+                });
+
+                //获取到设备列表了
+                this.getDeviceDate({
+                    deviceId: data.rows[0].deviceId,
+                    date: this.state.date
+                });
+            }
+        }).catch(err => {
+            this.setState({
+                loading: false
+            });
+            console.log(err)
+        });
+    };
+
     render() {
         //刷新2次  解决echars 的宽度问题
         let first = this.state.first || false;
-        let ecahrs = !first ? "" : <EchartsEffectScatter/>;
+        let ecahrs = !first ? "" : <EchartsEffectScatter title= ""/>;
         return (
             <Row gutter={16} style={{ height: '100%' }}>
                 <Col className="gutter-row" md={24} style={{ height: '100%' }}>
@@ -69,7 +94,7 @@ class RealDataAir extends React.Component {
 
 const mapStateToPorps = state => {
     const { auth } = state.httpData;
-    return {auth};
+    return { auth };
 };
 
 const mapDispatchToProps = dispatch => ({

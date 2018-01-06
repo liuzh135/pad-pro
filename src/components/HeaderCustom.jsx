@@ -2,10 +2,9 @@
  * Created by hao.cheng on 2017/4/13.
  */
 import React, {Component} from 'react';
-import {Badge, Icon, Layout, Menu, Dropdown, message} from 'antd';
+import {Dropdown, Icon, Layout, Menu, message} from 'antd';
 import {gitOauthInfo, gitOauthToken} from '../axios';
 import {queryString} from '../utils';
-import avater from '../style/imgs/b1.jpg';
 import {connect} from 'react-redux';
 
 const { Header } = Layout;
@@ -37,25 +36,15 @@ class HeaderCustom extends Component {
         }
     };
 
-    menuClick = e => {
-        console.log(e);
-        e.key === 'logout' && this.logout();
-    };
     logout = () => {
         localStorage.removeItem('user');
         this.props.router.push('/login')
     };
-    popoverHide = () => {
-        this.setState({
-            visible: false,
-        });
-    };
-    handleVisibleChange = (visible) => {
-        this.setState({ visible });
-    };
+
     onClick = function ({ key }) {
         message.info(`Click on item ${key}`);
     };
+
     menu = (
         <Menu onClick={this.onClick}>
             <Menu.Item key="plan1">平板采集方案1</Menu.Item>
@@ -63,9 +52,22 @@ class HeaderCustom extends Component {
         </Menu>
     );
 
+    menuUser = (
+        <Menu onClick={this.logout}>
+            <Menu.Item key="logout">退出登录</Menu.Item>
+        </Menu>
+    );
+
+    menuLanguage = (
+        <Menu onClick={this.onClick}>
+            <Menu.Item key="zhLanguage">中文</Menu.Item>
+            <Menu.Item key="enLanguage">英文</Menu.Item>
+        </Menu>
+    );
+
     render() {
         return (
-            <Header style={{ background: '#fff', padding: 0, height: 65 }} className="custom-theme">
+            <Header style={{ background: '#447ED9', padding: 0, height: 65 }} className="custom-theme">
 
                 <Icon
                     className="trigger custom-trigger"
@@ -78,41 +80,31 @@ class HeaderCustom extends Component {
                         平板采集方案 <Icon type="caret-down" style={{ color: "#fff" }}/>
                     </a>
                 </Dropdown>
-                <Menu
-                    mode="horizontal"
-                    style={{ lineHeight: '64px', float: 'right' }}
-                    onClick={this.menuClick}>
-                    <SubMenu title={<span className="avatar"><img src={avater} alt="头像"/><i
-                        className="on bottom b-white"/></span>}>
-                        <MenuItemGroup title="用户中心">
-                            <Menu.Item key="setting:1">你好 - {this.props.user.userName}</Menu.Item>
-                            <Menu.Item key="setting:2">个人信息</Menu.Item>
-                            <Menu.Item key="logout"><span onClick={this.logout}>退出登录</span></Menu.Item>
-                        </MenuItemGroup>
-                        <MenuItemGroup title="设置中心">
-                            <Menu.Item key="setting:3">个人设置</Menu.Item>
-                            <Menu.Item key="setting:4">系统设置</Menu.Item>
-                        </MenuItemGroup>
-                    </SubMenu>
-                </Menu>
+
+                <div style={{ lineHeight: '64px', float: 'right', marginRight: '30px' }}>
+                    <Dropdown overlay={this.menuUser}>
+                        <a className="ant-dropdown-link" href="javascript:void(0);"
+                           style={{ color: "#fff", fontSize: '14px', padding: '5px', marginLeft: '5px' }}>
+                            {this.props.user.userName}
+                        </a>
+                    </Dropdown>
+                </div>
+
+                <div style={{ lineHeight: '64px', float: 'right', marginRight: '30px' }}>
+                    <Dropdown overlay={this.menuLanguage}>
+                        <a className="ant-dropdown-link" href="javascript:void(0);"
+                           style={{ color: "#fff", fontSize: '14px', padding: '5px', marginLeft: '5px' }}>
+                            中文
+                        </a>
+                    </Dropdown>
+                </div>
                 <style>{`
                     .ant-menu-submenu-horizontal > .ant-menu {
                         width: 120px;
                         left: -40px;
                     }
-                    ,.ant-dropdown-menu{
-                        width: 120px;
-                    }
-                    .custom-theme {
-                        background: #447ED9 !important;
-                        color: #fff !important;
-                    }
-                    .custom-theme .ant-menu {
-                        background: #447ED9 !important;
-                        color: #fff !important;
-                    }
-                    .custom-theme .ant-menu-item-group-title {
-                        color: #fff !important;
+                    .ant-dropdown-menu{
+                        width: 100px;
                     }
                 `}</style>
             </Header>

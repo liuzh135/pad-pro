@@ -2,11 +2,17 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import React from 'react';
-import {Form, Icon, Input, Button, Checkbox} from 'antd';
-import {Layout} from 'antd';
+import {Menu, Button, Checkbox, Form, Icon, Input, Layout, Dropdown} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {message} from "antd/lib/index";
+import zhCN from "../../locale/zh_CN";
+import enUS from "../../locale/en_US";
+
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
 
 const FormItem = Form.Item;
 const { Footer } = Layout;
@@ -52,32 +58,65 @@ class Login extends React.Component {
         window.location.href = 'https://github.com/login/oauth/authorize?client_id=792cdcd244e98dcd2dee&redirect_uri=http://localhost:3006/&scope=user&state=reactAdmin';
     };
 
+    onClick = ({ key }) => {
+        const { receiveData } = this.props;
+        receiveData && receiveData(key, 'language');
+    };
+
+    menuLanguage = (
+        <Menu onClick={this.onClick}>
+            <Menu.Item key="zhLanguage">中文</Menu.Item>
+            <Menu.Item key="enLanguage">English</Menu.Item>
+        </Menu>
+    );
+
     render() {
         const { getFieldDecorator } = this.props.form;
+        let { language } = this.props;
+        let languageString = language.data === 'zhLanguage' ? '中文' : 'English';
+        let messagesStr = language.data === 'zhLanguage' ? zhCN : enUS;
         return (
             <Layout className="login_layout">
-                <div className="wrap" style={{ height: '100%' }}>
+
+                <div className="wrap">
+                    <div style={{ lineHeight: '64px', textAlign: "right", marginRight: '50px' }}>
+                        <Dropdown overlay={this.menuLanguage}>
+                            <a className="" href="#"
+                               style={{
+                                   color: "#fff",
+                                   fontSize: '14px',
+                                   padding: '5px',
+                                   marginLeft: '5px'
+                               }}>
+                                {languageString}
+                            </a>
+                        </Dropdown>
+                    </div>
                     <div className="login">
                         <div className="login-form">
                             <div className="login-logo">
-                                <span>空气检测仪管理系统</span>
+                                <FormattedMessage
+                                    id="erpName"
+                                    tagName='h2'
+                                    defaultMessage={'Air inspection management system'}
+                                />
                             </div>
 
                             <Form onSubmit={this.handleSubmit} style={{ maxWidth: '400px' }}>
                                 <FormItem>
                                     {getFieldDecorator('userName', {
-                                        rules: [{ required: true, message: '请输入用户名!' }],
+                                        rules: [{ required: true, message: messagesStr.inputAdmin }],
                                     })(
                                         <Input prefix={<Icon type="user" style={{ fontSize: 13 }}/>}
-                                               placeholder="管理员输入admin, 游客输入guest"/>
+                                               placeholder={messagesStr.inputHitAdmin}/>
                                     )}
                                 </FormItem>
                                 <FormItem>
                                     {getFieldDecorator('password', {
-                                        rules: [{ required: true, message: '请输入密码!' }],
+                                        rules: [{ required: true, message: messagesStr.inputpwd }],
                                     })(
                                         <Input prefix={<Icon type="lock" style={{ fontSize: 13 }}/>} type="password"
-                                               placeholder="管理员输入admin, 游客输入guest"/>
+                                               placeholder={messagesStr.inputHitpwd}/>
                                     )}
                                 </FormItem>
                                 <FormItem>
@@ -85,12 +124,22 @@ class Login extends React.Component {
                                         valuePropName: 'checked',
                                         initialValue: true,
                                     })(
-                                        <Checkbox>记住我</Checkbox>
+                                        <Checkbox> <FormattedMessage
+                                            id="remenber"
+                                            defaultMessage={'login'}
+                                        /></Checkbox>
                                     )}
-                                    <a className="login-form-forgot" href="" style={{ float: 'right' }}>忘记密码</a>
+                                    <a className="login-form-forgot" href="" style={{ float: 'right' }}>
+                                        <FormattedMessage
+                                            id="forget"
+                                            defaultMessage={'forget'}
+                                        /></a>
                                     <Button type="primary" htmlType="submit" className="login-form-button"
                                             style={{ width: '100%' }}>
-                                        登录
+                                        <FormattedMessage
+                                            id="login"
+                                            defaultMessage={'login'}
+                                        />
                                     </Button>
                                 </FormItem>
                             </Form>
@@ -100,15 +149,23 @@ class Login extends React.Component {
                         V1.0.0 ©2017 Created by wyzk
                     </Footer>
                 </div>
-
+                <style>{`
+                    .ant-menu-submenu-horizontal > .ant-menu {
+                        width: 120px;
+                        left: -40px;
+                    }
+                    .ant-dropdown-menu{
+                        width: 80px;
+                    }
+                `}</style>
             </Layout>
         );
     }
 }
 
 const mapStateToPorps = state => {
-    const { auth } = state.httpData;
-    return { auth };
+    const { auth, language = 'zhLanguage' } = state.httpData;
+    return { auth, language };
 };
 const mapDispatchToProps = dispatch => ({
     fetchData: bindActionCreators(fetchData, dispatch),
@@ -116,4 +173,4 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-export default connect(mapStateToPorps, mapDispatchToProps)(Form.create()(Login));
+export default connect(mapStateToPorps, mapDispatchToProps)(Form.create()(injectIntl(Login)));

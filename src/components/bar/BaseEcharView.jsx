@@ -61,7 +61,7 @@ class BaseEcharView extends React.Component {
                 }
             }
         });
-
+        // console.log("option = " + JSON.stringify(dataOption));
         return (
             <ReactEcharts
                 option={dataOption}

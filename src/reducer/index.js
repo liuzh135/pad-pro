@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 import * as type from '../action/type';
 
 const handleData = (state = {isFetching: true, data: {}}, action) => {
+    // console.log('action===>' + JSON.stringify(action));
     switch (action.type) {
         case type.REQUEST_DATA:
             return {...state, isFetching: true};

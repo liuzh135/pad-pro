@@ -5,19 +5,18 @@
  */
 
 import React from "react";
-import {Button, Col, DatePicker, Dropdown, Icon, Menu, message, Radio, Row} from 'antd';
+import {Button, Col, DatePicker, Dropdown, Icon, Menu, Radio, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
-import BaseTableData from "../data/BaseTableData";
 import moment from 'moment';
 import BaseEcharView from "../bar/BaseEcharView";
 import EcharCom from "../bar/EcharCom";
 import EcharBar from "../bar/EcharBar";
+import {getDeivceList, getDeviceByDate} from '../../axios';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-const { MonthPicker, RangePicker } = DatePicker;
 
 class StatisticalDeviceData extends React.Component {
 
@@ -25,21 +24,29 @@ class StatisticalDeviceData extends React.Component {
         super(props);
         let d = new Date();
         this.state = {
-            echartsFlag: false,
             mac: '设备MAC',
+            deviceId: 0,
+            date: this.getLocDate(),
             first: false,
-            menuJson: [
-                {key: "1", value: "aabbccdd"},
-                {key: "2", value: "11223344"},
-                {key: "3", value: "55667788"},
-                {key: "4", value: "88996622"},
-            ],
-            queryParam: {
-                'activityId': 1,//活动ID
-                'statisDate': d.getFullYear() + "" + (d.getMonth() + 1) + "" + d.getDate(),//查询日期默认当天
-                'userType': 1,//
-            }
+            devicelist: [],
+            pagination: {},
+            loading: false,
+            echarsData: {},
+            airType: 0
         }
+    }
+
+    //调用action中的ajax方法，获取数据
+    componentWillMount() {
+        this.getDevices({
+            rows: 10,
+            page: 1
+        });
+    }
+
+    //获取网络数据 渲染UI
+    componentWillReceiveProps(nextProps) {
+
     }
 
     componentDidMount() {
@@ -51,51 +58,149 @@ class StatisticalDeviceData extends React.Component {
         }
     }
 
-    //调用action中的ajax方法，获取数据
-    componentWillMount() {
-        const { receiveData } = this.props;
-        const { fetchData } = this.props;
-        //调用 http请求 获取网络数据
-        //fetchData({funcName: 'admin', stateName: 'auth'});
-    }
+    getLocDate = () => {
+        let date = new Date();
+        let seperator = "-";
+        let month = date.getMonth() + 1;
+        let strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        return (1900 + date.getYear()) + seperator + month + seperator + strDate;
+    };
 
-    //获取网络数据 渲染UI
-    componentWillReceiveProps(nextProps) {
+    getDevices = (params = {}) => {
+        this.setState({ loading: true });
+        getDeivceList(params).then(data => {
+            if (data.rows != null && data.rows.length > 1) {
+                this.setState({
+                    loading: false,
+                    devicelist: data.rows,
+                    mac: data.rows[0].deviceName,
+                    deviceId: data.rows[0].deviceId,
+                    pagination: {
+                        total: data.records,
+                        pageSize: 10,
+                        current: data.page
+                    }
+                });
 
-    }
-
-    handleMenuClick = (e) => {
-        message.info('device Mac :' + this.state.menuJson[e.key - 1].value);
-        console.log('click', this.state.menuJson[e.key - 1].value);
-        this.setState({
-            mac: this.state.menuJson[e.key - 1].value
+                //获取到设备列表了
+                this.getDeviceDate({
+                    deviceId: data.rows[0].deviceId,
+                    date: this.state.date
+                });
+            }
+        }).catch(err => {
+            this.setState({
+                loading: false
+            });
+            console.log(err)
         });
     };
 
+    /**
+     * 获取线表数据
+     * @param deviceId  设备ID
+     * @param date  日期
+     *
+     */
+    getDeviceDate = (params = {}) => {
+        getDeviceByDate(params).then(data => {
+            if (data != null) {
+                this.setState({
+                    echarsData: data
+                });
+            }
+        }).catch(err => {
+            console.log(err)
+        });
+    };
+
+    //选择设备  重新拉取线表数据
+    handleMenuClick = (e) => {
+        // message.info('device Mac :' + this.state.devicelist[e.key].deviceName);
+        this.setState({
+            mac: this.state.devicelist[e.key].deviceName,
+            deviceId: this.state.devicelist[e.key].deviceId,
+        });
+
+        this.getDeviceDate({
+            deviceId: this.state.devicelist[e.key].deviceId,
+            date: this.state.date
+        });
+    };
+
+    //选择日期  重新拉取线表数据
+    onSelectChange = (date, dateString) => {
+        this.setState({
+            date: dateString,
+        });
+        this.getDeviceDate({
+            deviceId: this.state.deviceId,
+            date: dateString
+        });
+    };
 
     getMenuJon() {
         let menus = [];
-        this.state.menuJson.map(function (data) {
-            menus.push(<Menu.Item key={data.key}>{data.value}</Menu.Item>)
+        this.state.devicelist.map((data, index) => {
+            menus.push(<Menu.Item key={index}>{data.deviceName}</Menu.Item>)
         });
         return <Menu onClick={this.handleMenuClick}>{menus}</Menu>;
     }
 
+    //切换列表
+    onTypeChange = (e) => {
+        console.log("e =" + e.target.value);
+        this.setState({
+            airType: e.target.value
+        });
+    };
+
+    getSelectType = () => {
+        let menus = [];
+        let echarsData = this.state.echarsData || {};
+        echarsData.data && echarsData.data.label && echarsData.data.label.map((airdata, index) => {
+            if (index % 3 === 0) {
+                menus.push(<RadioButton key={index}
+                                        value={index}>{String(airdata).replace("的每个小时平均值", "")}</RadioButton>)
+            }
+        });
+        return <RadioGroup defaultValue={0} onChange={this.onTypeChange}
+                           style={{ margin: 5, marginLeft: 10 }}>{menus}</RadioGroup>;
+    };
+
     render() {
-        let tableComs = new BaseTableData();
         let mac = this.state.mac;
+        let deviceId = this.state.deviceId;
+        let date = this.state.date;
+        console.log("select mac =" + mac + "###deviceId=" + deviceId);
+        console.log("select date =" + date);
+        let echarsData = this.state.echarsData || {};
         let menu = this.getMenuJon() || '';
-        let dateFormat = 'YYYY/MM/DD';
-        let monthFormat = 'YYYY/MM';
+        let dateFormat = 'YYYY-MM-DD';
 
         let echarCom = new EcharCom();
         let datalist = [];
-        let xlist = ["1点", "2点", "3点", "4点", "5点", "6点", "7点", "8点", "9点", "10点",];
-        datalist.push(new EcharBar('PM2.5', 'line', 'circle', 4, [120, 300, 402, 180, 590, 620, 200, 190, 220, 500], '#35C9CB', 20));
+        let xlist = (echarsData && echarsData.data && echarsData.data.axis) || [];
+        let airType = this.state.airType;
+        if (echarsData && echarsData.data && echarsData.data.series) {
+            for (let i = 0; i < 3; i++) {
+                let echarList = (echarsData.data.series[airType + i]).data || [];
+                let label = echarsData.data.label[airType + i];
+                datalist.push(new EcharBar(label, 'line', 'circle', 4, echarList, '#35C9CB', 20));
+            }
+        }
+
+        let title = (echarsData && echarsData.data && echarsData.data.title) || "设备历史数据";
         //刷新2次  解决echars 的宽度问题
         let first = this.state.first || false;
         let ecahrs = !first ? "" :
-            <BaseEcharView title="设备历史数据" option={echarCom.option} xAxis={xlist} data={datalist}
+            <BaseEcharView title={title} option={echarCom.option} xAxis={xlist} data={datalist}
                            style={{ height: '310px', width: '100%', border: '#E9E9E9 solid 1px' }}/>;
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
@@ -108,27 +213,18 @@ class StatisticalDeviceData extends React.Component {
                                 <div className="text-title">
                                     <span style={{ marginLeft: "15px" }}>设备历史数据</span>
                                 </div>
-
-                                <Dropdown overlay={menu} trigger={['click']}>
-                                    <Button style={{ margin: 10 }}>
-                                        {mac} <Icon type="down"/>
-                                    </Button>
-                                </Dropdown>
-
                                 <div>
-                                    <div className='pull-left'>
-                                        <RadioGroup defaultValue="a" style={{ margin: 5, marginLeft: 10 }}>
-                                            <RadioButton value="a">今天</RadioButton>
-                                            <RadioButton value="b">7天</RadioButton>
-                                            <RadioButton value="c">14天</RadioButton>
-                                            <RadioButton value="d">30天</RadioButton>
-                                        </RadioGroup>
-                                    </div>
-                                    <div className='pull-left'>
-                                        <RangePicker style={{ margin: 5, marginLeft: 10 }}
-                                                     defaultValue={[moment('2015/01/01', dateFormat), moment('2017/01/01', dateFormat)]}
-                                                     format={dateFormat}/>
-                                    </div>
+                                    {this.getSelectType()}
+                                    <Dropdown overlay={menu} trigger={['click']}>
+                                        <Button style={{ margin: 10 }}>
+                                            {mac} <Icon type="down"/>
+                                        </Button>
+                                    </Dropdown>
+
+                                    <DatePicker style={{ margin: 10, marginLeft: 10 }}
+                                                onChange={this.onSelectChange}
+                                                defaultValue={moment(date, dateFormat)}
+                                                format={dateFormat}/>
                                 </div>
                             </div>
                         </div>
@@ -186,7 +282,7 @@ class StatisticalDeviceData extends React.Component {
 
 const mapStateToPorps = state => {
     const { auth } = state.httpData;
-    return {auth};
+    return { auth };
 };
 
 const mapDispatchToProps = dispatch => ({
