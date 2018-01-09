@@ -13,9 +13,14 @@ export default class BarStyleProgress extends React.Component {
         this.state = {}
     }
 
-    getProString(percent) {
-        return (percent) * 1000;
-    }
+    getProString = (percent) => {
+        return (percent) * 10;
+    };
+
+    getSafeProgress = (percent) => {
+        if (percent > 100) return 100;
+        return percent;
+    };
 
     render() {
         const { airName, prosName1, prosgress1, prosName2, prosgress2 } = this.props;
@@ -23,10 +28,10 @@ export default class BarStyleProgress extends React.Component {
             <div className=" pd-2x">
                 <div><span style={{ fontSize: '20px', margin: '5px' }}>{airName}</span></div>
                 <div><span style={{ margin: '5px' }}>{prosName1}</span></div>
-                <Progress style={{ margin: '5px' }} percent={parseInt(prosgress1)/1000} status="active"
+                <Progress style={{ margin: '5px' }} percent={this.getSafeProgress(parseInt(prosgress1) / 10)} status="active"
                           format={this.getProString}/>
                 <div><span style={{ margin: '5px' }}>{prosName2}</span></div>
-                <Progress style={{ margin: '5px' }} percent={parseInt(prosgress2)/1000} status="active"
+                <Progress style={{ margin: '5px' }} percent={this.getSafeProgress(parseInt(prosgress2) / 10)} status="active"
                           format={this.getProString}/>
             </div>
         );

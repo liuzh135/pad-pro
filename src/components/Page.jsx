@@ -20,10 +20,10 @@ addLocaleData([...en, ...zh]);
 class Page extends React.Component {
     render() {
         const { auth, language } = this.props;
-        console.log('auth--->' + JSON.stringify(auth) + "-->language=" + language.data);
+        // console.log('auth--->' + JSON.stringify(auth) + "-->language=" + language.data);
         let localeStr = language.data === 'zhLanguage' ? 'zh' : 'en';
         let messagesStr = language.data === 'zhLanguage' ? zhCN : enUS;
-        console.log('localeStr=' + localeStr);//默认 英文
+        // console.log('localeStr=' + localeStr);//默认 英文
         return (
             <div style={{ height: '100%' }}>
                 <IntlProvider locale={localeStr} messages={messagesStr}>

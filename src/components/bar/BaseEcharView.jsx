@@ -13,17 +13,25 @@ class BaseEcharView extends React.Component {
         super(props);
         this.state = {};
     }
-
     render() {
-        const { style, option, data, xAxis, legend, title } = this.props;
+        const { style, option, data, xAxis, legend, title, subtitle } = this.props;
 
         const dataOption = Object.assign(option, {
             series: data,
             title: {
-                text: title,
-                left: '50%',
+                text: title || "",
+                subtext: subtitle || "",
+                left: '1%',
                 show: true,
-                textAlign: 'center'
+                textStyle: {
+                    fontSize: 18,
+                    fontWeight: 'bolder',
+                    color: '#41A8DA'
+                },
+                subtextStyle: {
+                    fontSize: 12,
+                    color: '#aaa'
+                }
             },
             grid: {
                 left: '3%',
@@ -32,7 +40,8 @@ class BaseEcharView extends React.Component {
                 containLabel: true
             },
             legend: {
-                data: legend,
+                show: true,
+                data: legend
             },
             xAxis: {
                 type: 'category',
@@ -62,6 +71,7 @@ class BaseEcharView extends React.Component {
             }
         });
         // console.log("option = " + JSON.stringify(dataOption));
+
         return (
             <ReactEcharts
                 option={dataOption}

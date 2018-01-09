@@ -38,7 +38,7 @@ export class AirDataProgress extends React.Component {
                 <div className={className + " point3"}>
                     <div className="loader loader5 loader5-green duration-3s-after point2 contentY"
                          style={{ height: '90px', width: '90px', margin: '0' }}>
-                        <div className="pointer"></div>
+                        <div className="pointer"/>
                     </div>
                 </div>
                 {

@@ -46,6 +46,21 @@ class App extends Component {
         }
     }
 
+    componentDidUpdate() {
+        let patharry = this.props.location.pathname.split("/");
+        const { connect } = this.props;
+        if (patharry.length > 2 && patharry[3] !== 'realdevicedata'
+            && connect != null && connect.client != null) {
+            if (connect && connect.mqdata != null) {
+                let renderData = JSON.parse(connect.mqdata).data;
+                if (renderData != null) {
+                    connect.client.unsubscribe("/device/air/airmonitor/" + renderData.uuid);
+                    console.log("---unsubscribe-->" + renderData.uuid);
+                }
+            }
+        }
+    }
+
     getClientWidth = () => {    // 获取当前浏览器宽度并设置responsive管理响应式
         const { receiveData } = this.props;
         const clientWidth = document.body.clientWidth;

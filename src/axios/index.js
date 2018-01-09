@@ -61,18 +61,39 @@ export const guest = () => get({ url: config.MOCK_AUTH_VISITOR });
 
 export const getDeivceList = params => axios({
     method: 'get',
-    url: 'http://120.77.252.48:9999/device/device/getDeviceList?page=' + params.page + '&rows=' + params.rows
+    url: config.BASEWYZK + '/device/device/getDeviceList?page=' + params.page + '&rows=' + params.rows
 }).then(res => res.data).catch(err => console.log(err));
 
 
 export const getDeviceByDate = params => axios({
     method: 'get',
-    url: 'http://120.77.252.48:9999/device/line/getDeviceByDate?deviceId=' + params.deviceId + '&date=' + params.date
+    url: config.BASEWYZK + '/device/line/getDeviceByDate?deviceId=' + params.deviceId + '&date=' + params.date
 }).then(res => res.data).catch(err => console.log(err));
 
 
 export const getDeviceMapList = () => axios({
     method: 'get',
-    url: 'http://120.77.252.48:9999/device/device/getDeviceMapList'
+    url: config.BASEWYZK + '/device/device/getDeviceMapList'
 }).then(res => res.data).catch(err => console.log(err));
+
+export const getDeviceRealData = (deviceId) => axios({
+    method: 'get',
+    url: config.BASEWYZK + '/device/data/getLastDeviceData?deviceId=' + deviceId
+}).then(res => res.data).catch(err => console.log(err));
+
+export const getDeviceByHour = (params) => axios({
+    method: 'get',
+    url: config.BASEWYZK + '/device/line/getDeviceByHour?deviceId=' + params.deviceId + '&date=' + params.date
+}).then(res => res.data).catch(err => console.log(err));
+
+
+export const getDeviceDataHistoryByDeviceId = (params) => axios({
+    method: 'get',
+    url: config.BASEWYZK + '/device/data/getDeviceDataHistoryByDeviceId?deviceId=' + params.deviceId + '&startTime=' + params.startTime
+    + '&endTime=' + params.endTime + '&page=' + params.page + '&rows=' + params.rows
+}).then(res => res.data).catch(err => console.log(err));
+
+
+
+
 

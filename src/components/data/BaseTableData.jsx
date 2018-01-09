@@ -37,6 +37,15 @@ class BaseTableData {
         return Object.prototype.toString.call(obj) === '[object Array]';
     };
 
+    renderOperationContent = (value, row, index) => {
+        console.log("row " + row.deviceId);
+        return <div className="table-operation flex-center">
+            <a href={"/#/app/device/realdevicedata?deviceId=" + row.deviceId} style={{ marginRight: '4px' }}>实时数据</a><a
+            style={{ marginLeft: '4px' }}
+            href={"/#/app/device/historydata?deviceId=" + row.deviceId}>历史数据</a>
+        </div>;
+    };
+
 
     //默认表头 适配
     comIssue_columns = [
@@ -149,8 +158,8 @@ class BaseTableData {
         columns: this.comIssue_columns,
         data: this.pm_data,
         bordered: true,
-        pagination: {pageSize: 5},
-        style: {padding: '0 10px'}
+        pagination: { pageSize: 5 },
+        style: { padding: '0 10px' }
     };
 
 
@@ -166,7 +175,7 @@ class BaseTableData {
             dataIndex: 'deviceName',
             width: 150,
             render: this.renderContent
-        },{
+        }, {
             title: '设备类型',
             dataIndex: 'typeName',
             width: 150,
@@ -191,83 +200,88 @@ class BaseTableData {
             width: 150,
             dataIndex: 'deviceOnline',
             render: this.renderContent
+        }, {
+            title: '操作',
+            width: 150,
+            dataIndex: 'operation',
+            render: this.renderOperationContent
         }
     ];
 
-    device_data = [{
-        key: '1',
-        deviceId: "1",
-        bindtime: "2017.12.22",
-        onlineTime: "2天",
-        devicestate: "正常",
-        devicepos: "深圳",
-    }, {
-        key: '2',
-        deviceId: "2",
-        bindtime: "2017.12.22",
-        onlineTime: "2天",
-        devicestate: "正常",
-        devicepos: "深圳",
-    }, {
-        key: '3',
-        deviceId: "3",
-        bindtime: "2017.12.22",
-        onlineTime: "2天",
-        devicestate: "正常",
-        devicepos: "深圳",
-    }, {
-        key: '4',
-        deviceId: "4",
-        bindtime: "2017.12.22",
-        onlineTime: "2天",
-        devicestate: "正常",
-        devicepos: "深圳",
-    }, {
-        key: '5',
-        deviceId: "5",
-        bindtime: "2017.12.22",
-        onlineTime: "2天",
-        devicestate: "正常",
-        devicepos: "深圳",
-    }, {
-        key: '6',
-        deviceId: "5",
-        bindtime: "2017.12.22",
-        onlineTime: "2天",
-        devicestate: "正常",
-        devicepos: "深圳",
-    }, {
-        key: '7',
-        deviceId: "5",
-        bindtime: "2017.12.22",
-        onlineTime: "2天",
-        devicestate: "正常",
-        devicepos: "深圳",
-    }, {
-        key: '8',
-        deviceId: "5",
-        bindtime: "2017.12.22",
-        onlineTime: "2天",
-        devicestate: "正常",
-        devicepos: "深圳",
-    }, {
-        key: '9',
-        deviceId: "5",
-        bindtime: "2017.12.22",
-        onlineTime: "2天",
-        devicestate: "正常",
-        devicepos: "深圳",
-    }];
-
-    deviceTabledata = {
-        columns: this.device_columns,
-        data: this.device_data,
-        bordered: true,
-        pagination: {pageSize: 8, showQuickJumper: true},
-        style: {padding: '0 10px', clear: 'both'}
-    };
-
-
+    //默认表头 适配
+    device_his_columns = [
+        {
+            title: '设备ID',
+            dataIndex: 'deviceId',
+            width: 100,
+            render: this.renderContent
+        }, {
+            title: 'UUID',
+            dataIndex: 'uuid',
+            width: 250,
+            render: this.renderContent
+        }, {
+            title: 'ECO2',
+            dataIndex: 'eco2',
+            width: 100,
+            render: this.renderContent
+        }, {
+            title: 'ECO2Mg',
+            dataIndex: 'eco2Mg',
+            width: 100,
+            render: this.renderContent
+        }, {
+            title: 'HCHO',
+            width: 100,
+            dataIndex: 'hcho',
+            render: this.renderContent
+        }, {
+            title: 'HCHOUg',
+            width: 100,
+            dataIndex: 'hchoUg',
+            render: this.renderContent
+        }, {
+            title: 'PM1',
+            width: 100,
+            dataIndex: 'pm1',
+            render: this.renderContent
+        }, {
+            title: 'PM10',
+            width: 100,
+            dataIndex: 'pm10',
+            render: this.renderContent
+        }, {
+            title: 'RH',
+            width: 100,
+            dataIndex: 'rh',
+            render: this.renderContent
+        }, {
+            title: 'PM25',
+            width: 100,
+            dataIndex: 'pm25',
+            render: this.renderContent
+        }, {
+            title: 'T',
+            width: 100,
+            dataIndex: 't',
+            render: this.renderContent
+        }, {
+            title: 'TVOC',
+            width: 100,
+            dataIndex: 'tvoc',
+            render: this.renderContent
+        }, {
+            title: 'TVOCUg',
+            width: 100,
+            dataIndex: 'tvocUg',
+            render: this.renderContent
+        }, {
+            title: '上传时间',
+            width: 150,
+            dataIndex: 'createTime',
+            render: this.renderContent
+        }
+    ];
 }
 
 export default BaseTableData;

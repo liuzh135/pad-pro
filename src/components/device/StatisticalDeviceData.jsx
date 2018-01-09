@@ -5,18 +5,12 @@
  */
 
 import React from "react";
-import {Button, Col, DatePicker, Dropdown, Icon, Menu, Radio, Row} from 'antd';
+import {Button, Col, Dropdown, Icon, Menu, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
-import moment from 'moment';
-import BaseEcharView from "../bar/BaseEcharView";
-import EcharCom from "../bar/EcharCom";
-import EcharBar from "../bar/EcharBar";
-import {getDeivceList, getDeviceByDate} from '../../axios';
-
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
+import {getDeivceList} from '../../axios';
+import HistoryEcharView from "./HistoryEcharView";
 
 class StatisticalDeviceData extends React.Component {
 
@@ -27,12 +21,9 @@ class StatisticalDeviceData extends React.Component {
             mac: '设备MAC',
             deviceId: 0,
             date: this.getLocDate(),
-            first: false,
             devicelist: [],
             pagination: {},
             loading: false,
-            echarsData: {},
-            airType: 0
         }
     }
 
@@ -42,20 +33,6 @@ class StatisticalDeviceData extends React.Component {
             rows: 10,
             page: 1
         });
-    }
-
-    //获取网络数据 渲染UI
-    componentWillReceiveProps(nextProps) {
-
-    }
-
-    componentDidMount() {
-        let first = this.state.first || false;
-        if (!first) {
-            this.setState({
-                first: true
-            });
-        }
     }
 
     getLocDate = () => {
@@ -72,50 +49,47 @@ class StatisticalDeviceData extends React.Component {
         return (1900 + date.getYear()) + seperator + month + seperator + strDate;
     };
 
+    GetQueryString = (name) => {
+        let url = window.location.href.substr(1);
+        if (url.indexOf(name + "=")) {
+            let deviecID = url.split(name + "=");
+            if (deviecID.length === 2) {
+                return deviecID[1];
+            }
+        }
+        return null;
+    };
+
     getDevices = (params = {}) => {
         this.setState({ loading: true });
         getDeivceList(params).then(data => {
             if (data.rows != null && data.rows.length > 1) {
+                let querydeviceId = this.GetQueryString("deviceId");
+                console.log("GetQueryString deviceId =" + querydeviceId);
+                let mac = data.rows[0].deviceName;
+                let deviceId = data.rows[0].deviceId;
+                for (let i = 0; i < data.rows.length; i++) {
+                    if (data.rows[i].deviceId === parseInt(querydeviceId)) {
+                        mac = data.rows[i].deviceName;
+                        deviceId = data.rows[i].deviceId;
+                    }
+                }
                 this.setState({
                     loading: false,
                     devicelist: data.rows,
-                    mac: data.rows[0].deviceName,
-                    deviceId: data.rows[0].deviceId,
+                    mac: mac,
+                    deviceId: deviceId,
                     pagination: {
                         total: data.records,
                         pageSize: 10,
                         current: data.page
                     }
                 });
-
-                //获取到设备列表了
-                this.getDeviceDate({
-                    deviceId: data.rows[0].deviceId,
-                    date: this.state.date
-                });
             }
         }).catch(err => {
             this.setState({
                 loading: false
             });
-            console.log(err)
-        });
-    };
-
-    /**
-     * 获取线表数据
-     * @param deviceId  设备ID
-     * @param date  日期
-     *
-     */
-    getDeviceDate = (params = {}) => {
-        getDeviceByDate(params).then(data => {
-            if (data != null) {
-                this.setState({
-                    echarsData: data
-                });
-            }
-        }).catch(err => {
             console.log(err)
         });
     };
@@ -128,22 +102,8 @@ class StatisticalDeviceData extends React.Component {
             deviceId: this.state.devicelist[e.key].deviceId,
         });
 
-        this.getDeviceDate({
-            deviceId: this.state.devicelist[e.key].deviceId,
-            date: this.state.date
-        });
     };
 
-    //选择日期  重新拉取线表数据
-    onSelectChange = (date, dateString) => {
-        this.setState({
-            date: dateString,
-        });
-        this.getDeviceDate({
-            deviceId: this.state.deviceId,
-            date: dateString
-        });
-    };
 
     getMenuJon() {
         let menus = [];
@@ -153,55 +113,12 @@ class StatisticalDeviceData extends React.Component {
         return <Menu onClick={this.handleMenuClick}>{menus}</Menu>;
     }
 
-    //切换列表
-    onTypeChange = (e) => {
-        console.log("e =" + e.target.value);
-        this.setState({
-            airType: e.target.value
-        });
-    };
-
-    getSelectType = () => {
-        let menus = [];
-        let echarsData = this.state.echarsData || {};
-        echarsData.data && echarsData.data.label && echarsData.data.label.map((airdata, index) => {
-            if (index % 3 === 0) {
-                menus.push(<RadioButton key={index}
-                                        value={index}>{String(airdata).replace("的每个小时平均值", "")}</RadioButton>)
-            }
-        });
-        return <RadioGroup defaultValue={0} onChange={this.onTypeChange}
-                           style={{ margin: 5, marginLeft: 10 }}>{menus}</RadioGroup>;
-    };
 
     render() {
         let mac = this.state.mac;
         let deviceId = this.state.deviceId;
-        let date = this.state.date;
-        console.log("select mac =" + mac + "###deviceId=" + deviceId);
-        console.log("select date =" + date);
-        let echarsData = this.state.echarsData || {};
         let menu = this.getMenuJon() || '';
-        let dateFormat = 'YYYY-MM-DD';
 
-        let echarCom = new EcharCom();
-        let datalist = [];
-        let xlist = (echarsData && echarsData.data && echarsData.data.axis) || [];
-        let airType = this.state.airType;
-        if (echarsData && echarsData.data && echarsData.data.series) {
-            for (let i = 0; i < 3; i++) {
-                let echarList = (echarsData.data.series[airType + i]).data || [];
-                let label = echarsData.data.label[airType + i];
-                datalist.push(new EcharBar(label, 'line', 'circle', 4, echarList, '#35C9CB', 20));
-            }
-        }
-
-        let title = (echarsData && echarsData.data && echarsData.data.title) || "设备历史数据";
-        //刷新2次  解决echars 的宽度问题
-        let first = this.state.first || false;
-        let ecahrs = !first ? "" :
-            <BaseEcharView title={title} option={echarCom.option} xAxis={xlist} data={datalist}
-                           style={{ height: '310px', width: '100%', border: '#E9E9E9 solid 1px' }}/>;
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
 
@@ -213,28 +130,26 @@ class StatisticalDeviceData extends React.Component {
                                 <div className="text-title">
                                     <span style={{ marginLeft: "15px" }}>设备历史数据</span>
                                 </div>
-                                <div>
-                                    {this.getSelectType()}
+                                <div style={{ border: '1px solid rgb(233, 233, 233)' }}>
+                                    <span className="device_text">设备名称</span>
                                     <Dropdown overlay={menu} trigger={['click']}>
                                         <Button style={{ margin: 10 }}>
                                             {mac} <Icon type="down"/>
                                         </Button>
                                     </Dropdown>
-
-                                    <DatePicker style={{ margin: 10, marginLeft: 10 }}
-                                                onChange={this.onSelectChange}
-                                                defaultValue={moment(date, dateFormat)}
-                                                format={dateFormat}/>
+                                    <span className="device_text" style={{ marginLeft: '20px' }}>设备位置</span>
+                                    <Dropdown overlay={menu} trigger={['click']}>
+                                        <Button style={{ margin: 10 }}>
+                                            {mac} <Icon type="down"/>
+                                        </Button>
+                                    </Dropdown>
                                 </div>
                             </div>
                         </div>
                     </Col>
-
-                    <Col className="gutter-row" md={24} style={{ paddingRight: '30px' }}>
-                        <div className="gutter-box" style={{ padding: '2px 15px' }}>
-                            {ecahrs}
-                        </div>
-                    </Col>
+                    <HistoryEcharView deviceId={deviceId} type={1}/>
+                    <HistoryEcharView deviceId={deviceId} type={2}/>
+                    <HistoryEcharView deviceId={deviceId} type={3}/>
                 </Row>
                 {
                     <style>

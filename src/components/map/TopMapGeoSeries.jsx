@@ -7,9 +7,9 @@
 import BaseMapGeoSeries from "./BaseMapGeoSeries";
 
 class TopMapGeoSeries extends BaseMapGeoSeries {
-    constructor(name, type,data) {
+    constructor(name, type,data,pointColor) {
         super(name, type,data);
-        this.name = name || 'pm2.5';
+        this.name = name || '';
         this.type = type || 'effectScatter';
         this.showEffectOn = 'render';
         this.rippleEffect = {
@@ -26,7 +26,7 @@ class TopMapGeoSeries extends BaseMapGeoSeries {
         };
         this.itemStyle = {
             normal: {
-                color: '#f4e925',
+                color: pointColor,
                 shadowBlur: 10,
                 shadowColor: '#333'
             }

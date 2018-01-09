@@ -6,12 +6,12 @@
  */
 class BaseMapGeoSeries {
     constructor(name, type, data) {
-        this.name = name || 'pm2.5';
+        this.name = name || '';
         this.type = type || 'scatter';
         this.coordinateSystem = 'geo';
         this.data = data;
         this.symbolSize = function (val) {
-            return val[2] / 10;
+            return val === 0 ? 10 : 15;
         };
         this.label = {
             normal: {

@@ -2,10 +2,11 @@
  * Created by hao.cheng on 2017/4/13.
  */
 import React, {Component} from 'react';
-import {Dropdown, Icon, Layout, Menu, message} from 'antd';
+import {Dropdown, Layout, Menu, message} from 'antd';
 import {gitOauthInfo, gitOauthToken} from '../axios';
 import {queryString} from '../utils';
 import {connect} from 'react-redux';
+import avater from '../style/imgs/short_ico.png';
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -61,7 +62,7 @@ class HeaderCustom extends Component {
     menuLanguage = (
         <Menu onClick={this.onClick}>
             <Menu.Item key="zhLanguage">中文</Menu.Item>
-            <Menu.Item key="enLanguage">英文</Menu.Item>
+            <Menu.Item key="enLanguage">English</Menu.Item>
         </Menu>
     );
 
@@ -69,17 +70,25 @@ class HeaderCustom extends Component {
         return (
             <Header style={{ background: '#447ED9', padding: 0, height: 65 }} className="custom-theme">
 
-                <Icon
-                    className="trigger custom-trigger"
-                    type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
-                    onClick={this.props.toggle}
-                />
-                <Dropdown overlay={this.menu} trigger={['click']}>
-                    <a className="ant-dropdown-link" href="#"
-                       style={{ color: "#fff", fontSize: '14px', padding: '5px', marginLeft: '5px' }}>
-                        平板采集方案 <Icon type="caret-down" style={{ color: "#fff" }}/>
-                    </a>
-                </Dropdown>
+                {/*<Icon*/}
+                {/*className="trigger custom-trigger"*/}
+                {/*type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}*/}
+                {/*onClick={this.props.toggle}*/}
+                {/*/>*/}
+                <img src={avater} style={{ width: '30px', height: '30px', marginLeft: '20px', marginBottom: '8px'}} alt="LOGO"/>
+                <span style={{
+                    color: "#fff",
+                    fontSize: '20px',
+                    padding: '5px',
+                    marginLeft: '5px',
+                    marginBottom: '8px'
+                }}>空气管理系统</span>
+                {/*<Dropdown overlay={this.menu} trigger={['click']}>*/}
+                {/*<a className="ant-dropdown-link" href="#"*/}
+                {/*style={{ color: "#fff", fontSize: '14px', padding: '5px', marginLeft: '5px' }}>*/}
+                {/*平板采集方案 <Icon type="caret-down" style={{ color: "#fff" }}/>*/}
+                {/*</a>*/}
+                {/*</Dropdown>*/}
 
                 <div style={{ lineHeight: '64px', float: 'right', marginRight: '30px' }}>
                     <Dropdown overlay={this.menuUser}>

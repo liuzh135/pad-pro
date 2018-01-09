@@ -39,7 +39,6 @@ class DeviceManager extends React.Component {
         });
     }
 
-
     getDevices = (params = {}) => {
         this.setState({ loading: true });
         getDeivceList(params).then(data => {
@@ -58,7 +57,6 @@ class DeviceManager extends React.Component {
             });
             console.log(err)
         });
-        ;
     };
 
     handleTableChange = (pagination, filters, sorter) => {
@@ -113,11 +111,16 @@ class DeviceManager extends React.Component {
                                 ,.ant-table-row-level-0 > td:nth-child(3)
                                 ,.ant-table-row-level-0 > td:nth-child(4)
                                 ,.ant-table-row-level-0 > td:nth-child(5)
+                                ,.ant-table-row-level-0 > td:nth-child(7)
+                                ,.ant-table-row-level-0 > td:nth-child(8)
                                 , .ant-table-thead > tr > th:nth-child(1)
                                 , .ant-table-thead > tr > th:nth-child(2)
                                 , .ant-table-thead > tr > th:nth-child(3)
                                 , .ant-table-thead > tr > th:nth-child(4)
                                 , .ant-table-thead > tr > th:nth-child(5)
+                                , .ant-table-thead > tr > th:nth-child(5)
+                                , .ant-table-thead > tr > th:nth-child(7)
+                                , .ant-table-thead > tr > th:nth-child(8)
                                 {
                                     text-align: center;
                                 }
