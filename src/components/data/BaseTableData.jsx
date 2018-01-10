@@ -181,11 +181,6 @@ class BaseTableData {
             width: 150,
             render: this.renderContent
         }, {
-            title: 'UUID',
-            dataIndex: 'uuid',
-            width: 150,
-            render: this.renderContent
-        }, {
             title: '创建时间',
             width: 150,
             dataIndex: 'updateTime',
@@ -214,11 +209,6 @@ class BaseTableData {
             title: '设备ID',
             dataIndex: 'deviceId',
             width: 100,
-            render: this.renderContent
-        }, {
-            title: 'UUID',
-            dataIndex: 'uuid',
-            width: 250,
             render: this.renderContent
         }, {
             title: 'ECO2',

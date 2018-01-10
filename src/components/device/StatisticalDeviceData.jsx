@@ -149,7 +149,7 @@ class StatisticalDeviceData extends React.Component {
                     </Col>
                     <HistoryEcharView deviceId={deviceId} type={1}/>
                     <HistoryEcharView deviceId={deviceId} type={2}/>
-                    <HistoryEcharView deviceId={deviceId} type={3}/>
+                    {/*<HistoryEcharView deviceId={deviceId} type={3}/>*/}
                 </Row>
                 {
                     <style>
