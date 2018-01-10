@@ -92,7 +92,7 @@ class RealDataAir extends React.Component {
                 } else {
                     offlineSeries.push({
                         name: data.address,
-                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId]
+                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId,data.deviceName]
                     });
                 }
             }
@@ -165,7 +165,9 @@ class RealDataAir extends React.Component {
         if (params !== {} && params.value != null) {
             tostView = <div className="toast_base toast_text">
                 <div><span className="span_toast">设备ID :</span><span
-                    className="span_toast_sub">{params.value[3]}</span></div>
+                className="span_toast_sub">{params.value[3]}</span></div>
+                <div><span className="span_toast">设备名称 :</span><span
+                    className="span_toast_sub">{params.value[4]}</span></div>
                 <div><span className="span_toast">设备类型 :</span><span
                     className="span_toast_sub">{params.seriesName}</span></div>
                 <div><span className="span_toast">设备地址 :</span><span className="span_toast_sub">{params.name}</span>

@@ -323,14 +323,14 @@ class RealDeviceData extends React.Component {
                         </div>
                     </Col>
                     <Row gutter={10} className="text-center" style={{
-                        margin: '100px 40px 20px 40px',
-                        paddingLeft: '20px',
-                        paddingRight: '20px',
-                        background: 'linear-gradient(to right bottom, #9326B7, #4C1DA6 80%, #3322A8)', width: '70%'
+                        margin: '100px 40px 20px',
+                        paddingLeft: '50px',
+                        paddingRight: '50px',
+                        background: 'linear-gradient(to right bottom, #9326B7, #4C1DA6 80%, #3322A8)'
                     }}>
                         <Col className="gutter-row " md={6}
-                             style={{ padding: '30px' }}>
-                            <ProgressStyle className='progress_index' width={250} height={250}
+                             style={{ padding: '20px' }}>
+                            <ProgressStyle className='progress_index' width={200} height={250}
                                            progress={(parseInt(temp) / 10000)}
                                            proressValue={"RH: " + (parseInt(rh) / 100) + "%"}
                                            value={parseInt(temp) / 100}/>
@@ -338,7 +338,7 @@ class RealDeviceData extends React.Component {
                         <Col className="gutter-row" md={16}
                              style={{ float: 'right' }}>
                             <div className='flex-center' style={{
-                                justifyContent: 'space-around', marginTop: '70px', marginBottom: '20px',
+                                justifyContent: 'space-around', marginTop: '50px', marginBottom: '20px',
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '8px', borderRadius: '5px'
                             }}>
                                 <AirDataProgress color='#C54AD1' className='progress_a' width={150} height={150}
