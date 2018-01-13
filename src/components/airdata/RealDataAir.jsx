@@ -169,7 +169,6 @@ class RealDataAir extends React.Component {
         let TVOCUG = this.getTextViewUnit("TVOC_UG", this.state.params.tvocUg,"ppm");
         // let upTime = this.getTextView("upTime", this.state.params.upTime);
         // let createTime = this.getTextView("createTime", this.state.params.createTime);
-
         if (params !== {} && params.value != null) {
 
 
