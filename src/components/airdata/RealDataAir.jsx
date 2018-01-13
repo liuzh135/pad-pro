@@ -137,6 +137,14 @@ class RealDataAir extends React.Component {
         this.getRealData(params);
     };
 
+    getTextViewUnit = (text, obj,unit) => {
+        return obj ?
+            <div><span className="span_toast">{text + " : "} </span><span
+                className="span_toast_sub">{obj}</span><span
+                className="span_toast_unit">{unit}</span>
+            </div> : "";
+    };
+
     getTextView = (text, obj) => {
         return obj ?
             <div><span className="span_toast">{text + " : "} </span><span
@@ -148,45 +156,49 @@ class RealDataAir extends React.Component {
         let params = this.state.params || {};
         let showToast = this.state.showToast || false;
         let tostView = {};
-        let eco2 = this.getTextView("eco2", this.state.params.eco2);
-        let eco2Mg = this.getTextView("eco2Mg", this.state.params.eco2Mg);
-        let hcho = this.getTextView("hcho", this.state.params.hcho);
-        let hchoUg = this.getTextView("hchoUg", this.state.params.hchoUg);
-        let pm1 = this.getTextView("pm1", this.state.params.pm1);
-        let pm10 = this.getTextView("pm10", this.state.params.pm10);
-        let rh = this.getTextView("rh", this.state.params.rh);
-        let pm25 = this.getTextView("pm25", this.state.params.pm25);
-        let t = this.getTextView("t", this.state.params.t);
-        let tvoc = this.getTextView("tvoc", this.state.params.tvoc);
-        let tvocUg = this.getTextView("tvocUg", this.state.params.tvocUg);
-        let upTime = this.getTextView("upTime", this.state.params.upTime);
-        let createTime = this.getTextView("createTime", this.state.params.createTime);
+        let ECO2 = this.getTextViewUnit("ECO2", this.state.params.eco2,"ppm");
+        let ECO2MG = this.getTextViewUnit("ECO2_MG", this.state.params.eco2Mg,"ppm");
+        let HCHO = this.getTextViewUnit("HCHO", this.state.params.hcho,"ppm");
+        let HCHOUG = this.getTextViewUnit("HCHO_UG", this.state.params.hchoUg,"ppm");
+        let PM1 = this.getTextViewUnit("PM1", this.state.params.pm1,"μg/m³");
+        let PM10 = this.getTextViewUnit("PM10", this.state.params.pm10,"μg/m³");
+        let RH = this.getTextViewUnit("RH", (this.state.params.rh)/100,"%");
+        let PM25 = this.getTextViewUnit("PM2.5", this.state.params.pm25,"μg/m³");
+        let T = this.getTextViewUnit("TEMP", (this.state.params.t)/100,"℃");
+        let TVOC = this.getTextViewUnit("TVOC", this.state.params.tvoc,"ppm");
+        let TVOCUG = this.getTextViewUnit("TVOC_UG", this.state.params.tvocUg,"ppm");
+        // let upTime = this.getTextView("upTime", this.state.params.upTime);
+        // let createTime = this.getTextView("createTime", this.state.params.createTime);
 
         if (params !== {} && params.value != null) {
+
+
+
             tostView = <div className="toast_base toast_text">
                 <div><span className="span_toast">设备ID :</span><span
                 className="span_toast_sub">{params.value[3]}</span></div>
                 <div><span className="span_toast">设备名称 :</span><span
                     className="span_toast_sub">{params.value[4]}</span></div>
-                <div><span className="span_toast">设备类型 :</span><span
-                    className="span_toast_sub">{params.seriesName}</span></div>
-                <div><span className="span_toast">设备地址 :</span><span className="span_toast_sub">{params.name}</span>
-                </div>
+                {/*<div><span className="span_toast">设备类型 :</span><span*/}
+                    {/*className="span_toast_sub">{params.seriesName}</span></div>*/}
+                {/*<div><span className="span_toast">设备地址 :</span><span className="span_toast_sub">{params.name}</span>*/}
+                {/*</div>*/}
                 <div><span className="span_toast">设备状态 :</span><span
                     className="span_toast_sub">{params.value[2] === 0 ? "离线" : "在线"}</span></div>
-                {eco2}
-                {eco2Mg}
-                {hcho}
-                {hchoUg}
-                {pm1}
-                {pm10}
-                {rh}
-                {pm25}
-                {t}
-                {tvoc}
-                {tvocUg}
-                {upTime}
-                {createTime}
+                {ECO2}
+                {ECO2MG}
+                {HCHO}
+                {HCHOUG}
+                {TVOC}
+                {TVOCUG}
+                {PM1}
+                {PM25}
+                {PM10}
+                {RH}
+                {T}
+
+                {/*{upTime}*/}
+                {/*{createTime}*/}
             </div>
         }
         return showToast ? tostView : "";
