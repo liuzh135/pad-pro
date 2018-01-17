@@ -120,10 +120,11 @@ export default class HistoryEcharView extends React.Component {
     getSelectType = () => {
         let menus = [];
         let echarsData = this.state.echarsData || {};
+        let reg=/[\u4E00-\u9FA5]/g;
         echarsData.data && echarsData.data.label && echarsData.data.label.map((airdata, index) => {
             if (index % 3 === 0) {
                 menus.push(<RadioButton key={index}
-                                        value={index}>{String(airdata).replace("的每个小时平均值", "")}</RadioButton>)
+                                        value={index}>{String(airdata).replace(reg, "")}</RadioButton>)
             }
         });
         return <RadioGroup defaultValue={0} onChange={this.onTypeChange}

@@ -87,12 +87,12 @@ class RealDataAir extends React.Component {
                 if (data.deviceOnline === 1) {
                     onlineSeries.push({
                         name: data.address,
-                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId]
+                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId, data.deviceName, data.pm2_5]
                     });
                 } else {
                     offlineSeries.push({
                         name: data.address,
-                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId,data.deviceName]
+                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId, data.deviceName, data.pm2_5]
                     });
                 }
             }
@@ -128,19 +128,22 @@ class RealDataAir extends React.Component {
             this.setState({
                 showToast: false
             });
-        }, 5000)
+        }, 8000)
     };
 
     onChartClick = (params) => {
+        this.setState({
+            showToast: false
+        });
         //Toast 展示设备详情 弹出层
         //获取该设备最后的数据 显示出来
         this.getRealData(params);
     };
 
-    getTextView = (text, obj) => {
+    getTextView = (text, obj, unit) => {
         return obj ?
             <div><span className="span_toast">{text + " : "} </span><span
-                className="span_toast_sub">{obj}</span>
+                className="span_toast_sub">{obj}{unit}</span>
             </div> : "";
     };
 
@@ -148,45 +151,40 @@ class RealDataAir extends React.Component {
         let params = this.state.params || {};
         let showToast = this.state.showToast || false;
         let tostView = {};
-        let eco2 = this.getTextView("eco2", this.state.params.eco2);
-        let eco2Mg = this.getTextView("eco2Mg", this.state.params.eco2Mg);
+        let eco2 = this.getTextView("ECO2", this.state.params.eco2, "ppm");
+        let eco2Mg = this.getTextView("ECO2_Mg", this.state.params.eco2Mg, "ppm");
         let hcho = this.getTextView("hcho", this.state.params.hcho);
         let hchoUg = this.getTextView("hchoUg", this.state.params.hchoUg);
-        let pm1 = this.getTextView("pm1", this.state.params.pm1);
-        let pm10 = this.getTextView("pm10", this.state.params.pm10);
-        let rh = this.getTextView("rh", this.state.params.rh);
-        let pm25 = this.getTextView("pm25", this.state.params.pm25);
-        let t = this.getTextView("t", this.state.params.t);
+        let pm1 = this.getTextView("PM1", this.state.params.pm1, "μg/m³");
+        let pm10 = this.getTextView("PM10", this.state.params.pm10, "μg/m³");
+        let rh = this.getTextView("RH", parseInt(this.state.params.rh || 0) / 100, "%");
+        let pm25 = this.getTextView("pm25", this.state.params.pm25, "μg/m³");
+        let t = this.getTextView("TEMP", parseInt(this.state.params.t || 0) / 100, "℃");
+
         let tvoc = this.getTextView("tvoc", this.state.params.tvoc);
         let tvocUg = this.getTextView("tvocUg", this.state.params.tvocUg);
         let upTime = this.getTextView("upTime", this.state.params.upTime);
         let createTime = this.getTextView("createTime", this.state.params.createTime);
 
+
         if (params !== {} && params.value != null) {
-            tostView = <div className="toast_base toast_text">
-                <div><span className="span_toast">设备ID :</span><span
-                className="span_toast_sub">{params.value[3]}</span></div>
-                <div><span className="span_toast">设备名称 :</span><span
-                    className="span_toast_sub">{params.value[4]}</span></div>
-                <div><span className="span_toast">设备类型 :</span><span
-                    className="span_toast_sub">{params.seriesName}</span></div>
-                <div><span className="span_toast">设备地址 :</span><span className="span_toast_sub">{params.name}</span>
-                </div>
-                <div><span className="span_toast">设备状态 :</span><span
-                    className="span_toast_sub">{params.value[2] === 0 ? "离线" : "在线"}</span></div>
+            let deviceIdString = params.value[3];
+            let deviceId = this.getTextView("设备ID", deviceIdString);
+            let deviceNameString = params.value[4];
+            let deviceName = this.getTextView("设备名称", deviceNameString);
+            let deviceStatusString = params.value[2] === 0 ? "离线" : "在线";
+            let deviceStatus = this.getTextView("设备状态", deviceStatusString);
+            tostView = <div className="anim_fade_image toast_base toast_text">
+                {deviceId}
+                {deviceName}
+                {deviceStatus}
                 {eco2}
                 {eco2Mg}
-                {hcho}
-                {hchoUg}
                 {pm1}
                 {pm10}
-                {rh}
                 {pm25}
+                {rh}
                 {t}
-                {tvoc}
-                {tvocUg}
-                {upTime}
-                {createTime}
             </div>
         }
         return showToast ? tostView : "";
