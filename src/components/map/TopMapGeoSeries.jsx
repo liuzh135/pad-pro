@@ -7,8 +7,9 @@
 import BaseMapGeoSeries from "./BaseMapGeoSeries";
 
 class TopMapGeoSeries extends BaseMapGeoSeries {
-    constructor(name, type,data,pointColor) {
-        super(name, type,data);
+    constructor(name, type, data, pointColor) {
+        super(name, type, data);
+        this.bgColor = ["#55C300", "#F3CB00", "#FF9200", "#FF2C1A", "#ED2FA6", "#C3271E"];
         this.name = name || '';
         this.type = type || 'effectScatter';
         this.showEffectOn = 'render';
@@ -26,13 +27,38 @@ class TopMapGeoSeries extends BaseMapGeoSeries {
         };
         this.itemStyle = {
             normal: {
-                color: pointColor,
+                color: (seriesIndex, series, dataIndex, data) => {
+
+                    if (seriesIndex != null && seriesIndex.data != null) {
+                        let pm25 = seriesIndex.data.value[5];
+                        console.log("pm25-->" + pm25);
+                        return this.getPmLevel(pm25);
+                    }
+                },
                 shadowBlur: 10,
-                shadowColor: '#333'
+                shadowColor: '#9eaf97'
             }
         };
         this.zlevel = 1
     }
+
+    getPmLevel = (pm) => {
+        let pmValue = 0;
+        if (pm => 0 && pm <= 50) {
+            pmValue = this.bgColor[0];
+        } else if (pm > 50 && pm <= 100) {
+            pmValue = this.bgColor[1];
+        } else if (pm > 100 && pm <= 150) {
+            pmValue = this.bgColor[2];
+        } else if (pm > 150 && pm <= 200) {
+            pmValue = this.bgColor[3];
+        } else if (pm > 200 && pm <= 300) {
+            pmValue = this.bgColor[4];
+        } else if (pm > 300) {
+            pmValue = this.bgColor[5];
+        }
+        return pmValue
+    };
 }
 
 export default TopMapGeoSeries;

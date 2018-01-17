@@ -17,10 +17,13 @@ class EchartsEffectScatter extends Component {
     render() {
         const { title, dataSource,subtitle } = this.props;
         const dataOption = {
-            backgroundColor: '#404a59',
+            backgroundColor: '#A7C2DF',
             title: {
                 text: title,
                 subtext: subtitle,
+                subtextStyle:{
+                    color: '#eee'
+                },
                 left: 'center',
                 textStyle: {
                     color: '#fff'
@@ -54,11 +57,11 @@ class EchartsEffectScatter extends Component {
                 roam: true,
                 itemStyle: {
                     normal: {
-                        areaColor: '#1E4886',
-                        borderColor: '#111'
+                        areaColor: '#E5E9ED',
+                        borderColor: '#069fbf'
                     },
                     emphasis: {
-                        areaColor: '#6A2858'
+                        areaColor: '#D1D1D1'
                     }
                 }
             },

@@ -27,6 +27,7 @@ class RealDataAir extends React.Component {
             params: {}
         };
         this.timer = {};
+
     }
 
     //调用action中的ajax方法，获取数据
@@ -97,10 +98,13 @@ class RealDataAir extends React.Component {
                 }
             }
         });
-        seriesList.push(new TopMapGeoSeries("空气净化器", "effectScatter", onlineSeries, "#f4e925"));//在线
+
+        seriesList.push(new TopMapGeoSeries("空气净化器", "effectScatter", onlineSeries, "#4e9588"));//在线
         seriesList.push(new TopMapGeoSeries("空气净化器", "scatter", offlineSeries, "#4e9588"));//离线
         return seriesList;
     };
+
+
 
     getRealData = (params) => {
         getDeviceRealData(params.value[3]).then(data => {
@@ -190,8 +194,21 @@ class RealDataAir extends React.Component {
         return showToast ? tostView : "";
     };
 
+
+    getPmView = () => {
+        return <div className="toast_base_bottom ">
+            <div className='width-auto pm-1'><span className='text_pm'>优</span></div>
+            <div className='width-auto pm-2'><span className='text_pm'>良</span></div>
+            <div className='width-auto pm-3'><span className='text_pm'>轻度污染</span></div>
+            <div className='width-auto pm-4'><span className='text_pm'>中度污染</span></div>
+            <div className='width-auto pm-5'><span className='text_pm'>重度污染</span></div>
+            <div className='width-auto pm-6'><span className='text_pm'>严重污染</span></div>
+        </div>
+    };
+
     render() {
         let toastView = this.getToast();
+        let showPmView = this.getPmView();
 
         //组合地图数据 series []
         let series = this.getSeries();
@@ -208,11 +225,13 @@ class RealDataAir extends React.Component {
                     <div className="gutter-box" style={{ height: '100%' }}>
                         {ecahrs}
                         {toastView}
+                        {showPmView}
                     </div>
                 </Col>
             </Row>
         )
     }
+
 }
 
 const mapStateToPorps = state => {
