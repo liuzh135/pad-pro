@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import {Col, Row} from 'antd';
+import {Col, Icon, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
@@ -24,6 +24,8 @@ class RealDataAir extends React.Component {
             pagination: {},
             loading: false,
             showToast: false,
+            showMap: false,
+            mapName: "",
             params: {}
         };
         this.timer = {};
@@ -105,7 +107,6 @@ class RealDataAir extends React.Component {
     };
 
 
-
     getRealData = (params) => {
         getDeviceRealData(params.value[3]).then(data => {
             if (data.code === 0 && data.data !== null) {
@@ -142,6 +143,14 @@ class RealDataAir extends React.Component {
         //Toast 展示设备详情 弹出层
         //获取该设备最后的数据 显示出来
         this.getRealData(params);
+    };
+
+    onGeoClick = (params) => {
+        //点击地图层
+        this.setState({
+            showMap: true,
+            mapName: params.name
+        });
     };
 
     getTextView = (text, obj, unit) => {
@@ -206,9 +215,22 @@ class RealDataAir extends React.Component {
         </div>
     };
 
+    /**
+     * 弹出百度地图层
+     */
+    getMapView = () => {
+        // let showMap = this.state.showMap || false;
+        // let mapView = <div className="map_view">
+        //     <Icon type="close" style={{ margin: '3px', color: '#0fb0f0' }}/>
+        // </div>;
+        // return showMap ? mapView : "";
+        return "";
+    };
+
     render() {
         let toastView = this.getToast();
         let showPmView = this.getPmView();
+        let mapView = this.getMapView();
 
         //组合地图数据 series []
         let series = this.getSeries();
@@ -216,7 +238,10 @@ class RealDataAir extends React.Component {
         //刷新2次  解决echars 的宽度问题
         let first = this.state.first || false;
         let ecahrs = !first ? "" :
-            <EchartsEffectScatter onEventClick={this.onChartClick} dataSource={series} subtitle="空气检测仪全国分布图"
+            <EchartsEffectScatter onEventClick={this.onChartClick}
+                                  onEventGeoClick={this.onGeoClick}
+                                  dataSource={series}
+                                  subtitle="空气检测仪全国分布图"
                                   title="全国空气详情信息"/>;
 
         return (
@@ -226,6 +251,7 @@ class RealDataAir extends React.Component {
                         {ecahrs}
                         {toastView}
                         {showPmView}
+                        {mapView}
                     </div>
                 </Col>
             </Row>

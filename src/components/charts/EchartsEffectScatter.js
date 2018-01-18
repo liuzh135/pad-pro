@@ -7,21 +7,24 @@ import ReactEcharts from 'echarts-for-react';
 require('echarts/map/js/china.js');
 
 class EchartsEffectScatter extends Component {
-    onChartClick= (params)=>{
+    onChartClick = (params) => {
         let onEventClick = this.props.onEventClick || {};
-        if (typeof onEventClick === 'function' && params.componentType === 'series'){
+        let onEventGeoClick = this.props.onEventGeoClick || {};
+        if (typeof onEventClick === 'function' && params.componentType === 'series') {
             onEventClick(params);
+        }else if (typeof onEventClick === 'function' && params.componentType === 'geo'){
+            onEventGeoClick(params);
         }
     };
 
     render() {
-        const { title, dataSource,subtitle } = this.props;
+        const { title, dataSource, subtitle } = this.props;
         const dataOption = {
             backgroundColor: '#A7C2DF',
             title: {
                 text: title,
                 subtext: subtitle,
-                subtextStyle:{
+                subtextStyle: {
                     color: '#eee'
                 },
                 left: 'center',
@@ -48,11 +51,14 @@ class EchartsEffectScatter extends Component {
             },
             geo: {
                 map: 'china',
-                zoom: '1.2',
                 label: {
                     emphasis: {
                         show: false
                     }
+                },
+                scaleLimit: {
+                    min: 0.5,
+                    max: 4
                 },
                 roam: true,
                 itemStyle: {

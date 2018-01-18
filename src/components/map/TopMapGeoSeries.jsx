@@ -31,7 +31,6 @@ class TopMapGeoSeries extends BaseMapGeoSeries {
 
                     if (seriesIndex != null && seriesIndex.data != null) {
                         let pm25 = seriesIndex.data.value[5];
-                        console.log("pm25-->" + pm25);
                         return this.getPmLevel(pm25);
                     }
                 },
