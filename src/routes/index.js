@@ -27,11 +27,12 @@ import BasicAnimations from '../components/animation/BasicAnimations';
 import ExampleAnimations from '../components/animation/ExampleAnimations';
 import AuthBasic from '../components/auth/Basic';
 import RouterEnter from '../components/auth/RouterEnter';
-
 import DeviceManager from '../components/device/DeviceManager';
 import StatisticalDeviceData from '../components/device/StatisticalDeviceData';
 import RealDeviceData from '../components/device/RealDeviceData';
-
+import DeviceWarning from '../components/manager/DeviceWarning';
+import UserManager from '../components/manager/UserManager';
+import DeviceRealData from '../components/device/DeviceRealData';
 import RealDataAir from '../components/airdata/RealDataAir';
 import StatisticalAirData from '../components/airdata/StatisticalAirData';
 
@@ -57,12 +58,16 @@ export default class CRouter extends Component {
                             <Route path={'realdevicedata'} component={RealDeviceData} />
                             <Route path={'historydata'} components={StatisticalDeviceData} />
                             <Route path={'devicemanager'} components={DeviceManager} />
+                            <Route path={'devicerealdata'} components={DeviceRealData} />
                         </Route>
                         <Route path={'airdata'}>
                             <Route path={'realdataair'} component={RealDataAir} />
+                            <Route path={'devicewarning'} components={DeviceWarning} />
+                        </Route>
+                        <Route path={'manager'}>
+                            <Route path={'usermanager'} component={UserManager} />
                             <Route path={'statisticalairdata'} components={StatisticalAirData} />
                         </Route>
-
                         <Route path={'table'}>
                             <Route path={'basicTable'} component={BasicTable} />
                             <Route path={'advancedTable'} components={AdvancedTable} />

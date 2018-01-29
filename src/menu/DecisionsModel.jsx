@@ -48,6 +48,23 @@ class DecisionsModel {
                         title: "设备管理"
                     }
                 ]
+            },
+            {
+                menuId: 3,
+                menu: "/app/manager",
+                title: "系统管理",
+                icon: "car",
+                submenu: [
+                    {
+                        subId: 1,
+                        path: "/app/manager/usermanager",
+                        title: "用户管理"
+                    }, {
+                        subId: 2,
+                        path: "/app/manager/devicewarning",
+                        title: "设备预警"
+                    }
+                ]
             }
         ]
     };

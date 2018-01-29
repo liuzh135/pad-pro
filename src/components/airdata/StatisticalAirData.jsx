@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import {Col, Row} from 'antd';
+import {Col, Icon, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
@@ -15,6 +15,8 @@ import Bacecomstyle from "../Bacecomstyle";
 import BaseEcharView from "../bar/BaseEcharView";
 import EcharCom from "../bar/EcharCom";
 import EcharBar from "../bar/EcharBar";
+import Dropdown from "antd/es/dropdown/dropdown";
+import Button from "antd/es/button/button";
 
 class StatisticalAirData extends React.Component {
 
@@ -59,7 +61,8 @@ class StatisticalAirData extends React.Component {
         let tableComs = new BaseTableData();
         let echarCom = new EcharCom();
         let echarCom1 = new EcharCom();
-
+        let menu={};
+        let mac={};
         let datalist = [];
         let datalist1 = [];
         let xlist = ["1点", "2点", "3点", "4点", "5点", "6点", "7点", "8点", "9点", "10点",];
@@ -87,8 +90,23 @@ class StatisticalAirData extends React.Component {
                                 <div className="text-title">
                                     <span style={{ marginLeft: "15px" }}>采集点实时数据</span>
                                 </div>
+                                <div style={{ border: '1px solid rgb(233, 233, 233)' }}>
+                                    <span className="device_text">设备名称</span>
+                                    <Dropdown overlay={menu} trigger={['click']}>
+                                        <Button style={{ margin: 10 }}>
+                                            {mac} <Icon type="down"/>
+                                        </Button>
+                                    </Dropdown>
+                                    <span className="device_text" style={{ marginLeft: '20px' }}>设备位置</span>
+                                    <Dropdown overlay={menu} trigger={['click']}>
+                                        <Button style={{ margin: 10 }}>
+                                            {mac} <Icon type="down"/>
+                                        </Button>
+                                    </Dropdown>
+                                </div>
                                 <ExtBaseicTable {...tableComs.pmTabledata} />
                             </div>
+
                         </div>
                     </Col>
                     <Col className="gutter-row" md={24} style={{ paddingRight: '30px' }}>

@@ -40,8 +40,9 @@ class BaseSideCustom extends Component {
         const { path } = props;
         this.setState({
             // openKey: path.substr(0, path.lastIndexOf('/')),
-            openKey: ['/app/airdata', '/app/device'],
-            openKey: ['/app/airdata', '/app/device'],
+            openKey: ['/app/airdata', '/app/device','/app/manager'],
+            openKey: ['/app/airdata', '/app/device','/app/manager'],
+
             selectedKey: path
         });
     };
@@ -64,7 +65,7 @@ class BaseSideCustom extends Component {
         console.log(v);
         this.setState({
             // openKey: v[v.length - 1],
-            openKey: ['/app/airdata', '/app/device'],
+            openKey: ['/app/airdata', '/app/device',"/app/manager"],
             firstHide: false,
         })
     };
