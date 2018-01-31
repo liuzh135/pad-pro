@@ -12,6 +12,8 @@ import {fetchData, receiveData} from '@/action';
 import EchartsEffectScatter from '../charts/EchartsEffectScatter';
 import {getDeviceMapList, getDeviceRealData} from '../../axios';
 import TopMapGeoSeries from "../map/TopMapGeoSeries";
+import {Map, Marker, NavigationControl, InfoWindow} from 'react-bmap'
+import {BaiduMapView} from "../map/BaiduMapView";
 
 class RealDataAir extends React.Component {
 
@@ -147,10 +149,10 @@ class RealDataAir extends React.Component {
 
     onGeoClick = (params) => {
         //点击地图层
-        this.setState({
-            showMap: true,
-            mapName: params.name
-        });
+        // this.setState({
+        //     showMap: true,
+        //     mapName: params.name
+        // });
     };
 
     getTextView = (text, obj, unit) => {
@@ -215,23 +217,19 @@ class RealDataAir extends React.Component {
         </div>
     };
 
-    /**
-     * 弹出百度地图层
-     */
-    getMapView = () => {
-        // let showMap = this.state.showMap || false;
-        // let mapView = <div className="map_view">
-        //     <Icon type="close" style={{ margin: '3px', color: '#0fb0f0' }}/>
-        // </div>;
-        // return showMap ? mapView : "";
-        return "";
+    closeMap = () => {
+        this.setState({
+            showMap: false
+        });
     };
+
 
     render() {
         let toastView = this.getToast();
         let showPmView = this.getPmView();
-        let mapView = this.getMapView();
 
+        let showMap = this.state.showMap;
+        let cityName = this.state.mapName;
         //组合地图数据 series []
         let series = this.getSeries();
 
@@ -251,7 +249,10 @@ class RealDataAir extends React.Component {
                         {ecahrs}
                         {toastView}
                         {showPmView}
-                        {mapView}
+                        <BaiduMapView
+                            showMap={showMap}
+                            closeMap={this.closeMap}
+                            cityName={cityName}/>
                     </div>
                 </Col>
             </Row>

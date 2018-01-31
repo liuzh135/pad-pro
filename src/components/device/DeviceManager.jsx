@@ -24,14 +24,6 @@ class DeviceManager extends React.Component {
         }
     }
 
-    //调用action中的ajax方法，获取数据
-    componentWillMount() {
-        const { receiveData } = this.props;
-        const { fetchData } = this.props;
-        //调用 http请求 获取网络数据
-        //fetchData({funcName: 'admin', stateName: 'auth'});
-    }
-
     componentDidMount() {
         this.getDevices({
             rows: 10,
@@ -75,7 +67,7 @@ class DeviceManager extends React.Component {
     render() {
         let tableComs = new BaseTableData();
         let devices = this.state.devicelist || [];
-        console.log("devicelist :" + JSON.stringify(devices));
+        // console.log("devicelist :" + JSON.stringify(devices));
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
 

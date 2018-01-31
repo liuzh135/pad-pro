@@ -46,6 +46,7 @@
     "rc-banner-anim": "^0.5.13",
     "rc-tween-one": "^1.7.3",
     "react": "^15.6.1",
+    "react-bmap": "^1.0.69",
     "react-dev-utils": "^3.0.2",
     "react-dom": "^15.6.1",
     "react-draft-wysiwyg": "^1.12.5",

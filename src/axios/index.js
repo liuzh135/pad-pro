@@ -64,17 +64,15 @@ export const getDeivceList = params => axios({
     url: config.BASEWYZK + '/device/device/getDeviceList?page=' + params.page + '&rows=' + params.rows
 }).then(res => res.data).catch(err => console.log(err));
 
-export const getProvinceList = params => axios({
+export const getProvinceList = () => axios({
     method: 'get',
     url: config.BASEWYZK + '/device/common/getProvinceList'
 }).then(res => res.data).catch(err => console.log(err));
 
-export const getCityList = params => axios({
+export const getCityList = provinceName => axios({
     method: 'get',
-    url: config.BASEWYZK + '/device/common/getCityList'
+    url: config.BASEWYZK + '/device/common/getCityList?provinceName=' + provinceName
 }).then(res => res.data).catch(err => console.log(err));
-
-
 
 export const getDeviceByDate = params => axios({
     method: 'get',

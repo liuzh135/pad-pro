@@ -42,8 +42,8 @@ export default class HistoryEcharView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("this deivceId" + this.props.deviceId);
-        console.log("nextProps deivceId" + nextProps.deviceId);
+        // console.log("this deivceId" + this.props.deviceId);
+        // console.log("nextProps deivceId" + nextProps.deviceId);
         if (nextProps.deviceId !== null) {
             let type = this.props.type || 1;
             if (type === 1) {

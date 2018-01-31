@@ -5,186 +5,35 @@
  */
 
 import React from "react";
-import {Button, Col, Dropdown, Icon, Menu, Row,message} from 'antd';
+import {Col, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
-import {getProvinceList,getCityList,getDeivceList} from '../../axios';
 import HistoryEcharView from "./HistoryEcharView";
-
+import SelectCityAndDevice from "./SelectCityAndDevice";
 
 
 class StatisticalDeviceData extends React.Component {
 
     constructor(props) {
         super(props);
-        let d = new Date();
         this.state = {
-            mac: '设备MAC',
-            address:'深圳',
-            province:[],
-            citys:[],
+            mac: '',
+            address: '',
+            province: [],
             deviceId: 0,
-            date: this.getLocDate(),
-            devicelist: [],
-            pagination: {},
-            loading: false,
         }
     }
 
-    //调用action中的ajax方法，获取数据
-    componentWillMount() {
-        this.getDevices({
-            rows: 10,
-            page: 1
-        });
-        this.getProvince();
-    }
-
-    getLocDate = () => {
-        let date = new Date();
-        let seperator = "-";
-        let month = date.getMonth() + 1;
-        let strDate = date.getDate();
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-        }
-        return (1900 + date.getYear()) + seperator + month + seperator + strDate;
-    };
-
-    GetQueryString = (name) => {
-        let url = window.location.href.substr(1);
-        if (url.indexOf(name + "=")) {
-            let deviecID = url.split(name + "=");
-            if (deviecID.length === 2) {
-                return deviecID[1];
-            }
-        }
-        return null;
-    };
-
-    getProvince = (params = {}) => {
-        this.setState({ loading: true });
-        getProvinceList(params).then(data => {
-
-
-            if (data != null && data.code==0) {
-                let dta=JSON.stringify(data.data);
-                this.setState({
-                    loading: false,
-                    province:dta
-                });
-
-               // this.state.province=data;
-                // let querydeviceId = this.GetQueryString("deviceId");
-                // console.log("GetQueryString deviceId =" + querydeviceId);
-                // let mac = data.rows[0].deviceName;
-                // let deviceId = data.rows[0].deviceId;
-                // let address= data.rows[0].address;
-                // for (let i = 0; i < data.rows.length; i++) {
-                //     if (data.rows[i].deviceId === parseInt(querydeviceId)) {
-                //         mac = data.rows[i].deviceName;
-                //         deviceId = data.rows[i].deviceId;
-                //     }
-                // }
-                // this.setState({
-                //     loading: false,
-                //     devicelist: data.rows,
-                //     mac: mac,
-                //     deviceId: deviceId,
-                //     pagination: {
-                //         total: data.records,
-                //         pageSize: 10,
-                //         current: data.page
-                //     }
-                // });
-            }
-        }).catch(err => {
-            this.setState({
-                loading: false
-            });
-            console.log(err)
-        });
-    };
-
-
-
-    getDevices = (params = {}) => {
-        this.setState({ loading: true });
-        getDeivceList(params).then(data => {
-            if (data.rows != null && data.rows.length > 1) {
-
-                let querydeviceId = this.GetQueryString("deviceId");
-                console.log("GetQueryString deviceId =" + querydeviceId);
-                let mac = data.rows[0].deviceName;
-                let deviceId = data.rows[0].deviceId;
-                let address= data.rows[0].address;
-                for (let i = 0; i < data.rows.length; i++) {
-                    if (data.rows[i].deviceId === parseInt(querydeviceId)) {
-                        mac = data.rows[i].deviceName;
-                        deviceId = data.rows[i].deviceId;
-                    }
-                }
-                this.setState({
-                    loading: false,
-                    devicelist: data.rows,
-                    mac: mac,
-                    deviceId: deviceId,
-                    pagination: {
-                        total: data.records,
-                        pageSize: 10,
-                        current: data.page
-                    }
-                });
-            }
-        }).catch(err => {
-            this.setState({
-                loading: false
-            });
-            console.log(err)
-        });
-    };
-
-    //选择设备  重新拉取线表数据
-    handleMenuClick = (e) => {
-        // message.info('device Mac :' + this.state.devicelist[e.key].deviceName);
+    getSelectDevice = (deviceId) => {
+        console.log("select device = " + deviceId);
         this.setState({
-            mac: this.state.devicelist[e.key].deviceName,
-            deviceId: this.state.devicelist[e.key].deviceId,
+            deviceId: deviceId
         });
-
     };
 
-
-    getMenuJon() {
-        let menus = [];
-
-        this.state.devicelist.map((data, index) => {
-            menus.push(<Menu.Item key={index}>{data.deviceName}</Menu.Item>)
-        });
-
-        return <Menu onClick={this.handleMenuClick}>{menus}</Menu>;
-    }
-
-    getAddressJon() {
-        let menus = [];
-        // this.state.province.map((data, index) => {
-        //     menus.push(<Menu.Item key={index}>{data}</Menu.Item>)
-        // });
-        menus.push(  <Menu.Item>1st menu item</Menu.Item> )
-
-        message.info(this.state.province.length);
-        return <Menu onClick={this.handleMenuClick}>{menus}</Menu>;
-    }
     render() {
-        let mac = this.state.mac;
         let deviceId = this.state.deviceId;
-        let menu = this.getMenuJon() || '';
-        let addressMenu = this.getAddressJon() || '';
-        let address=this.state.address;
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
 
@@ -197,19 +46,7 @@ class StatisticalDeviceData extends React.Component {
                                     <span style={{ marginLeft: "15px" }}>设备历史数据</span>
                                 </div>
                                 <div style={{ border: '1px solid rgb(233, 233, 233)' }}>
-                                    <span className="device_text" style={{ marginLeft: '20px' }}>设备位置</span>
-                                    <Dropdown overlay={addressMenu} trigger={['click']}>
-                                        <Button style={{ margin: 10 }}>
-                                            {address} <Icon type="down"/>
-                                        </Button>
-                                    </Dropdown>
-                                    <span className="device_text">设备名称</span>
-                                    <Dropdown overlay={menu} trigger={['click']}>
-                                        <Button style={{ margin: 10 }}>
-                                            {mac} <Icon type="down"/>
-                                        </Button>
-                                    </Dropdown>
-
+                                    <SelectCityAndDevice selectDevice={this.getSelectDevice}/>
                                 </div>
                             </div>
                         </div>
