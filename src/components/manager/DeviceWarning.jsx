@@ -94,7 +94,7 @@ class DeviceWarning extends React.Component {
 
         cards.push(<TempWarningCards title="TEMP参数范围" key={6} menu={tempUnit}
                                      warnData={this.getTempWarningData()}/>);
-        cards.push(<TempWarningCards title="湿度参数范围" key={7} menu={siUnit}
+        cards.push(<TempWarningCards title="湿度参数范围" key={7} menu={siUnit} isRight={true}
                                      warnData={this.getTempWarningData()}/>);
         this.setState({
             cards: cards
