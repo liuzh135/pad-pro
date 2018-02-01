@@ -34,15 +34,22 @@ class DeviceManager extends React.Component {
     getDevices = (params = {}) => {
         this.setState({ loading: true });
         getDeivceList(params).then(data => {
-            this.setState({
-                loading: false,
-                devicelist: data.rows,
-                pagination: {
-                    total: data.records,
-                    pageSize: 10,
-                    current: data.page
-                }
-            });
+            if (data != null && data.rows != null){
+                this.setState({
+                    loading: false,
+                    devicelist: data.rows,
+                    pagination: {
+                        total: data.records,
+                        pageSize: 10,
+                        current: data.page
+                    }
+                });
+            }else {
+                this.setState({
+                    loading: false
+                });
+            }
+
         }).catch(err => {
             this.setState({
                 loading: false

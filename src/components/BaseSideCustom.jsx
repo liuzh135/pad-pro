@@ -40,9 +40,7 @@ class BaseSideCustom extends Component {
         const { path } = props;
         this.setState({
             // openKey: path.substr(0, path.lastIndexOf('/')),
-            openKey: ['/app/airdata', '/app/device','/app/manager'],
-            openKey: ['/app/airdata', '/app/device','/app/manager'],
-
+            openKey: ['/app/airdata', '/app/device', '/app/manager'],
             selectedKey: path
         });
     };
@@ -65,7 +63,7 @@ class BaseSideCustom extends Component {
         console.log(v);
         this.setState({
             // openKey: v[v.length - 1],
-            openKey: ['/app/airdata', '/app/device',"/app/manager"],
+            openKey: ['/app/airdata', '/app/device', "/app/manager"],
             firstHide: false,
         })
     };
@@ -75,14 +73,14 @@ class BaseSideCustom extends Component {
 
         this.menu = [];
         if (v != null) {
-            for (var index in v) {
+            for (let index in v) {
                 let menuitem = v[index];
                 let icon = menuitem.icon || "book";
 
                 if (menuitem.submenu != null) {
                     submenu = menuitem.submenu;
                     let submenuView = [];
-                    for (var suni in submenu) {
+                    for (let suni in submenu) {
                         let subItem = submenu[suni];
                         submenuView.push(<Menu.Item key={subItem.path}><Link
                             to={subItem.path}>{subItem.title}</Link></Menu.Item>);
@@ -109,7 +107,7 @@ class BaseSideCustom extends Component {
             <Sider
                 trigger={null}
                 breakpoint="xl"
-                width= {220}
+                width={220}
                 collapsed={this.props.collapsed}
                 style={{
                     overflowY: 'auto',
