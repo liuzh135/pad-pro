@@ -1,17 +1,17 @@
 /**
  * @fileName: PM1WarningCards.jsx
  * Created on 2018-02-01
- * des: Pm空气指数的设置界面
+ * des: 温度和湿度 指数的预警设置界面
  */
 import React from "react";
-import {Button, Card, Icon, Select} from "antd";
+import {Button, Card, Icon, InputNumber, Select} from "antd";
 import {InputSelectPm} from "./InputSelectPm";
 import {SketchPicker} from 'react-color';
+import {SingleInputTemp} from "./SingleInputTemp";
 
 const Option = Select.Option;
 
-export class PM1WarningCards extends React.Component {
-
+export class TempWarningCards extends React.Component {
 
     constructor(props) {
         super(props);
@@ -20,7 +20,7 @@ export class PM1WarningCards extends React.Component {
             selectColor: '',
             selectKeyIndex: -1,
             unit: props.menu[0],
-            pm1: []
+            pm1: [],
         }
     }
 
@@ -29,7 +29,7 @@ export class PM1WarningCards extends React.Component {
         let pm1 = this.props.warnData || [];
         console.log(" pm1 " + JSON.stringify(pm1));
         this.setState({
-            pm1: pm1
+            pm1: pm1,
         });
     }
 
@@ -57,18 +57,17 @@ export class PM1WarningCards extends React.Component {
     PmonClick = () => {
         let unit = this.state.unit || '';
         console.log(" ---get new pm1----> " + JSON.stringify(this.state));
-        //提交 组装数据提交服务器
+        //提交
 
     };
 
     onPmChange = (pmVault) => {
         if (pmVault != null) {
-            let pm = this.state.pm1 || [];
-            pm[pmVault.keyIndex].startValue = pmVault.startValue;
-            pm[pmVault.keyIndex].endValue = pmVault.endValue;
-            pm[pmVault.keyIndex].colorValue = pmVault.colorValue;
+            let pm1 = this.state.pm1 || [];
+            pm1[pmVault.keyIndex].startValue = pmVault.startValue;
+            pm1[pmVault.keyIndex].colorValue = pmVault.colorValue;
             //动态计算所有点的最大取值和最下取值
-            this.claPointMinAndMax(pm);
+            this.claPointMinAndMax(pm1);
         }
     };
 
@@ -79,21 +78,12 @@ export class PM1WarningCards extends React.Component {
      */
     claPointMinAndMax = (star, min, max) => {
         let starTemps = star;
-        let firstMin = min || 0;
-        let lastMax = max || 300;
         for (let i = 0; i < starTemps.length; i++) {
             if (i === 0) {
-                starTemps[i].startmin = firstMin;
-                starTemps[i].endmax = starTemps[i + 1].startValue;
-            } else if (i === starTemps.length - 1) {
-                starTemps[i].startmin = starTemps[i - 1].endValue;
-                starTemps[i].endmax = lastMax;
-            } else {
-                starTemps[i].startmin = starTemps[i - 1].endValue;
-                starTemps[i].endmax = starTemps[i + 1].startValue;
+                starTemps[i].startmin = starTemps[i + 1].startValue;
+            } else if (i === 1) {
+                starTemps[i].startmax = starTemps[i - 1].startValue;
             }
-            starTemps[i].startmax = starTemps[i].endValue;
-            starTemps[i].endmin = starTemps[i].startValue;
         }
         this.setState({
             pm1: starTemps
@@ -117,6 +107,42 @@ export class PM1WarningCards extends React.Component {
                 endmax: pm1[keyindex].endmax,
                 colorValue: pm1[keyindex].colorValue,
                 title: pm1[keyindex].title,
+                unit: this.state.unit || '',
+            };
+        }
+        return parmas;
+    };
+
+    onTempChange = (pmVault) => {
+        if (pmVault != null) {
+            let pm1 = this.state.pm1 || [];
+            pm1[pmVault.keyIndex].startValue = pmVault.startValue;
+            pm1[pmVault.keyIndex].colorValue = pmVault.colorValue;
+            //这里强耦合 第三个参数 第二个值与下限一致  第一值与上限一致
+            if (pmVault.keyIndex === 0) {
+                pm1[2].endValue = pmVault.startValue;
+            } else if (pmVault.keyIndex === 1) {
+                pm1[2].startValue = pmVault.startValue;
+            }
+            //动态计算所有点的最大取值和最下取值
+            this.claPointMinAndMax(pm1);
+        }
+    };
+
+    getTempParmas = (keyindex) => {
+        let pm1 = this.state.pm1 || [];
+        let parmas = {};
+        if (pm1.length > 0 && pm1.length > keyindex) {
+            parmas = {
+                onPmChange: this.onTempChange,
+                colorClick: this.colorClick,
+                keyIndex: keyindex,
+                startValue: pm1[keyindex].startValue,
+                startmin: pm1[keyindex].startmin,
+                startmax: pm1[keyindex].startmax,
+                colorValue: pm1[keyindex].colorValue,
+                title: pm1[keyindex].title,
+                unit: this.state.unit || '',
             };
         }
         return parmas;
@@ -152,7 +178,11 @@ export class PM1WarningCards extends React.Component {
         let pm1 = this.state.pm1 || [];
         let rangV = [];
         pm1 && pm1.map((data, index) => {
-            rangV.push(<InputSelectPm key={index} {...this.getParmas(index)}/>)
+            if (index > 1) {
+                rangV.push(<InputSelectPm key={index} disabled={true} {...this.getParmas(index)}/>)
+            } else {
+                rangV.push(<SingleInputTemp key={index} {...this.getTempParmas(index)}/>);
+            }
         });
         return rangV;
     };

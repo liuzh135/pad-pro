@@ -13,7 +13,6 @@
  */
 
 import EcharsLine from './EcharsLine'
-import echarts from 'echarts'
 
 class EcharBar extends EcharsLine {
     constructor(name, type, symbol, symbolSize, data, color, barWidth) {

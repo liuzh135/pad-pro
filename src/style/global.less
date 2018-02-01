@@ -84,6 +84,18 @@ small {
   align-items: center;
 }
 
+.add_rang {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 0;
+  border: rgba(20, 110, 217, 0.49) dashed 1px;
+}
+
+.add_rang :active, .add_rang :focus,
+.add_rang :hover {
+  background-color: rgb(218, 220, 221);
+}
+
 .point3 {
   position: relative;
 }
@@ -91,7 +103,8 @@ small {
 .point2 {
   position: absolute;
 }
-.contentY{
+
+.contentY {
   top: 50%;
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
@@ -122,19 +135,32 @@ small {
   align-items: center;
 }
 
-.flex{
+.flex {
   display: flex;
 }
 
-.flex-gongge{
-  flex-direction: row;
-  flex-wrap:wrap;
-  justify-content:flex-start;
-  align-items: flex-start;
-  align-content:flex-start;
+.fix-center {
+  position: absolute;
+  top: 10%;
+  left: 100%;
+  z-index: 9999;
 }
 
-.pmdiv{
+.fix-center-right{
+  position: absolute;
+  top: 10%;
+  z-index: 9999;
+}
+
+.flex-gongge {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.pmdiv {
   display: inline-block;
   margin-top: 5px;
 }
@@ -148,22 +174,24 @@ small {
   color: #DAB5F1;
 }
 
-.device_text{
+.device_text {
   color: #aaa;
   font-size: 12px;
   margin-left: 10px;
 }
-.device_name_div{
+
+.device_name_div {
   border: 1px solid rgb(233, 233, 233);
   border-bottom: 0px solid rgb(233, 233, 233);
 }
-.toast_base{
+
+.toast_base {
   position: absolute;
   top: 50px;
   left: 50px;
 }
 
-.toast_base_bottom{
+.toast_base_bottom {
   position: absolute;
   bottom: 50px;
   left: 50px;
@@ -175,39 +203,46 @@ small {
   border: 1px solid #89A0B7;
 }
 
-.pm-1{
+.pm-1 {
   background-color: #55C300;
 }
-.pm-2{
+
+.pm-2 {
   background-color: #F3CB00;
 }
-.pm-3{
+
+.pm-3 {
   background-color: #FF9200;
 }
-.pm-4{
+
+.pm-4 {
   background-color: #FF2C1A;
 }
-.pm-5{
+
+.pm-5 {
   background-color: #ED2FA6;
 }
-.pm-6{
+
+.pm-6 {
   background-color: #C3271E;
 }
-.width-auto{
+
+.width-auto {
   width: 100%;
   padding: 3px 6px;
   border-radius: 15px;
   margin: 3px 0;
 }
-.text_pm{
+
+.text_pm {
   padding: 10px;
 }
 
-.map_view{
+.map_view {
   position: absolute;
   width: 50%;
   height: 50%;
-  top:  50px;
+  top: 50px;
   right: 50px;
   color: #eee;
   font-size: 12px;
@@ -216,34 +251,38 @@ small {
   border-radius: 10px;
   border: 1px solid #89A0B7;
 }
-.toast_text{
+
+.toast_text {
   color: #eee;
   font-size: 14px;
   padding: 20px;
   background-color: rgba(95, 95, 95, 0.35);
   border-radius: 5px;
 }
-.span_toast{
+
+.span_toast {
   margin-right: 10px;
   font-size: 12px;
   color: #eee;
   width: 60px;
   display: inline-block;
 }
-.span_toast_sub{
+
+.span_toast_sub {
   font-size: 14px;
 }
-.table-operation{
+
+.table-operation {
   width: 100%;
 }
 
 @-webkit-keyframes fadeInOut {
   0% {
-    opacity:0;
+    opacity: 0;
     transform: scale(0.5);
   }
   10% {
-    opacity:1;
+    opacity: 1;
     transform: scale(1);
   }
   50% {
@@ -251,16 +290,17 @@ small {
     transform: scale(1);
   }
   90% {
-    opacity:1;
+    opacity: 1;
     transform: scale(1);
   }
   100% {
-    opacity:0;
+    opacity: 0;
     transform: scale(0.5);
   }
 }
+
 .anim_fade_image {
-  position:absolute;
+  position: absolute;
   -webkit-animation-name: fadeInOut;
   -webkit-animation-timing-function: ease-in-out;
   -webkit-animation-iteration-count: infinite;
