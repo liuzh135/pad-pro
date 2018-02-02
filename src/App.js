@@ -37,15 +37,6 @@ class App extends Component {
         mqttConnect("connect");
     }
 
-    componentWillUnmount() {
-        console.log("+++++++APP++++componentWillUnmount+++++");
-        const { connect } = this.props;
-        //接受数据  渲染UI
-        if (connect && connect.client != null) {
-            connect.client.end();
-        }
-    }
-
     componentDidUpdate() {
         let patharry = this.props.location.pathname.split("/");
         const { connect } = this.props;
@@ -58,6 +49,15 @@ class App extends Component {
                     console.log("---unsubscribe-->" + renderData.uuid);
                 }
             }
+        }
+    }
+
+    componentWillUnmount() {
+        console.log("+++++++APP++++componentWillUnmount+++++");
+        const { connect } = this.props;
+        //接受数据  渲染UI
+        if (connect && connect.client != null) {
+            connect.client.end();
         }
     }
 

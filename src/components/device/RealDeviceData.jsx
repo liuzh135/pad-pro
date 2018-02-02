@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import {Button, Col, Dropdown, Icon, Menu, DatePicker, Row} from 'antd';
+import {Button, Col, Dropdown, Icon, Menu, DatePicker, Row, Layout} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
@@ -16,6 +16,10 @@ import {getDeivceList, getDeviceRealData, getDeviceDataHistoryByDeviceId} from '
 import moment from "moment";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
 import BaseTableData from "../data/BaseTableData";
+import {VirtualMachineView} from "./VirtualMachineView";
+import HistoryEcharView from "./HistoryEcharView";
+import {HistoryMachineView} from "../manager/HistoryMachineView";
+import {DynamicEcharView} from "./DynamicEcharView";
 
 const { RangePicker } = DatePicker;
 
@@ -272,7 +276,7 @@ class RealDeviceData extends React.Component {
     }
 
     render() {
-        const dateFormat = 'YYYY-MM-DD';
+
         let mac = this.state.mac;
         let menu = this.getMenuJon() || '';
         let renderData = this.state.renderData || {};
@@ -297,122 +301,43 @@ class RealDeviceData extends React.Component {
         let tvoc = renderData.mcu ? renderData.mcu.tvoc : renderRealData.tvoc ? renderRealData.tvoc : '0';
         let tvoc_ug = renderData.mcu ? renderData.mcu.tvoc_ug : renderRealData.tvocUg ? renderRealData.tvocUg : '0';
 
+        let VirtualData = {
+            temp, rh, pm25, pm10, pm1, eco2, eco2_mg, hcho, hcho_ug, tvoc, tvoc_ug
+        };
+
+        const dateFormat = 'YYYY-MM-DD';
         let startDate = this.state.startDate;
         let endDate = this.state.endDate;
-        let tableComs = new BaseTableData();
         let histroyData = this.state.historyRealData || [];
+
+
+        let hisViewData = {
+            dateFormat,
+            startDate,
+            endDate,
+            histroyData,
+            loadingHis: this.state.loadingHis,
+            paginationHis: this.state.paginationHis,
+        };
 
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff', height: "100%" }}>
-
-                <Row gutter={10} style={{ height: "100%" }}>
-                    <Col className="gutter-row" md={24}
-                         style={{ paddingRight: '30px' }}>
-                        <div className="gutter-box ">
-                            <div className="gutter-box" style={{ padding: '2px 15px' }}>
-                                <div className="text-title">
-                                    <span style={{ marginLeft: "15px" }}>设备实时采集数据</span>
-                                </div>
-                                <span className="device_text">设备名称</span>
-                                <Dropdown overlay={menu} trigger={['click']}>
-                                    <Button style={{ margin: 10 }}>
-                                        {mac} <Icon type="down"/>
-                                    </Button>
-                                </Dropdown>
-                            </div>
-                        </div>
-                    </Col>
-                    <Row gutter={10} className="text-center" style={{
-                        margin: '100px 40px 20px',
-                        paddingLeft: '50px',
-                        paddingRight: '50px',
-                        background: 'linear-gradient(to right bottom, #9326B7, #4C1DA6 80%, #3322A8)'
-                    }}>
-                        <Col className="gutter-row " md={6}
-                             style={{ padding: '20px' }}>
-                            <ProgressStyle className='progress_index' width={200} height={250}
-                                           progress={(parseInt(temp) / 10000)}
-                                           proressValue={"RH: " + (parseInt(rh) / 100) + "%"}
-                                           value={parseInt(temp) / 100}/>
-                        </Col>
-                        <Col className="gutter-row" md={16}
-                             style={{ float: 'right' }}>
-                            <div className='flex-center' style={{
-                                justifyContent: 'space-around', marginTop: '50px', marginBottom: '20px',
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '8px', borderRadius: '5px'
-                            }}>
-                                <AirDataProgress color='#C54AD1' className='progress_a' width={150} height={150}
-                                                 progress={parseInt(pm1) / 100}
-                                                 pm="PM1" pmValue={pm1}/>
-                                <AirDataProgress color='#ADF5F3' className='progress_b' width={150} height={150}
-                                                 progress={parseInt(pm25) / 100}
-                                                 pm="PM2.5" pmValue={pm25}/>
-                                <AirDataProgress color='#CB3FF7' className='progress_c' width={150} height={150}
-                                                 progress={parseInt(pm10) / 100}
-                                                 pm="PM10" pmValue={pm10}/>
-                            </div>
-
-                        </Col>
-                        <Col className="gutter-row flex-center" md={8}>
-                            <BarStyleProgress airName='TVOG' prosName1='ppb' prosName2='μg/m3'
-                                              prosgress1={parseInt(tvoc)}
-                                              prosgress2={parseInt(tvoc_ug)}/>
-                        </Col>
-                        <Col className="gutter-row flex-center" md={8}>
-                            <BarStyleProgress airName='HCHO' prosName1='ppb' prosName2='μg/m3'
-                                              prosgress1={parseInt(hcho)}
-                                              prosgress2={parseInt(hcho_ug)}/>
-
-                        </Col>
-                        <Col className="gutter-row flex-center" md={8}>
-                            <BarStyleProgress airName='ECO2' prosName1='ppm' prosName2='μg/m3'
-                                              prosgress1={parseInt(eco2)}
-                                              prosgress2={parseInt(eco2_mg)}/>
-                        </Col>
-                    </Row>
-
-                    <Col className="gutter-row" md={24}
-                         style={{ paddingRight: '30px', backgroundColor: '#fff' }}>
-                        <div className="gutter-box ">
-                            <div className="gutter-box" style={{ padding: '2px 15px' }}>
-                                <div className="text-title">
-                                    <span style={{ marginLeft: "15px" }}>设备历史采集数据</span>
-                                </div>
-                                <div className='device_text'>
-                                    <span className="device_text" style={{ marginRight: '20px' }}>选择时间</span>
-                                    <RangePicker
-                                        defaultValue={[moment(startDate, dateFormat), moment(endDate, dateFormat)]}
-                                        format={dateFormat}
-                                        onChange={this.handOnChangeTime}
-                                        dateRender={(current) => {
-                                            const style = {};
-                                            if (current.date() === 1) {
-                                                style.border = '1px solid #1890ff';
-                                                style.borderRadius = '50%';
-                                            }
-                                            return (
-                                                <div className="ant-calendar-date" style={style}>
-                                                    {current.date()}
-                                                </div>
-                                            );
-                                        }}
-                                    />
-                                </div>
-
-
-                                <ExtBaseicTable columns={tableComs.device_his_columns}
-                                                data={histroyData}
-                                                pagination={this.state.paginationHis}
-                                                loading={this.state.loadingHis}
-                                                bordered={true}
-                                                size="small"
-                                                style={{ padding: '0 10px', marginTop: '10px', lear: 'both' }}
-                                                onChange={this.handleTableChange}/>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
-
+                <div className="gutter-box" style={{ padding: '2px 15px' }}>
+                    <div className="text-title">
+                        <span style={{ marginLeft: "15px" }}>设备实时采集数据</span>
+                    </div>
+                    <span className="device_text">设备名称</span>
+                    <Dropdown overlay={menu} trigger={['click']}>
+                        <Button style={{ margin: 10 }}>
+                            {mac} <Icon type="down"/>
+                        </Button>
+                    </Dropdown>
+                </div>
+                {/*<DynamicEcharView/>*/}
+                <VirtualMachineView dataSource={VirtualData}/>
+                <HistoryMachineView dataSource={hisViewData}
+                                    handOnChangeTime={this.handOnChangeTime}
+                                    handleTableChange={this.handleTableChange}/>
             </div>
         )
     }

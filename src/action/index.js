@@ -32,7 +32,7 @@ export const mqttClient = (data, category) => ({
  * @param funcName      请求接口的函数名
  * @param params        请求接口的参数
  */
-export const fetchData = ({funcName, params, stateName}) => dispatch => {
+export const fetchData = ({ funcName, params, stateName }) => dispatch => {
     !stateName && (stateName = funcName);
     dispatch(requestData(stateName));
     return http[funcName](params).then(res => dispatch(receiveData(res, stateName)));
@@ -40,15 +40,16 @@ export const fetchData = ({funcName, params, stateName}) => dispatch => {
 
 /**
  * MQTT数据调用方法
- * @param params        请求接口的参数
+ * @param category        请求接口的参数
  */
 export const mqttConnect = (category) => dispatch => {
+    let clientId = 'liuzh-2018-' + Math.random().toString(16).substr(2, 8);//保证Id唯一  不然会出现一致reconnect的问题
     let ptions = {
         keepalive: 10,
         port: 8083,
         host: '120.77.252.48',
         protocol: 'mqtt',
-        clientId: 'liuzh-2018',
+        clientId: clientId,
         protocolId: 'MQTT',
         protocolVersion: 4,
         clean: true,

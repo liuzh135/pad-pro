@@ -82,7 +82,7 @@ class DeviceWarning extends React.Component {
         const menu = ["ppm", "bbm"];
         const menu1 = ["μg/m3"];
         const tempUnit = ["℃"];
-        const siUnit = ["RH"];
+        const siUnit = ["%"];
         let cards = [];
         cards.push(<PM1WarningCards title="pm1空气指数" key={0} menu={menu} warnData={this.getAirWarningData()}/>);
         cards.push(<PM1WarningCards title="PM2.5空气指数" key={1} menu={menu} warnData={this.getAirWarningData()}/>);
