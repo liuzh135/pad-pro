@@ -15,6 +15,7 @@ import Bacecomstyle from "../Bacecomstyle";
 import BaseEcharView from "../bar/BaseEcharView";
 import EcharCom from "../bar/EcharCom";
 import EcharBar from "../bar/EcharBar";
+import SelectCityDevices from "./SelectCityDevices";
 
 class StatisticalAirData extends React.Component {
 
@@ -25,6 +26,8 @@ class StatisticalAirData extends React.Component {
             echartsFlag: false,
             first: false,
             expand: false,
+            devicelist: [],
+            pm_data: [],
             queryParam: {
                 'activityId': 1,//活动ID
                 'statisDate': d.getFullYear() + "" + (d.getMonth() + 1) + "" + d.getDate(),//查询日期默认当天
@@ -46,6 +49,11 @@ class StatisticalAirData extends React.Component {
     componentWillReceiveProps(nextProps) {
 
     }
+
+    getPmData = (params = {}) => {
+        let pmData = [];
+        return pmData;
+    };
 
     render() {
         let tableComs = new BaseTableData();
@@ -76,9 +84,23 @@ class StatisticalAirData extends React.Component {
                         <div className="gutter-box ">
                             <div className="gutter-box" style={{ padding: '2px 15px' }}>
                                 <div className="text-title">
-                                    <span style={{ marginLeft: "15px" }}>采集点实时数据</span>
+                                    <span style={{ marginLeft: "15px" }}>空气趋势城市数据</span>
                                 </div>
-                                <ExtBaseicTable {...tableComs.pmTabledata} />
+                                <div style={{ border: '1px solid rgb(233, 233, 233)', padding: '5px 5px 5px 5px' }}>
+                                    <SelectCityDevices
+                                      // devicelist={this.state.devicelist}
+                                     //  pm_data=getPmData(this.state.devicelist)
+                                        selectDevice={this.getSelectDevice}/>
+                                </div>
+                                <div className="city-table" style={{ padding: '2px 15px 15px' }}>
+                                    <ExtBaseicTable {...tableComs.pmTabledata}
+                                       // data=getPmData(this.state.devicelist)
+
+
+
+                                    />
+                                </div>
+
                             </div>
 
                         </div>
