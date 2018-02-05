@@ -20,6 +20,7 @@ export class TempWarningCards extends React.Component {
             selectColor: '',
             selectKeyIndex: -1,
             unit: props.menu[0],
+            color: 0,
             pm1: [],
         }
     }
@@ -31,6 +32,22 @@ export class TempWarningCards extends React.Component {
         this.setState({
             pm1: pm1,
         });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let color = this.state.color;
+        let colorNew = nextProps.showColor;
+        // console.log(" color " + color + "####colorNew = " + colorNew);
+        if (colorNew - color === 1 && color !== 1) {
+            this.setState({
+                displayColorPicker: false,
+                color: colorNew,
+            });
+        } else {
+            this.setState({
+                color: colorNew,
+            });
+        }
     }
 
     handleChange = (value) => {
@@ -154,12 +171,14 @@ export class TempWarningCards extends React.Component {
                 displayColorPicker: !this.state.displayColorPicker,
                 selectColor: colorValue,
                 selectKeyIndex: keyIndex,
+                color: this.state.color++
             });
         } else {
             this.setState({
                 displayColorPicker: true,
                 selectColor: colorValue,
                 selectKeyIndex: keyIndex,
+                color: this.state.color++
             });
         }
     };
@@ -187,6 +206,10 @@ export class TempWarningCards extends React.Component {
         return rangV;
     };
 
+    onColorPickClick = (event) => {
+        event.stopPropagation();//阻止点击事件的冒泡事件
+    };
+
     render() {
         const { title } = this.props;
         let selectColor = this.state.selectColor || "#333";
@@ -204,7 +227,7 @@ export class TempWarningCards extends React.Component {
                 {this.getUnit()}
                 <Button type="primary" onClick={this.PmonClick}>确认设置</Button>
             </div>
-            {this.state.displayColorPicker && <div className={isRight ? "fix-center-right" : "fix-center"}>
+            {this.state.displayColorPicker && <div className={isRight ? "fix-center-right" : "fix-center"} onClick={this.onColorPickClick}>
                 <SketchPicker
                     color={selectColor}
                     onChangeComplete={this.handleColorChange}/>

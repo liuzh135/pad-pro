@@ -1,5 +1,7 @@
 /**
- * Created by hao.cheng on 2017/4/13.
+ * @fileName: BaseSideCustom.jsx
+ * Created on 2017-11-22
+ * 默认左边栏样式
  */
 import React, {Component} from 'react';
 import {Layout, Menu, Icon} from 'antd';
@@ -8,11 +10,6 @@ import {Link} from 'react-router';
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
-/**
- * @fileName: BaseSideCustom.jsx
- * Created on 2017-11-22
- * 默认左边栏样式
- */
 class BaseSideCustom extends Component {
 
     constructor(props) {
@@ -115,7 +112,6 @@ class BaseSideCustom extends Component {
                 }}
             >
                 {/*<div className="logo"/>*/}
-
                 <Menu
                     onClick={this.menuClick}
                     mode="inline"

@@ -45,7 +45,7 @@ class StatisticalDeviceData extends React.Component {
                                 <div className="text-title">
                                     <span style={{ marginLeft: "15px" }}>设备历史数据</span>
                                 </div>
-                                <div style={{ border: '1px solid rgb(233, 233, 233)' }}>
+                                <div style={{ border: '1px solid #C7D3E3' }}>
                                     <SelectCityAndDevice selectDevice={this.getSelectDevice}/>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@ class StatisticalDeviceData extends React.Component {
                                     text-align: center;
                                 }
                                 .ant-table-thead{
-                                    background-color: #e0e5eC;
+                                    background-color: #EDEEF2;
                                 }
                                 .ant-table-thead > tr > th{
                                    background: transparent;

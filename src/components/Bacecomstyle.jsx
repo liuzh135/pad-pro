@@ -19,7 +19,7 @@ const Bacecomstyle =
                                     text-align: center;
                                 }
                                 .ant-table-thead{
-                                    background-color: #e0e5eC;
+                                    background-color: #EDEEF2;
                                 }
                                 .ant-table-thead > tr > th{
                                    background: transparent;

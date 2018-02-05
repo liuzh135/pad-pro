@@ -4,7 +4,7 @@
  * des: Pm空气指数的设置界面
  */
 import React from "react";
-import {Button, Card, Icon, Select} from "antd";
+import {Button, Card, Select} from "antd";
 import {InputSelectPm} from "./InputSelectPm";
 import {SketchPicker} from 'react-color';
 
@@ -20,6 +20,7 @@ export class PM1WarningCards extends React.Component {
             selectColor: '',
             selectKeyIndex: -1,
             unit: props.menu[0],
+            color: 0,
             pm1: []
         }
     }
@@ -32,6 +33,23 @@ export class PM1WarningCards extends React.Component {
             pm1: pm1
         });
     }
+
+    componentWillReceiveProps(nextProps) {
+        let color = this.state.color;
+        let colorNew = nextProps.showColor;
+        // console.log(" color " + color + "####colorNew = " + colorNew);
+        if (colorNew - color === 1 && color !== 1) {
+            this.setState({
+                displayColorPicker: false,
+                color: colorNew,
+            });
+        } else {
+            this.setState({
+                color: colorNew,
+            });
+        }
+    }
+
 
     handleChange = (value) => {
         console.log(`selected ${value}`);
@@ -123,17 +141,20 @@ export class PM1WarningCards extends React.Component {
     };
 
     colorClick = (keyIndex, colorValue) => {
+        // console.log("--------------keyIndex-------------->" + keyIndex);
         if (keyIndex === this.state.selectKeyIndex) {
             this.setState({
                 displayColorPicker: !this.state.displayColorPicker,
                 selectColor: colorValue,
                 selectKeyIndex: keyIndex,
+                color: this.state.color++
             });
         } else {
             this.setState({
                 displayColorPicker: true,
                 selectColor: colorValue,
                 selectKeyIndex: keyIndex,
+                color: this.state.color++
             });
         }
     };
@@ -157,11 +178,17 @@ export class PM1WarningCards extends React.Component {
         return rangV;
     };
 
+    onColorPickClick = (event) => {
+        event.stopPropagation();//阻止点击事件的冒泡事件
+    };
+
     render() {
         const { title } = this.props;
         let selectColor = this.state.selectColor || "#333";
         let rangthView = this.getRangth();
         let isRight = this.props.isRight || false;
+
+        let displayColorPicker = this.state.displayColorPicker;
 
         return (<Card bordered={true}
                       title={title}
@@ -174,8 +201,10 @@ export class PM1WarningCards extends React.Component {
                 {this.getUnit()}
                 <Button type="primary" onClick={this.PmonClick}>确认设置</Button>
             </div>
-            {this.state.displayColorPicker && <div className={isRight ? "fix-center-right" : "fix-center"}>
+            {displayColorPicker &&
+            <div className={isRight ? "fix-center-right" : "fix-center"} onClick={this.onColorPickClick}>
                 <SketchPicker
+                    disableAlpha={true}
                     color={selectColor}
                     onChangeComplete={this.handleColorChange}/>
             </div>}

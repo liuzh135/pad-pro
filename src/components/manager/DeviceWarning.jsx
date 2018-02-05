@@ -18,6 +18,7 @@ class DeviceWarning extends React.Component {
         super(props);
         this.state = {
             loading: false,
+            color: 0,
             cards: [],
         }
     }
@@ -79,33 +80,45 @@ class DeviceWarning extends React.Component {
 
 
     createDomCards = () => {
-        const menu = ["ppm", "bbm"];
+        const menu = ["ppm", "μg/m³", "ppb"];
         const menu1 = ["μg/m3"];
         const tempUnit = ["℃"];
         const siUnit = ["%"];
         let cards = [];
-        cards.push(<PM1WarningCards title="pm1空气指数" key={0} menu={menu} warnData={this.getAirWarningData()}/>);
-        cards.push(<PM1WarningCards title="PM2.5空气指数" key={1} menu={menu} warnData={this.getAirWarningData()}/>);
-        cards.push(<PM1WarningCards title="PM10空气指数" key={2} menu={menu} warnData={this.getAirWarningData()}/>);
-        cards.push(<PM1WarningCards title="TVOG空气指数" key={3} menu={menu} isRight={true}
+        let color = this.state.color + 1;
+        cards.push(<PM1WarningCards showColor={color} title="pm1空气指数" key={0} menu={menu}
                                     warnData={this.getAirWarningData()}/>);
-        cards.push(<PM1WarningCards title="HCHO空气指数" key={4} menu={menu1} warnData={this.getAirWarningData()}/>);
-        cards.push(<PM1WarningCards title="ECO2空气指数" key={5} menu={menu1} warnData={this.getAirWarningData()}/>);
+        cards.push(<PM1WarningCards showColor={color} title="PM2.5空气指数" key={1} menu={menu}
+                                    warnData={this.getAirWarningData()}/>);
+        cards.push(<PM1WarningCards showColor={color} title="PM10空气指数" key={2} menu={menu}
+                                    warnData={this.getAirWarningData()}/>);
+        cards.push(<PM1WarningCards showColor={color} title="TVOG空气指数" key={3} menu={menu} isRight={true}
+                                    warnData={this.getAirWarningData()}/>);
+        cards.push(<PM1WarningCards showColor={color} title="HCHO空气指数" key={4} menu={menu1}
+                                    warnData={this.getAirWarningData()}/>);
+        cards.push(<PM1WarningCards showColor={color} title="ECO2空气指数" key={5} menu={menu1}
+                                    warnData={this.getAirWarningData()}/>);
 
-        cards.push(<TempWarningCards title="TEMP参数范围" key={6} menu={tempUnit}
+        cards.push(<TempWarningCards showColor={color} title="TEMP参数范围" key={6} menu={tempUnit}
                                      warnData={this.getTempWarningData()}/>);
-        cards.push(<TempWarningCards title="湿度参数范围" key={7} menu={siUnit} isRight={true}
+        cards.push(<TempWarningCards showColor={color} title="湿度参数范围" key={7} menu={siUnit} isRight={true}
                                      warnData={this.getTempWarningData()}/>);
         this.setState({
-            cards: cards
+            cards: cards,
+            color: color
         });
+    };
+
+    onWindowClick = () => {
+        //把所有的颜色选择框都去掉
+        this.createDomCards();
     };
 
     render() {
         //设备预警的卡片--空气
         let airCards = this.state.cards || [];
         return (
-            <Layout style={{ backgroundColor: "#fff" }}>
+            <Layout style={{ backgroundColor: "#fff" }} onClick={this.onWindowClick}>
                 <section className="flex flex-gongge">
                     {airCards}
                 </section>

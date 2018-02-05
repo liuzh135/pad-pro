@@ -5,14 +5,14 @@
  */
 
 import React from "react";
+import {Layout} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
-import SearchInput from "../user/SearchInput";
-import RoleList from "../user/RoleList";
-import UserList from "../user/UserList";
+import SearchInput from "./SearchInput";
+import RoleList from "./RoleList";
 
-class UserManager extends React.Component {
+class ChildAccountRoleList extends React.Component {
 
     constructor(props) {
         super(props);
@@ -38,8 +38,8 @@ class UserManager extends React.Component {
         //设备预警的卡片--空气
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
-                <SearchInput indexName="用户名" onInputClick={this.onSearch}/>
-                <UserList/>
+                <SearchInput indexName="角色名称" onInputClick={this.onSearch}/>
+                <RoleList/>
                 {
                     <style>
                         {`
@@ -97,4 +97,4 @@ const mapDispatchToProps = dispatch => ({
     receiveData: bindActionCreators(receiveData, dispatch)
 });
 
-export default connect(mapStateToPorps, mapDispatchToProps)(UserManager);
+export default connect(mapStateToPorps, mapDispatchToProps)(ChildAccountRoleList);

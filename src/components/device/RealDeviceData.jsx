@@ -326,12 +326,14 @@ class RealDeviceData extends React.Component {
                     <div className="text-title">
                         <span style={{ marginLeft: "15px" }}>设备实时采集数据</span>
                     </div>
-                    <span className="device_text">设备名称</span>
-                    <Dropdown overlay={menu} trigger={['click']}>
-                        <Button style={{ margin: 10 }}>
-                            {mac} <Icon type="down"/>
-                        </Button>
-                    </Dropdown>
+                    <div className="input-search">
+                        <span className="device_text">设备名称</span>
+                        <Dropdown overlay={menu} trigger={['click']}>
+                            <Button style={{ margin: 10 }}>
+                                {mac} <Icon type="down"/>
+                            </Button>
+                        </Dropdown>
+                    </div>
                 </div>
                 {/*<DynamicEcharView/>*/}
                 <VirtualMachineView dataSource={VirtualData}/>

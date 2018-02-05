@@ -120,7 +120,7 @@ export default class HistoryEcharView extends React.Component {
     getSelectType = () => {
         let menus = [];
         let echarsData = this.state.echarsData || {};
-        let reg=/[\u4E00-\u9FA5]/g;
+        let reg = /[\u4E00-\u9FA5]/g;
         echarsData.data && echarsData.data.label && echarsData.data.label.map((airdata, index) => {
             if (index % 3 === 0) {
                 menus.push(<RadioButton key={index}
@@ -214,7 +214,7 @@ export default class HistoryEcharView extends React.Component {
         let ecahrs = !first ? "" :
             <BaseEcharView legend={legend} subtitle={subtitle} title={title} option={echarCom.option} xAxis={xlist}
                            data={datalist}
-                           style={{ height: '310px', width: '100%', border: '#E9E9E9 solid 1px' }}/>;
+                           style={{ height: '310px', marginLeft: '5px', border: '#C7D3E3 solid 1px' }}/>;
         let timePicker = type === 1 ? <TimePicker
             open={this.state.open}
             onOpenChange={this.handleOpenChange}
@@ -222,9 +222,9 @@ export default class HistoryEcharView extends React.Component {
             onChange={this.onSelectTimeChange}
             format={timeFormat}/> : "";
 
-        return (<Col className="gutter-row" md={24} style={{ paddingRight: '30px' }}>
+        return (<Col className="gutter-row" md={24} style={{marginTop:'5px', paddingRight: '30px' }}>
             <div className="gutter-box" style={{ padding: '2px 15px' }}>
-                <div className='flex-space-between device_name_div'>
+                <div className='flex-space-between device_name_div' style={{ marginLeft: '5px' }}>
                     <div>
                         <DatePicker style={{ margin: 10, marginLeft: 10 }}
                                     onChange={this.onSelectChange}

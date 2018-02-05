@@ -6,15 +6,17 @@ import {Router, Route, hashHistory, IndexRedirect} from 'react-router';
 import App from '../App';
 import Page from '../components/Page';
 import Login from '../components/pages/Login';
+//设备分析
 import DeviceManager from '../components/device/DeviceManager';
 import StatisticalDeviceData from '../components/device/StatisticalDeviceData';
 import RealDeviceData from '../components/device/RealDeviceData';
-import DeviceWarning from '../components/manager/DeviceWarning';
-import UserManager from '../components/manager/UserManager';
-// import DeviceRealData from '../components/device/DeviceRealData';
+//空气趋势
 import RealDataAir from '../components/airdata/RealDataAir';
 import StatisticalAirData from '../components/airdata/StatisticalAirData';
-
+//系统管理
+import DeviceWarning from '../components/manager/DeviceWarning';
+import UserManager from '../components/manager/UserManager';
+import ChildAccountRoleList from '../components/user/ChildAccountRoleList';
 
 export default class CRouter extends Component {
     requireAuth = (permission, component) => {
@@ -44,6 +46,7 @@ export default class CRouter extends Component {
                         <Route path={'manager'}>
                             <Route path={'usermanager'} component={UserManager}/>
                             <Route path={'devicewarning'} components={DeviceWarning}/>
+                            <Route path={'childAccountRoleList'} components={ChildAccountRoleList}/>
                         </Route>
 
 

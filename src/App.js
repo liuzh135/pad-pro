@@ -4,7 +4,7 @@ import './style/index.less';
 import BaseSideCustom from './components/BaseSideCustom';
 import HeaderCustom from './components/HeaderCustom';
 import DecisionsModel from './menu/DecisionsModel';
-import {mqttConnect, receiveData} from '@/action';
+import {mqttConnect, receiveData, mqttData} from '@/action';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
@@ -45,8 +45,12 @@ class App extends Component {
             if (connect && connect.mqdata != null) {
                 let renderData = JSON.parse(connect.mqdata).data;
                 if (renderData != null) {
+
                     connect.client.unsubscribe("/device/air/airmonitor/" + renderData.uuid);
                     console.log("---unsubscribe-->" + renderData.uuid);
+                    const { mqttData } = this.props;
+                    mqttData(null, "connect");
+                    console.log("---clear data-->");
                 }
             }
         }
@@ -132,6 +136,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => ({
     receiveData: bindActionCreators(receiveData, dispatch),
+    mqttData: bindActionCreators(mqttData, dispatch),
     mqttConnect: bindActionCreators(mqttConnect, dispatch)
 });
 
