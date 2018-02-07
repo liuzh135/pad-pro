@@ -69,26 +69,6 @@ class BaseTableData {
             width: 100,
             render: this.renderContent
         }, {
-            title: 'ECO2',
-            dataIndex: 'eco2',
-            width: 100,
-            render: this.renderContent
-        }, {
-            title: 'ECO2Mg',
-            dataIndex: 'eco2Mg',
-            width: 100,
-            render: this.renderContent
-        }, {
-            title: 'HCHO',
-            dataIndex: 'hcho',
-            width: 100,
-            render: this.renderContent
-        }, {
-            title: 'HCHOUG',
-            width: 100,
-            dataIndex: 'hchoUg',
-            render: this.renderContent
-        }, {
             title: 'PM1',
             width: 100,
             dataIndex: 'pm1',
@@ -99,29 +79,14 @@ class BaseTableData {
             dataIndex: 'pm10',
             render: this.renderContent
         }, {
-            title: '湿度',
-            width: 100,
-            dataIndex: 'rh',
-            render: this.renderContent
-        }, {
             title: 'PM25',
             width: 100,
             dataIndex: 'pm25',
             render: this.renderContent
         }, {
-            title: '温度',
+            title: '首要污染物',
             width: 100,
-            dataIndex: 't',
-            render: this.renderContent
-        }, {
-            title: 'TVOC',
-            width: 100,
-            dataIndex: 'tvoc',
-            render: this.renderContent
-        }, {
-            title: 'TVOCUG',
-            width: 100,
-            dataIndex: 'tvocUg',
+            dataIndex: 'mainPm',
             render: this.renderContent
         }, {
             title: '上传时间',

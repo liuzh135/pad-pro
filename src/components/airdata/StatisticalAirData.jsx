@@ -94,6 +94,20 @@ class StatisticalAirData extends React.Component {
             });
         }
     };
+    isShowLine = (data) => {
+        console.log("data" + data);
+        if ((data.indexOf("PM1") !== -1) || (data.indexOf("PM10") !== -1) || (data.indexOf("PM2_5") !== -1)) {
+            return true;
+        }
+        return false;
+    };
+
+    isCantin = (data, tardata) => {
+        if ((data === tardata)) {
+            return true;
+        }
+        return false;
+    };
 
     getChars = (echarsHourData, shape) => {
         let dataList = [];
@@ -102,13 +116,16 @@ class StatisticalAirData extends React.Component {
         if (echarsHourData && echarsHourData.data && echarsHourData.data.series) {
             for (let i = 0; i < echarsHourData.data.series.length; i++) {
                 if (i % 3 === 0) {
-                    let echarList = (echarsHourData.data.series[i]).data || [];
-                    let label = echarsHourData.data.label[i];
-                    let reg = /[\u4E00-\u9FA5]/g;
-                    let labelString = String(label).replace(reg, "");
-                    let color = ((i / 3) % 3) === 0 ? '#60B4EF' : ((i / 3) % 3) === 1 ? "#B9A6DF" : "#34C8CA";
+                    if (this.isShowLine(echarsHourData.data.label[i])) {
+                        let echarList = (echarsHourData.data.series[i]).data || [];
+                        let label = echarsHourData.data.label[i];
+                        let reg = /[\u4E00-\u9FA5]/g;
+                        let labelString = String(label).replace(reg, "");
+                        let color = this.isCantin(labelString, "PM1") ? '#60B4EF' : this.isCantin(labelString, "PM2_5") ? "#B9A6DF" : "#34C8CA";
 
-                    dataList.push(new EcharBar(labelString, shapeView, 'circle', 4, echarList, color, 20));
+                        dataList.push(new EcharBar(labelString, shapeView, 'circle', 4, echarList, color, 20));
+                    }
+
                 }
             }
         }
@@ -126,7 +143,7 @@ class StatisticalAirData extends React.Component {
 
                 <Row gutter={10}>
                     <Col className="gutter-row" md={24}
-                         style={{ paddingRight: '30px'}}>
+                         style={{ paddingRight: '30px' }}>
                         <div className="gutter-box ">
                             <div className="gutter-box" style={{ padding: '2px 15px' }}>
                                 <div className="text-title">
@@ -148,10 +165,10 @@ class StatisticalAirData extends React.Component {
                             </div>
                         </div>
                     </Col>
-                    <AirEchars mainTitle="空气质量趋势" title={addr.provinceName + addr.cityName + "24小时空气质量"}
+                    <AirEchars mainTitle="空气质量趋势" title={addr.cityName + "24小时空气质量"}
                                xlist={hourData.xlist}
                                datalist={hourData.dataList}/>
-                    <AirEchars mainTitle="月空气质量" title={addr.provinceName + addr.cityName + "月空气质量"}
+                    <AirEchars mainTitle="月空气质量" title={addr.cityName + "月空气质量"}
                                xlist={monthData.xlist}
                                datalist={monthData.dataList}/>
                 </Row>

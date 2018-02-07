@@ -44,15 +44,46 @@ export class OnlineDeviceInfo extends React.Component {
         });
     }
 
+    getMax = (a, b, c) => {
+        return a > b ? (a > c ? a : c) : (b > c ? b : c);
+    };
+
+    reviewDataList = (dataList = []) => {
+        let Templist = [];
+        dataList.map((data) => {
+            let TempData = data;
+            let mainPm = this.getMax(TempData.pm1, TempData.pm10, TempData.pm25);
+            let mainpmstring = '';
+            switch (mainPm) {
+                case TempData.pm1:
+                    mainpmstring = "PM1";
+                    break;
+                case TempData.pm10:
+                    mainpmstring = "PM10";
+                    break;
+                case TempData.pm25:
+                    mainpmstring = "PM2.5";
+                    break;
+                default:
+                    break;
+            }
+            TempData.mainPm = mainpmstring;
+            Templist.push(TempData);
+        });
+        return Templist;
+
+    };
+
     getOnlineDevices = (parm) => {
         const { addr } = this.props;
         if (addr != null && addr.cityName != null) {
             this.setState({ loading: true });
             getDeviceDataByCityName(parm).then((data) => {
                 if (data != null && data.rows != null) {
+                    let dataList = this.reviewDataList(data.rows);
                     this.setState({
                         loading: false,
-                        devicelist: data.rows,
+                        devicelist: dataList,
                         pagination: {
                             total: data.records,
                             pageSize: 10,
