@@ -59,10 +59,37 @@ export const guest = () => get({ url: config.MOCK_AUTH_VISITOR });
 //    console.log(error);
 //});
 
-export const getDeivceList = params => axios({
+export const getDeivceList = params => {
+    let provinceName = params.provinceName;
+    let cityName = params.cityName;
+    let url = config.BASEWYZK + '/device/device/getDeviceList?page=' + params.page + '&rows=' + params.rows;
+    if (provinceName !== undefined && provinceName !== "") {
+        url = url + "&provinceName=" + provinceName;
+    }
+    if (cityName !== undefined && cityName !== "") {
+        url = url + "&cityName=" + cityName;
+    }
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
+export const getDeviceByCityAndDate = (cityName, date) => axios({
     method: 'get',
-    url: config.BASEWYZK + '/device/device/getDeviceList?page=' + params.page + '&rows=' + params.rows
+    url: config.BASEWYZK + '/device/line/getDeviceByCityAndDate?cityName=' + cityName + '&date=' + date
 }).then(res => res.data).catch(err => console.log(err));
+
+export const getDeviceByCityAndMonth = (cityName, date) => axios({
+    method: 'get',
+    url: config.BASEWYZK + '/device/line/getDeviceByCityAndMonth?cityName=' + cityName + '&date=' + date
+}).then(res => res.data).catch(err => console.log(err));
+
+export const getDeviceDataByCityName = (params) => axios({
+    method: 'get',
+    url: config.BASEWYZK + '/device/data/getDeviceDataByCityName?cityName=' + params.cityName + '&page=' + params.page + '&rows=' + params.rows
+}).then(res => res.data).catch(err => console.log(err));
+
 
 export const getProvinceList = () => axios({
     method: 'get',

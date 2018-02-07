@@ -46,7 +46,7 @@ class StatisticalDeviceData extends React.Component {
                                     <span style={{ marginLeft: "15px" }}>设备历史数据</span>
                                 </div>
                                 <div style={{ border: '1px solid #C7D3E3' }}>
-                                    <SelectCityAndDevice selectDevice={this.getSelectDevice}/>
+                                    <SelectCityAndDevice selectDevice={this.getSelectDevice} showDevice={true}/>
                                 </div>
                             </div>
                         </div>

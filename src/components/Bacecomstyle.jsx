@@ -36,9 +36,6 @@ const Bacecomstyle =
                                 .ant-table-thead > tr > th{
                                     padding: 10px 8px;
                                 }
-                                .ant-table-large {
-                                    height: 296px;
-                                }
 
 .ant-card-body{
     padding: 0px;}

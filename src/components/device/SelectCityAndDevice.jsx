@@ -20,30 +20,82 @@ export default class SelectCityAndDevice extends React.Component {
 
     //调用action中的ajax方法，获取数据
     componentWillMount() {
-        this.getDevices({
-            rows: 10,
-            page: 1
-        });
-        this.getProvinceList();
+        let querydeviceId = this.GetQueryString("deviceId");
+        if (querydeviceId !== null) {
+            console.log("--querydeviceId->" + querydeviceId);
+            this.getDevices({
+                rows: 10,
+                page: 1,
+            })
+        }
+        this.getProvinceList(querydeviceId);
     }
 
     isArray = (o) => {
         return Object.prototype.toString.call(o) === "[object Array]";
     };
 
-    getProvinceList = () => {
+    //获取省份列表
+    getProvinceList = (querydeviceId) => {
         getProvinceList().then(data => {
-            if (data != null && data.data.length > 1) {
+            if (data != null && data.data.length > 0) {
                 console.log("data =>" + data.data);
                 let optionsTemp = [];
                 if (this.isArray(data.data)) {
                     data.data.map((data, index) => {
+                        let isLeaf = false;
                         optionsTemp.push({
                             value: data,
                             label: data,
-                            isLeaf: false,
+                            isLeaf,
                         });
                     });
+                    if (data.data !== null && data.data.length > 0) {
+                        let provinceName = data.data[0];
+                        let cityName = null;
+                        if (provinceName !== undefined) {
+                            getCityList(provinceName).then((data) => {
+                                if (data !== undefined && data.data !== undefined && data.data.length > 0) {
+                                    cityName = data.data[0];
+                                }
+                                if (!querydeviceId) {
+                                    this.getDevices({
+                                        rows: 10,
+                                        page: 1,
+                                        provinceName: provinceName,
+                                        cityName: cityName,
+                                    });
+                                    this.setState({
+                                        address: this.getCityNameString(provinceName, cityName)
+                                    });
+                                }
+
+                                this.pushSelectAddress({
+                                    provinceName: provinceName,
+                                    cityName: cityName,
+                                });
+
+                            }).catch(err => {
+                                console.log(err);
+                                this.pushSelectAddress({
+                                    provinceName: provinceName,
+                                    cityName: cityName,
+                                });
+
+                                if (!querydeviceId) {
+                                    this.getDevices({
+                                        rows: 10,
+                                        page: 1,
+                                        provinceName: provinceName,
+                                        cityName: cityName,
+                                    });
+                                    this.setState({
+                                        address: this.getCityNameString(provinceName, cityName)
+                                    });
+                                }
+                            });
+                        }
+                    }
                 }
                 this.setState({
                     options: optionsTemp,
@@ -139,57 +191,121 @@ export default class SelectCityAndDevice extends React.Component {
     }
 
     getDevices = (params = {}) => {
-        this.setState({ loading: true });
-        getDeivceList(params).then(data => {
-            if (data.rows != null && data.rows.length > 1) {
+        const { showDevice } = this.props;
+        if (showDevice) {
+            this.setState({ loading: true });
+            getDeivceList(params).then(data => {
+                if (data.rows != null && data.rows.length > 0) {
 
-                let querydeviceId = this.GetQueryString("deviceId");
-                console.log("GetQueryString deviceId =" + querydeviceId);
-                let mac = data.rows[0].deviceName;
-                let deviceId = data.rows[0].deviceId;
-                let address = data.rows[0].address;
-                for (let i = 0; i < data.rows.length; i++) {
-                    if (data.rows[i].deviceId === parseInt(querydeviceId)) {
-                        mac = data.rows[i].deviceName;
-                        deviceId = data.rows[i].deviceId;
-                        address = data.rows[i].address;
+                    let querydeviceId = this.GetQueryString("deviceId");
+                    if (params.isChangeTab) {//点击tab选择的时候  不需要去匹配这个url中的deviceId
+                        querydeviceId = null;
+                    }
+                    console.log("GetQueryString deviceId =" + querydeviceId);
+                    let mac = data.rows[0].deviceName;
+                    let deviceId = data.rows[0].deviceId;
+                    let address = data.rows[0].address;
+                    let isSearch = false;
+                    for (let i = 0; i < data.rows.length; i++) {
+                        if (data.rows[i].deviceId === parseInt(querydeviceId)) {
+                            mac = data.rows[i].deviceName;
+                            deviceId = data.rows[i].deviceId;
+                            address = data.rows[i].address;
+                            isSearch = true;
+                        }
+                    }
+
+                    if (!isSearch && querydeviceId != null) {
+                        console.log("设备不再当前列表,列表id: " + params.page);
+                        console.log("请求下一个列表");
+                        this.getDevices({
+                            rows: 10,
+                            page: params.page + 1
+                        });
+                    } else {
+                        this.setState({
+                            loading: false,
+                            devicelist: data.rows,
+                            mac: mac,
+                            address: address,
+                            deviceId: deviceId,
+                            pagination: {
+                                total: data.records,
+                                pageSize: 10,
+                                current: data.page
+                            }
+                        });
+                        this.pushSelectDeivceId(deviceId);
                     }
                 }
+            }).catch(err => {
                 this.setState({
-                    loading: false,
-                    devicelist: data.rows,
-                    mac: mac,
-                    address: address,
-                    deviceId: deviceId,
-                    pagination: {
-                        total: data.records,
-                        pageSize: 10,
-                        current: data.page
-                    }
+                    loading: false
                 });
-                this.pushSelectDeivceId(deviceId);
-            }
-        }).catch(err => {
-            this.setState({
-                loading: false
+                console.log(err)
             });
-            console.log(err)
-        });
+        }
     };
 
-    onAddrChange = (value) => {
+    //返回选择的地址
+    pushSelectAddress = (addr) => {
+        const { selectCity } = this.props;
+        if (selectCity != null && typeof selectCity === "function") {
+            selectCity(addr);
+        }
+    };
+
+    onAddrChange = (value = []) => {
         console.log(value);
+        let provinceName = value[0];
+        let cityName = value[1];
+        this.pushSelectAddress({
+            provinceName: provinceName,
+            cityName: cityName,
+        });
+
+        this.getDevices({
+            rows: 10,
+            page: 1,
+            provinceName: provinceName,
+            cityName: cityName,
+            isChangeTab: true
+        });
     };
 
     getOptions = () => {
         return this.state.options;
     };
 
-    render() {
+    // Just show the latest item.
+    displayRender = (label) => {
+        let cityName = label[label.length - 1] ? label[label.length - 1] : "";
+        let proName = label[label.length - 2] ? label[label.length - 2] : "";
+        return this.getCityNameString(proName, cityName);
+    };
+
+    getCityNameString = (proName, cityName) => {
+        return proName + (proName && cityName ? "-" : "") + cityName;
+    };
+
+    getDeviceView = () => {
         let menu = this.getMenuJon() || '';
         let mac = this.state.mac;
+        return <span>
+            <span style={{ margin: '0 10px' }} className="device_text">设备名称</span>
+            <Dropdown overlay={menu} trigger={['click']}>
+                <Button style={{ margin: 10 }}>
+                    {mac} <Icon type="down"/>
+                </Button>
+            </Dropdown>
+        </span>
+    };
+
+    render() {
+
         let options = this.getOptions();
         let address = this.state.address || '';
+        const { showDevice } = this.props;
         return <div>
             <span className="device_text" style={{ margin: '0 10px' }}>设备位置</span>
             <Cascader
@@ -197,14 +313,10 @@ export default class SelectCityAndDevice extends React.Component {
                 options={options}
                 loadData={this.loadData}
                 onChange={this.onAddrChange}
+                displayRender={this.displayRender}
                 allowClear={false}
                 placeholder={address}/>
-            <span style={{ margin: '0 10px' }} className="device_text">设备名称</span>
-            <Dropdown overlay={menu} trigger={['click']}>
-                <Button style={{ margin: 10 }}>
-                    {mac} <Icon type="down"/>
-                </Button>
-            </Dropdown>
+            {showDevice && this.getDeviceView()}
         </div>;
     }
 }

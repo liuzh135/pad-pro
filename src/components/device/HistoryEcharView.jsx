@@ -222,7 +222,7 @@ export default class HistoryEcharView extends React.Component {
             onChange={this.onSelectTimeChange}
             format={timeFormat}/> : "";
 
-        return (<Col className="gutter-row" md={24} style={{marginTop:'5px', paddingRight: '30px' }}>
+        return (<Col className="gutter-row" md={24} style={{ marginTop: '5px', paddingRight: '30px' }}>
             <div className="gutter-box" style={{ padding: '2px 15px' }}>
                 <div className='flex-space-between device_name_div' style={{ marginLeft: '5px' }}>
                     <div>

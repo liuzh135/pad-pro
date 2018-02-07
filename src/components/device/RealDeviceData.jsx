@@ -113,39 +113,52 @@ class RealDeviceData extends React.Component {
                 let mac = data.rows[0].deviceName;
                 let uuid = data.rows[0].uuid;
                 let realDeviceId = data.rows[0].deviceId;
+                let isSearch = false;
                 for (let i = 0; i < data.rows.length; i++) {
                     if (data.rows[i].deviceId === parseInt(deviceId)) {
                         mac = data.rows[i].deviceName;
                         uuid = data.rows[i].uuid;
                         realDeviceId = data.rows[i].deviceId;
+                        isSearch = true;
                     }
                 }
-                this.setState({
-                    loading: false,
-                    devicelist: data.rows,
-                    mac: mac,
-                    uuid: uuid,
-                    deviceId: realDeviceId,
-                    pagination: {
-                        total: data.records,
-                        pageSize: 10,
-                        current: data.page
+                if (!isSearch && deviceId != null) {
+                    console.log("设备不再当前列表,列表id: " + params.page);
+                    console.log("请求下一个列表");
+                    this.getDevices({
+                        rows: 10,
+                        page: params.page + 1
+                    });
+                } else {
+                    console.log("设备在当前列表" + realDeviceId);
+                    this.setState({
+                        loading: false,
+                        devicelist: data.rows,
+                        mac: mac,
+                        uuid: uuid,
+                        deviceId: realDeviceId,
+                        pagination: {
+                            total: data.records,
+                            pageSize: 10,
+                            current: data.page
+                        }
+                    });
+
+                    //http 获取一次数据
+                    this.getRealData(realDeviceId);
+
+                    this.getHistoryByDeviceId(realDeviceId, this.state.startDate, this.state.endDate, {
+                        page: 1,
+                        rows: 10
+                    });
+                    //监听mqtt 数据
+                    const { connect } = this.props;
+                    if (connect.client != null) {
+                        console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + uuid);
+                        connect.client.subscribe("/device/air/airmonitor/" + uuid);
                     }
-                });
-
-                //http 获取一次数据
-                this.getRealData(realDeviceId);
-
-                this.getHistoryByDeviceId(realDeviceId, this.state.startDate, this.state.endDate, {
-                    page: 1,
-                    rows: 10
-                });
-                //监听mqtt 数据
-                const { connect } = this.props;
-                if (connect.client != null) {
-                    console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + uuid);
-                    connect.client.subscribe("/device/air/airmonitor/" + uuid);
                 }
+
             }
         }).catch(err => {
             this.setState({
@@ -340,6 +353,7 @@ class RealDeviceData extends React.Component {
                 <HistoryMachineView dataSource={hisViewData}
                                     handOnChangeTime={this.handOnChangeTime}
                                     handleTableChange={this.handleTableChange}/>
+
             </div>
         )
     }

@@ -10,7 +10,10 @@ class EcharCom {
         trigger: 'axis',
         gridIndex:2,
         axisPointer: {
-            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
         },
         backgroundColor: 'rgba(255,255,255,1)',
         padding: [5, 10],

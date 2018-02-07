@@ -22,7 +22,7 @@ class EcharBar extends EcharsLine {
         this.precision = 1;
         this.label = {
             normal: {
-                show: true,
+                show: false,
                 textStyle: {
                     color: '#188df0'
 
@@ -30,7 +30,12 @@ class EcharBar extends EcharsLine {
                 position: 'top'
             },
         };
-
+        this.markPoint = {
+            data: [
+                { type: 'max', name: '最大值' },
+                { type: 'min', name: '最小值' }
+            ]
+        };
     }
 }
 

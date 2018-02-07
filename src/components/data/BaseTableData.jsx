@@ -61,38 +61,72 @@ class BaseTableData {
     };
 
 
-
     //默认表头 适配
     comIssue_columns = [
         {
-            title: '监控站点',
-            dataIndex: 'doms',
-            width: 150,
+            title: '监控站点ID',
+            dataIndex: 'deviceId',
+            width: 100,
             render: this.renderContent
         }, {
-            title: 'AQI',
-            dataIndex: 'aqi',
-            width: 150,
+            title: 'ECO2',
+            dataIndex: 'eco2',
+            width: 100,
             render: this.renderContent
         }, {
-            title: '污染等级',
-            dataIndex: 'wlevel',
-            width: 150,
+            title: 'ECO2Mg',
+            dataIndex: 'eco2Mg',
+            width: 100,
             render: this.renderContent
         }, {
-            title: 'PM2.5浓度',
-            dataIndex: 'pm25',
-            width: 150,
+            title: 'HCHO',
+            dataIndex: 'hcho',
+            width: 100,
             render: this.renderContent
         }, {
-            title: 'PM10浓度',
-            width: 150,
+            title: 'HCHOUG',
+            width: 100,
+            dataIndex: 'hchoUg',
+            render: this.renderContent
+        }, {
+            title: 'PM1',
+            width: 100,
+            dataIndex: 'pm1',
+            render: this.renderContent
+        }, {
+            title: 'PM10',
+            width: 100,
             dataIndex: 'pm10',
             render: this.renderContent
         }, {
-            title: '首要污染物',
+            title: '湿度',
+            width: 100,
+            dataIndex: 'rh',
+            render: this.renderContent
+        }, {
+            title: 'PM25',
+            width: 100,
+            dataIndex: 'pm25',
+            render: this.renderContent
+        }, {
+            title: '温度',
+            width: 100,
+            dataIndex: 't',
+            render: this.renderContent
+        }, {
+            title: 'TVOC',
+            width: 100,
+            dataIndex: 'tvoc',
+            render: this.renderContent
+        }, {
+            title: 'TVOCUG',
+            width: 100,
+            dataIndex: 'tvocUg',
+            render: this.renderContent
+        }, {
+            title: '上传时间',
             width: 150,
-            dataIndex: 'fcontaminants',
+            dataIndex: 'upTime',
             render: this.renderContent
         }
     ];

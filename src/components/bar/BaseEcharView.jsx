@@ -43,6 +43,7 @@ class BaseEcharView extends React.Component {
                 show: true,
                 data: legend
             },
+
             xAxis: {
                 type: 'category',
                 data: xAxis,
