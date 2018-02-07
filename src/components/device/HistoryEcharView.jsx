@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import {TimePicker, Col, DatePicker, Radio} from 'antd';
+import {Col, DatePicker, Radio, TimePicker} from 'antd';
 import moment from 'moment';
 import BaseEcharView from "../bar/BaseEcharView";
 import EcharCom from "../bar/EcharCom";

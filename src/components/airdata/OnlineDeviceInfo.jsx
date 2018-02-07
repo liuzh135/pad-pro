@@ -1,5 +1,5 @@
 /**
- * @fileName: AirEchars.jsx
+ * @fileName: OnlineDeviceInfo.jsx
  * Created on 2018-02-01
  * 空气趋势表
  */

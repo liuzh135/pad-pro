@@ -1,5 +1,5 @@
 /**
- * @fileName: RealDataAir.jsx
+ * @fileName: StatisticalAirData.jsx
  * Created on 2017-12-20
  * 空气趋势 统计数据
  */
@@ -9,8 +9,6 @@ import {Col, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
-import BaseTableData from "../data/BaseTableData";
-import ExtBaseicTable from "../tables/ExtBaseicTable";
 import Bacecomstyle from "../Bacecomstyle";
 import SelectCityAndDevice from "../device/SelectCityAndDevice";
 import {AirEchars} from "./AirEchars";
