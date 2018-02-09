@@ -172,7 +172,6 @@ export default class HistoryEcharView extends React.Component {
 
     //切换列表
     onTypeChange = (e) => {
-        console.log("e =" + e.target.value);
         this.setState({
             airType: e.target.value
         });

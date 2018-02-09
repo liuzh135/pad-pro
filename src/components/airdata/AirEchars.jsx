@@ -30,7 +30,6 @@ export class AirEchars extends React.Component {
         }
     }
 
-
     render() {
         //刷新2次  解决echars 的宽度问题
         let first = this.state.first || false;

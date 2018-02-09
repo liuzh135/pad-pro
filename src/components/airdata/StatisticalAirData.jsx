@@ -27,15 +27,6 @@ class StatisticalAirData extends React.Component {
         }
     }
 
-    componentDidMount() {
-    }
-
-    //获取网络数据 渲染UI
-    componentWillReceiveProps(nextProps) {
-
-    }
-
-
     selectCity = (addr) => {
         console.log("addr ====>" + JSON.stringify(addr));
         this.setState({
@@ -95,7 +86,6 @@ class StatisticalAirData extends React.Component {
         }
     };
     isShowLine = (data) => {
-        console.log("data" + data);
         if ((data.indexOf("PM1") !== -1) || (data.indexOf("PM10") !== -1) || (data.indexOf("PM2_5") !== -1)) {
             return true;
         }
