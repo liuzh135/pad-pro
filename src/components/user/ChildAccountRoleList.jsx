@@ -38,7 +38,10 @@ class ChildAccountRoleList extends React.Component {
         //设备预警的卡片--空气
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
-                <SearchInput indexName="角色名称" onInputClick={this.onSearch}/>
+                <div className="text-title">
+                    <span style={{ marginLeft: "15px" }}>角色管理</span>
+                </div>
+                <SearchInput indexName="角色名称" addName="添加角色" isRole={true} onInputClick={this.onSearch}/>
                 <RoleList/>
                 {
                     <style>

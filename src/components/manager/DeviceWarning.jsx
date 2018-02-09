@@ -119,6 +119,9 @@ class DeviceWarning extends React.Component {
         let airCards = this.state.cards || [];
         return (
             <Layout style={{ backgroundColor: "#fff" }} onClick={this.onWindowClick}>
+                <div className="text-title">
+                    <span style={{ marginLeft: "15px" }}>设备预警</span>
+                </div>
                 <section className="flex flex-gongge">
                     {airCards}
                 </section>

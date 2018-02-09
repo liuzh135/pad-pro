@@ -38,7 +38,10 @@ class UserManager extends React.Component {
         //设备预警的卡片--空气
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
-                <SearchInput indexName="用户名" onInputClick={this.onSearch}/>
+                <div className="text-title">
+                    <span style={{ marginLeft: "15px" }}>用户管理</span>
+                </div>
+                <SearchInput indexName="用户名" addName="添加用户" onInputClick={this.onSearch}/>
                 <UserList/>
                 {
                     <style>

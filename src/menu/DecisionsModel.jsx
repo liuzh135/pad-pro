@@ -58,7 +58,7 @@ class DecisionsModel {
                     {
                         subId: 1,
                         path: "/app/manager/childAccountRoleList",
-                        title: "权限管理"
+                        title: "角色管理"
                     },
                     {
                         subId: 2,

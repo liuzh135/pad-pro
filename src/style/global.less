@@ -152,6 +152,17 @@ small {
   z-index: 9999;
 }
 
+.clearfloat{
+  zoom:1;
+}
+.clearfloat:after{
+  display:block;
+  height:0;
+  content:"";
+  clear:both;
+  visibility:hidden;
+}
+
 .flex-gongge {
   flex-direction: row;
   flex-wrap: wrap;
