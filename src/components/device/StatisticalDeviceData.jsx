@@ -25,8 +25,9 @@ class StatisticalDeviceData extends React.Component {
         }
     }
 
-    getSelectDevice = (deviceId) => {
+    getSelectDevice = (deviceId, device) => {
         console.log("select device = " + deviceId);
+        console.log("select deviceInfo = " + JSON.stringify(device));
         this.setState({
             deviceId: deviceId
         });

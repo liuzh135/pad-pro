@@ -1,37 +1,25 @@
 /**
- * @fileName: RealDataAir.jsx
+ * @fileName: RealDeviceData.jsx
  * Created on 2017-12-20
  * 设备分析-实时数据
  */
 
 import React from "react";
-import {Button, Col, Dropdown, Icon, Menu, DatePicker, Row, Layout} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
-import {ProgressStyle} from "../ProgressStyle";
-import {AirDataProgress} from "../AirDataProgress";
-import BarStyleProgress from "../BarStyleProgress";
-import {getDeivceList, getDeviceRealData, getDeviceDataHistoryByDeviceId} from '../../axios';
-import moment from "moment";
-import ExtBaseicTable from "../tables/ExtBaseicTable";
-import BaseTableData from "../data/BaseTableData";
+import {getDeviceDataHistoryByDeviceId, getDeviceRealData} from '../../axios';
 import {VirtualMachineView} from "./VirtualMachineView";
-import HistoryEcharView from "./HistoryEcharView";
 import {HistoryMachineView} from "../manager/HistoryMachineView";
-import {DynamicEcharView} from "./DynamicEcharView";
-
-const { RangePicker } = DatePicker;
+import SelectCityAndDevice from "./SelectCityAndDevice";
 
 class RealDeviceData extends React.Component {
 
     constructor(props) {
         super(props);
-        let d = new Date();
         this.state = {
             echartsFlag: false,
             mac: '设备MAC',
-            devicelist: [],
             pagination: {},
             loading: false,
             uuid: '',
@@ -44,19 +32,6 @@ class RealDeviceData extends React.Component {
             paginationHis: {},
             loadingHis: false,
         };
-    }
-
-    //调用action中的ajax方法，获取数据
-    componentWillMount() {
-        //调用 http请求 获取网络数据
-        //fetchData({funcName: 'admin', stateName: 'auth'});
-    }
-
-    componentDidMount() {
-        this.getDevices({
-            rows: 10,
-            page: 1
-        });
     }
 
     //获取网络数据 渲染UI
@@ -100,73 +75,6 @@ class RealDeviceData extends React.Component {
         return null;
     };
 
-    /**
-     *  这里查看是否是设备列表传进来的数据 deviceId
-     *
-     */
-    getDevices = (params = {}) => {
-        this.setState({ loading: true });
-        getDeivceList(params).then(data => {
-            if (data.rows != null && data.rows.length > 1) {
-                let deviceId = this.GetQueryString("deviceId");
-                console.log("GetQueryString deviceId =" + deviceId);
-                let mac = data.rows[0].deviceName;
-                let uuid = data.rows[0].uuid;
-                let realDeviceId = data.rows[0].deviceId;
-                let isSearch = false;
-                for (let i = 0; i < data.rows.length; i++) {
-                    if (data.rows[i].deviceId === parseInt(deviceId)) {
-                        mac = data.rows[i].deviceName;
-                        uuid = data.rows[i].uuid;
-                        realDeviceId = data.rows[i].deviceId;
-                        isSearch = true;
-                    }
-                }
-                if (!isSearch && deviceId != null) {
-                    console.log("设备不再当前列表,列表id: " + params.page);
-                    console.log("请求下一个列表");
-                    this.getDevices({
-                        rows: 10,
-                        page: params.page + 1
-                    });
-                } else {
-                    console.log("设备在当前列表" + realDeviceId);
-                    this.setState({
-                        loading: false,
-                        devicelist: data.rows,
-                        mac: mac,
-                        uuid: uuid,
-                        deviceId: realDeviceId,
-                        pagination: {
-                            total: data.records,
-                            pageSize: 10,
-                            current: data.page
-                        }
-                    });
-
-                    //http 获取一次数据
-                    this.getRealData(realDeviceId);
-
-                    this.getHistoryByDeviceId(realDeviceId, this.state.startDate, this.state.endDate, {
-                        page: 1,
-                        rows: 10
-                    });
-                    //监听mqtt 数据
-                    const { connect } = this.props;
-                    if (connect.client != null) {
-                        console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + uuid);
-                        connect.client.subscribe("/device/air/airmonitor/" + uuid);
-                    }
-                }
-
-            }
-        }).catch(err => {
-            this.setState({
-                loading: false
-            });
-            console.log(err)
-        });
-    };
 
     getRealData = (deviceId) => {
         getDeviceRealData(deviceId).then(data => {
@@ -227,32 +135,6 @@ class RealDeviceData extends React.Component {
         return false;
     };
 
-    handleMenuClick = (e) => {
-        // message.info('device Mac :' + this.state.devicelist[e.key].deviceName);
-        console.log('click', this.state.devicelist[e.key].deviceName);
-        const { connect } = this.props;
-        let uuid = this.state.uuid;
-        if (connect.client != null) {
-            if (this.isEmpty(uuid)) {
-                connect.client.unsubscribe("/device/air/airmonitor/" + this.state.uuid);
-            }
-
-            //http 获取一次设备数据   设备切换
-            this.getRealData(this.state.devicelist[e.key].deviceId);
-            //http 获取一次设备历史数据   设备切换
-            this.getHistoryByDeviceId(this.state.devicelist[e.key].deviceId, this.state.startDate, this.state.endDate, {
-                page: 1,
-                rows: 10
-            });
-            console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + this.state.devicelist[e.key].uuid);
-            connect.client.subscribe("/device/air/airmonitor/" + this.state.devicelist[e.key].uuid);
-        }
-        this.setState({
-            mac: this.state.devicelist[e.key].deviceName,
-            uuid: this.state.devicelist[e.key].uuid,
-            deviceId: this.state.devicelist[e.key].deviceId,
-        });
-    };
 
     handOnChangeTime = (dates, dateStrings) => {
         console.log("dateStrings" + dateStrings[0] + "  " + dateStrings[1]);
@@ -280,18 +162,39 @@ class RealDeviceData extends React.Component {
         });
     };
 
-    getMenuJon() {
-        let menus = [];
-        this.state.devicelist.map((data, index) => {
-            menus.push(<Menu.Item key={index}>{data.deviceName}</Menu.Item>)
+    /**
+     * deviceId 设备Id
+     * device 设备详情
+     * 设备位置和设备选择都会回调这里  所有逻辑处理在这里选择就好了
+     *
+     */
+    getSelectDevice = (deviceId, device) => {
+        console.log("select device = " + deviceId);
+        console.log("select deviceInfo = " + JSON.stringify(device));
+        const { connect } = this.props;
+        let uuid = this.state.uuid;
+        if (connect.client != null) {
+            if (!this.isEmpty(uuid)) {
+                connect.client.unsubscribe("/device/air/airmonitor/" + this.state.uuid);
+            }
+            //http 获取一次设备数据   设备切换
+            this.getRealData(deviceId);
+            //http 获取一次设备历史数据   设备切换
+            this.getHistoryByDeviceId(deviceId, this.state.startDate, this.state.endDate, {
+                page: 1,
+                rows: 10
+            });
+            console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + device.uuid);
+            connect.client.subscribe("/device/air/airmonitor/" + device.uuid);
+        }
+        this.setState({
+            mac: device.deviceName,
+            uuid: device.uuid,
+            deviceId: device.deviceId,
         });
-        return <Menu onClick={this.handleMenuClick}>{menus}</Menu>;
-    }
+    };
 
     render() {
-
-        let mac = this.state.mac;
-        let menu = this.getMenuJon() || '';
         let renderData = this.state.renderData || {};
         let renderRealData = this.state.renderRealData || {};
         let uuid = this.state.uuid;
@@ -323,7 +226,6 @@ class RealDeviceData extends React.Component {
         let endDate = this.state.endDate;
         let histroyData = this.state.historyRealData || [];
 
-
         let hisViewData = {
             dateFormat,
             startDate,
@@ -339,13 +241,8 @@ class RealDeviceData extends React.Component {
                     <div className="text-title">
                         <span style={{ marginLeft: "15px" }}>设备实时采集数据</span>
                     </div>
-                    <div className="input-search">
-                        <span className="device_text">设备名称</span>
-                        <Dropdown overlay={menu} trigger={['click']}>
-                            <Button style={{ margin: 10 }}>
-                                {mac} <Icon type="down"/>
-                            </Button>
-                        </Dropdown>
+                    <div style={{ border: '1px solid #C7D3E3' }}>
+                        <SelectCityAndDevice selectDevice={this.getSelectDevice} showDevice={true}/>
                     </div>
                 </div>
                 {/*<DynamicEcharView/>*/}
@@ -353,7 +250,6 @@ class RealDeviceData extends React.Component {
                 <HistoryMachineView dataSource={hisViewData}
                                     handOnChangeTime={this.handOnChangeTime}
                                     handleTableChange={this.handleTableChange}/>
-
             </div>
         )
     }

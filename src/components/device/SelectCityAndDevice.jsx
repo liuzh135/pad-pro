@@ -172,13 +172,13 @@ export default class SelectCityAndDevice extends React.Component {
         this.setState({
             mac: this.state.devicelist[e.key].deviceName,
         });
-        this.pushSelectDeivceId(this.state.devicelist[e.key].deviceId);
+        this.pushSelectDeivceId(this.state.devicelist[e.key].deviceId, this.state.devicelist[e.key]);
     };
 
-    pushSelectDeivceId = (deviceId) => {
+    pushSelectDeivceId = (deviceId, device) => {
         const { selectDevice } = this.props;
         if (selectDevice != null && typeof selectDevice === "function") {
-            selectDevice(deviceId);
+            selectDevice(deviceId, device);
         }
     };
 
@@ -205,12 +205,14 @@ export default class SelectCityAndDevice extends React.Component {
                     let mac = data.rows[0].deviceName;
                     let deviceId = data.rows[0].deviceId;
                     let address = data.rows[0].address;
+                    let device = data.rows[0];
                     let isSearch = false;
                     for (let i = 0; i < data.rows.length; i++) {
                         if (data.rows[i].deviceId === parseInt(querydeviceId)) {
                             mac = data.rows[i].deviceName;
                             deviceId = data.rows[i].deviceId;
                             address = data.rows[i].address;
+                            device = data.rows[i];
                             isSearch = true;
                         }
                     }
@@ -235,7 +237,7 @@ export default class SelectCityAndDevice extends React.Component {
                                 current: data.page
                             }
                         });
-                        this.pushSelectDeivceId(deviceId);
+                        this.pushSelectDeivceId(deviceId, device);
                     }
                 }
             }).catch(err => {
