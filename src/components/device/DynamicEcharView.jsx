@@ -1,5 +1,5 @@
 /**
- * @fileName: InputSelectPm.jsx
+ * @fileName: DynamicEcharView.jsx
  * Created on 2018-02-01
  * 显示设备实时数据模块 --- 模拟设备端数据
  */

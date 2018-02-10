@@ -1,7 +1,7 @@
 /**
- * @fileName: RealDataAir.jsx
+ * @fileName: DeviceManager.jsx
  * Created on 2017-12-20
- * 空气趋势 统计数据
+ * 设备管理
  */
 
 import React from "react";
