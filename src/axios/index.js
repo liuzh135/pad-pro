@@ -4,6 +4,7 @@
 import axios from 'axios';
 import {get} from './tools';
 import * as config from './config';
+import {message} from "antd/lib/index";
 
 export const getPros = () => axios.post('http://api.xitu.io/resources/github', {
     category: "trending",
@@ -43,6 +44,20 @@ export const admin = () => get({ url: config.MOCK_AUTH_ADMIN });
 
 // 访问权限获取
 export const guest = () => get({ url: config.MOCK_AUTH_VISITOR });
+
+//登录模块
+export const loginWyzk = (params={}) => {
+    let username = params.username;
+    let password = params.password;
+    let url = config.BASEWYZK + '/sso/login?username=' + username + '&password=' + password;
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => {
+        message.error(err.message);
+        console.log(err)
+    });
+};
 
 //export const getDeivceList = (params) => axios({
 //    method: 'get',
@@ -128,6 +143,27 @@ export const getDeviceDataHistoryByDeviceId = (params) => axios({
     url: config.BASEWYZK + '/device/data/getDeviceDataHistoryByDeviceId?deviceId=' + params.deviceId + '&startTime=' + params.startTime
     + '&endTime=' + params.endTime + '&page=' + params.page + '&rows=' + params.rows
 }).then(res => res.data).catch(err => console.log(err));
+
+export const getRoleList = params => {
+    let search = params.search;
+    let sort = params.sort;
+    let order = params.order;
+    let url = config.BASEWYZK + '/manage/role/list?page=' + params.page + '&rows=' + params.rows;
+    if (search !== undefined && search !== "") {
+        url = url + "&search=" + search;
+    }
+    if (sort !== undefined && sort !== "") {
+        url = url + "&sort=" + sort;
+    }
+    if (order !== undefined && order !== "") {
+        url = url + "&order=" + order;
+    }
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
 
 
 

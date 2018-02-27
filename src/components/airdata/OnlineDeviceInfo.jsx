@@ -11,9 +11,10 @@ import EcharCom from "../bar/EcharCom";
 import BaseEcharView from "../bar/BaseEcharView";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
 import {getDeviceDataByCityName} from "../../axios";
+import {BaseComponent} from "../BaseComponent";
 
 
-export class OnlineDeviceInfo extends React.Component {
+export class OnlineDeviceInfo extends BaseComponent {
 
 
     constructor(props) {
@@ -23,7 +24,6 @@ export class OnlineDeviceInfo extends React.Component {
             pagination: {},
             loading: false
         }
-
     }
 
     componentDidMount() {
@@ -37,11 +37,14 @@ export class OnlineDeviceInfo extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         const { addr } = nextProps;
-        this.getOnlineDevices({
-            cityName: addr.cityName,
-            rows: 10,
-            page: 1
-        });
+        const oldAddr = this.props.addr;
+        if (addr !== oldAddr) {
+            this.getOnlineDevices({
+                cityName: addr.cityName,
+                rows: 10,
+                page: 1
+            });
+        }
     }
 
     getMax = (a, b, c) => {
@@ -75,8 +78,7 @@ export class OnlineDeviceInfo extends React.Component {
     };
 
     getOnlineDevices = (parm) => {
-        const { addr } = this.props;
-        if (addr != null && addr.cityName != null) {
+        if (parm != null && parm.cityName != null) {
             this.setState({ loading: true });
             getDeviceDataByCityName(parm).then((data) => {
                 if (data != null && data.rows != null) {

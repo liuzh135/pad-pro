@@ -15,8 +15,9 @@ import {AirEchars} from "./AirEchars";
 import {getDeviceByCityAndDate, getDeviceByCityAndMonth} from "../../axios";
 import EcharBar from "../bar/EcharBar";
 import {OnlineDeviceInfo} from "./OnlineDeviceInfo";
+import {BaseComponent} from "../BaseComponent";
 
-class StatisticalAirData extends React.Component {
+class StatisticalAirData extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -28,8 +29,7 @@ class StatisticalAirData extends React.Component {
     }
 
     selectCity = (addr) => {
-        console.log("addr ====>" + JSON.stringify(addr));
-        this.setState({
+        this.setBaseState({
             addr: addr
         });
         this.getHourData(addr.cityName, this.getLocDate());
@@ -54,7 +54,7 @@ class StatisticalAirData extends React.Component {
         if (cityName !== undefined && cityName != null && cityName !== "") {
             getDeviceByCityAndDate(cityName, date).then((data) => {
                 if (data.data != null) {
-                    this.setState({
+                    this.setBaseState({
                         echarsHourData: data
                     });
                 }
@@ -62,7 +62,7 @@ class StatisticalAirData extends React.Component {
                 console.log(err);
             });
         } else {
-            this.setState({
+            this.setBaseState({
                 echarsHourData: []
             });
         }
@@ -72,7 +72,7 @@ class StatisticalAirData extends React.Component {
         if (cityName !== undefined && cityName != null && cityName !== "") {
             getDeviceByCityAndMonth(cityName, date).then((data) => {
                 if (data.data != null) {
-                    this.setState({
+                    this.setBaseState({
                         echarsMonthData: data
                     });
                 }
@@ -80,7 +80,7 @@ class StatisticalAirData extends React.Component {
                 console.log(err);
             });
         } else {
-            this.setState({
+            this.setBaseState({
                 echarsMonthData: []
             });
         }

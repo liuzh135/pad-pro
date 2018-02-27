@@ -1,8 +1,9 @@
 import React from "react";
 import {message, Button, Dropdown, Icon, Menu, Cascader} from "antd";
 import {getCityList, getDeivceList, getProvinceList} from "../../axios";
+import {BaseComponent} from "../BaseComponent";
 
-export default class SelectCityAndDevice extends React.Component {
+export default class SelectCityAndDevice extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -39,7 +40,6 @@ export default class SelectCityAndDevice extends React.Component {
     getProvinceList = (querydeviceId) => {
         getProvinceList().then(data => {
             if (data != null && data.data.length > 0) {
-                console.log("data =>" + data.data);
                 let optionsTemp = [];
                 if (this.isArray(data.data)) {
                     data.data.map((data, index) => {
@@ -65,7 +65,7 @@ export default class SelectCityAndDevice extends React.Component {
                                         provinceName: provinceName,
                                         cityName: cityName,
                                     });
-                                    this.setState({
+                                    this.setBaseState({
                                         address: this.getCityNameString(provinceName, cityName)
                                     });
                                 }
@@ -89,7 +89,7 @@ export default class SelectCityAndDevice extends React.Component {
                                         provinceName: provinceName,
                                         cityName: cityName,
                                     });
-                                    this.setState({
+                                    this.setBaseState({
                                         address: this.getCityNameString(provinceName, cityName)
                                     });
                                 }
@@ -97,7 +97,7 @@ export default class SelectCityAndDevice extends React.Component {
                         }
                     }
                 }
-                this.setState({
+                this.setBaseState({
                     options: optionsTemp,
                 });
             }
@@ -121,20 +121,20 @@ export default class SelectCityAndDevice extends React.Component {
                         });
                     });
                 }
-                this.setState({
+                this.setBaseState({
                     options: [...this.state.options],
                 });
             } else {
                 message.error(data.msg);
                 targetOption.loading = false;
-                this.setState({
+                this.setBaseState({
                     options: [...this.state.options],
                 });
             }
         }).catch(err => {
             targetOption.loading = false;
             targetOption.children = [];
-            this.setState({
+            this.setBaseState({
                 options: [...this.state.options],
             });
         });
@@ -169,7 +169,7 @@ export default class SelectCityAndDevice extends React.Component {
 
     //选择设备  重新拉取线表数据
     handleMenuClick = (e) => {
-        this.setState({
+        this.setBaseState({
             mac: this.state.devicelist[e.key].deviceName,
         });
         this.pushSelectDeivceId(this.state.devicelist[e.key].deviceId, this.state.devicelist[e.key]);
@@ -193,7 +193,7 @@ export default class SelectCityAndDevice extends React.Component {
     getDevices = (params = {}) => {
         const { showDevice } = this.props;
         if (showDevice) {
-            this.setState({ loading: true });
+            this.setBaseState({ loading: true });
             getDeivceList(params).then(data => {
                 if (data.rows != null && data.rows.length > 0) {
 
@@ -225,7 +225,7 @@ export default class SelectCityAndDevice extends React.Component {
                             page: params.page + 1
                         });
                     } else {
-                        this.setState({
+                        this.setBaseState({
                             loading: false,
                             devicelist: data.rows,
                             mac: mac,
@@ -241,7 +241,7 @@ export default class SelectCityAndDevice extends React.Component {
                     }
                 }
             }).catch(err => {
-                this.setState({
+                this.setBaseState({
                     loading: false
                 });
                 console.log(err)

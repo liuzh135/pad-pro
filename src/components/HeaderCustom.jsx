@@ -94,7 +94,7 @@ class HeaderCustom extends Component {
                     <Dropdown overlay={this.menuUser}>
                         <a className="ant-dropdown-link" href="javascript:void(0);"
                            style={{ color: "#fff", fontSize: '14px', padding: '5px', marginLeft: '5px' }}>
-                            {this.props.user.userName}
+                            系统管理员
                         </a>
                     </Dropdown>
                 </div>

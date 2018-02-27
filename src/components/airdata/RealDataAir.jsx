@@ -59,12 +59,12 @@ class RealDataAir extends React.Component {
     getDeviceMap = () => {
         this.setState({ loading: true });
         getDeviceMapList().then(data => {
-            if (data.rows != null && data.rows.length > 1) {
+            if (data.data != null && data.data.length > 1) {
                 this.setState({
                     loading: false,
-                    devicelist: data.rows,
-                    mac: data.rows[0].deviceName,
-                    deviceId: data.rows[0].deviceId,
+                    devicelist: data.data,
+                    mac: data.data[0].deviceName,
+                    deviceId: data.data[0].deviceId,
                     pagination: {
                         total: data.records,
                         pageSize: data.total,
@@ -103,8 +103,8 @@ class RealDataAir extends React.Component {
             }
         });
 
-        seriesList.push(new TopMapGeoSeries("空气净化器", "effectScatter", onlineSeries, "#4e9588"));//在线
-        seriesList.push(new TopMapGeoSeries("空气净化器", "scatter", offlineSeries, "#4e9588"));//离线
+        seriesList.push(new TopMapGeoSeries("空气净化器", "effectScatter", onlineSeries));//在线
+        seriesList.push(new TopMapGeoSeries("空气净化器", "effectScatter", offlineSeries));//离线
         return seriesList;
     };
 
@@ -112,7 +112,7 @@ class RealDataAir extends React.Component {
     getRealData = (params) => {
         getDeviceRealData(params.value[3]).then(data => {
             if (data.code === 0 && data.data !== null) {
-                console.log("getrealData =>" + JSON.stringify(data.data));
+                // console.log("getrealData =>" + JSON.stringify(data.data));
                 this.setParams({
                     ...params,
                     ...data.data

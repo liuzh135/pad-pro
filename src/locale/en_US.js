@@ -5,7 +5,7 @@ const en_US = {
     forget: 'Forget the password',
     inputAdmin: 'Please input a user name',
     inputpwd: 'Please input a password',
-    inputHitAdmin: 'Administrators enter admin, Tourists enter guest',
-    inputHitpwd: 'Administrators enter admin, Tourists enter guest',
+    inputHitAdmin: 'Administrators enter admin',
+    inputHitpwd: 'Administrators enter 123456',
 };
 export default en_US;

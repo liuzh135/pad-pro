@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import React from 'react';
-import {Menu, Button, Checkbox, Form, Icon, Input, Layout, Dropdown} from 'antd';
+import {Menu, Button, Checkbox, Form, Icon, Input, Layout, Dropdown, Alert} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
@@ -18,6 +18,11 @@ const FormItem = Form.Item;
 const { Footer } = Layout;
 
 class Login extends React.Component {
+
+    state = {
+        errorMesg: ""
+    };
+
     componentWillMount() {
         const { receiveData } = this.props;
         receiveData(null, 'auth');
@@ -31,9 +36,14 @@ class Login extends React.Component {
     componentWillReceiveProps(nextProps) {
         const { auth: nextAuth = {} } = nextProps;
         const { router } = this.props;
-        if (nextAuth.data && nextAuth.data.uid) {   // 判断是否登陆
+        console.log("data====>" + JSON.stringify(nextAuth));
+        if (nextAuth.data && nextAuth.data.code === 0) {   // 判断是否登陆
             localStorage.setItem('user', JSON.stringify(nextAuth.data));
             router.push('/app/airdata/realdataair');
+        } else if (nextAuth.data && nextAuth.data.message !== null) {
+            this.setState({
+                errorMesg: nextAuth.data.message
+            });
         }
     }
 
@@ -43,12 +53,21 @@ class Login extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 const { fetchData } = this.props;
-                if (values.userName === 'admin' && values.password === 'admin') fetchData({
-                    funcName: 'admin',
-                    stateName: 'auth'
-                });
-                if (values.userName === 'guest' && values.password === 'guest') fetchData({
-                    funcName: 'guest',
+                // if (values.userName === 'admin' && values.password === 'admin') fetchData({
+                //     funcName: 'admin',
+                //     stateName: 'auth'
+                // });
+                // if (values.userName === 'guest' && values.password === 'guest') fetchData({
+                //     funcName: 'guest',
+                //     stateName: 'auth'
+                // });
+
+                if (values.userName !== '' && values.password !== '') fetchData({
+                    funcName: 'loginWyzk',
+                    params: {
+                        username: values.userName,
+                        password: values.password
+                    },
                     stateName: 'auth'
                 });
             }
@@ -70,11 +89,21 @@ class Login extends React.Component {
         </Menu>
     );
 
+    getErrView = () => {
+        let msg = this.state.errorMesg || '';
+        if (msg === '') {
+            return msg;
+        }
+        return <Alert message={msg} type="error" closable showIcon/>;
+    };
+
+
     render() {
         const { getFieldDecorator } = this.props.form;
         let { language } = this.props;
         let languageString = language.data === 'zhLanguage' ? '中文' : 'English';
         let messagesStr = language.data === 'zhLanguage' ? zhCN : enUS;
+        let errView = this.getErrView();
         return (
             <Layout className="login_layout">
 
@@ -101,8 +130,8 @@ class Login extends React.Component {
                                     defaultMessage={'Air inspection management system'}
                                 />
                             </div>
-
-                            <Form onSubmit={this.handleSubmit} style={{ maxWidth: '400px' }}>
+                            {errView}
+                            <Form onSubmit={this.handleSubmit} style={{ maxWidth: '400px', marginTop: "10px" }}>
                                 <FormItem>
                                     {getFieldDecorator('userName', {
                                         rules: [{ required: true, message: messagesStr.inputAdmin }],

@@ -5,8 +5,8 @@ const zh_CN = {
     forget: '忘记密码',
     inputAdmin: '请输入用户名',
     inputpwd: '请输入密码',
-    inputHitAdmin: '管理员输入admin, 游客输入guest',
-    inputHitpwd: '管理员输入admin, 游客输入guest',
+    inputHitAdmin: '管理员输入admin',
+    inputHitpwd: '管理员输入123456',
 
 };
 export default zh_CN;

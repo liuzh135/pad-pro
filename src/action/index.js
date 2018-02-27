@@ -31,6 +31,7 @@ export const mqttClient = (data, category) => ({
  * 请求数据调用方法
  * @param funcName      请求接口的函数名
  * @param params        请求接口的参数
+ * @param stateName     state 名称
  */
 export const fetchData = ({ funcName, params, stateName }) => dispatch => {
     !stateName && (stateName = funcName);

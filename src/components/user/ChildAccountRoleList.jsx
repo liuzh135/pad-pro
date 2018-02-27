@@ -17,7 +17,7 @@ class ChildAccountRoleList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
+            searchValue: "",
         }
     }
 
@@ -30,19 +30,21 @@ class ChildAccountRoleList extends React.Component {
     }
 
     onSearch = (value = {}) => {
-        console.log("onSearch:" + value);
-
+        this.setState({
+            searchValue: value
+        });
     };
 
     render() {
         //设备预警的卡片--空气
+        let searchValue = this.state.searchValue;
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
                 <div className="text-title">
                     <span style={{ marginLeft: "15px" }}>角色管理</span>
                 </div>
                 <SearchInput indexName="角色名称" addName="添加角色" isRole={true} onInputClick={this.onSearch}/>
-                <RoleList/>
+                <RoleList searchValue={searchValue}/>
                 {
                     <style>
                         {`
