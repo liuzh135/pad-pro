@@ -18,6 +18,12 @@ addLocaleData([...en, ...zh]);
 
 
 class Page extends React.Component {
+
+    componentWillMount() {
+        const { receiveData } = this.props;
+        receiveData && receiveData("zhLanguage", 'language');
+    }
+
     render() {
         const { auth, language } = this.props;
         // console.log('auth--->' + JSON.stringify(auth) + "-->language=" + language.data);

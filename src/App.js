@@ -78,7 +78,7 @@ class App extends Component {
     };
 
     render() {
-        const { auth, router, responsive } = this.props;
+        const { auth, router } = this.props;
         // console.log("auth ---->" + JSON.stringify(auth));
         let de = new DecisionsModel();
 

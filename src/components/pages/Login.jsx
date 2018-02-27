@@ -36,7 +36,6 @@ class Login extends React.Component {
     componentWillReceiveProps(nextProps) {
         const { auth: nextAuth = {} } = nextProps;
         const { router } = this.props;
-        console.log("data====>" + JSON.stringify(nextAuth));
         if (nextAuth.data && nextAuth.data.code === 0) {   // 判断是否登陆
             localStorage.setItem('user', JSON.stringify(nextAuth.data));
             router.push('/app/airdata/realdataair');
@@ -51,7 +50,6 @@ class Login extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 const { fetchData } = this.props;
                 // if (values.userName === 'admin' && values.password === 'admin') fetchData({
                 //     funcName: 'admin',

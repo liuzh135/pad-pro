@@ -5,12 +5,13 @@ import React, {Component} from 'react';
 import {Dropdown, Layout, Menu, message} from 'antd';
 import {gitOauthInfo, gitOauthToken} from '../axios';
 import {queryString} from '../utils';
-import {connect} from 'react-redux';
 import avater from '../style/imgs/short_ico.png';
 
+import {connect} from 'react-redux';
+import {receiveData} from '@/action';
+import {bindActionCreators} from 'redux';
+
 const { Header } = Layout;
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 
 class HeaderCustom extends Component {
     state = {
@@ -42,8 +43,9 @@ class HeaderCustom extends Component {
         this.props.router.push('/login')
     };
 
-    onClick = function ({ key }) {
-        message.info(`Click on item ${key}`);
+    onClick = ({ key }) => {
+        const { receiveData } = this.props;
+        receiveData && receiveData(key, 'language');
     };
 
     menu = (
@@ -67,6 +69,9 @@ class HeaderCustom extends Component {
     );
 
     render() {
+        let { language } = this.props;
+        let languageString = language.data === 'zhLanguage' ? '中文' : 'English';
+
         return (
             <Header style={{ background: '#447ED9', padding: 0, height: 65 }} className="custom-theme">
 
@@ -75,7 +80,8 @@ class HeaderCustom extends Component {
                 {/*type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}*/}
                 {/*onClick={this.props.toggle}*/}
                 {/*/>*/}
-                <img src={avater} style={{ width: '30px', height: '30px', marginLeft: '20px', marginBottom: '8px'}} alt="LOGO"/>
+                <img src={avater} style={{ width: '30px', height: '30px', marginLeft: '20px', marginBottom: '8px' }}
+                     alt="LOGO"/>
                 <span style={{
                     color: "#fff",
                     fontSize: '20px',
@@ -103,7 +109,7 @@ class HeaderCustom extends Component {
                     <Dropdown overlay={this.menuLanguage}>
                         <a className="ant-dropdown-link" href="javascript:void(0);"
                            style={{ color: "#fff", fontSize: '14px', padding: '5px', marginLeft: '5px' }}>
-                            中文
+                            {languageString}
                         </a>
                     </Dropdown>
                 </div>
@@ -122,8 +128,12 @@ class HeaderCustom extends Component {
 }
 
 const mapStateToProps = state => {
-    const { responsive = { data: {} } } = state.httpData;
-    return { responsive };
+    const { responsive = { data: {} }, language = 'zhLanguage' } = state.httpData;
+    return { responsive, language };
 };
 
-export default connect(mapStateToProps)(HeaderCustom);
+const mapDispatchToProps = dispatch => ({
+    receiveData: bindActionCreators(receiveData, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderCustom);
