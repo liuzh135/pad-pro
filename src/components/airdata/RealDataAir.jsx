@@ -92,12 +92,12 @@ class RealDataAir extends React.Component {
                 if (data.deviceOnline === 1) {
                     onlineSeries.push({
                         name: data.address,
-                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId, data.deviceName, data.pm2_5]
+                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId, data.deviceName, data.pm25]
                     });
                 } else {
                     offlineSeries.push({
                         name: data.address,
-                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId, data.deviceName, data.pm2_5]
+                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId, data.deviceName, data.pm25]
                     });
                 }
             }

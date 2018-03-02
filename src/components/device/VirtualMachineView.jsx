@@ -37,31 +37,34 @@ export class VirtualMachineView extends React.Component {
             paddingRight: '50px',
             background: 'linear-gradient(to right bottom, #9326B7, #4C1DA6 80%, #3322A8)'
         }}>
-            <Col className="gutter-row " md={6}
-                 style={{ padding: '20px' }}>
-                <ProgressStyle className='progress_index' width={200} height={250}
-                               progress={(parseInt(temp) / 10000)}
-                               proressValue={"RH: " + (parseInt(rh) / 100) + "%"}
-                               value={parseInt(temp) / 100}/>
-            </Col>
-            <Col className="gutter-row" md={16}
-                 style={{ float: 'right' }}>
-                <div className='flex-center' style={{
-                    justifyContent: 'space-around', marginTop: '50px', marginBottom: '20px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '8px', borderRadius: '5px'
-                }}>
-                    <AirDataProgress color='#C54AD1' className='progress_a' width={150} height={150}
-                                     progress={parseInt(pm1) / 100}
-                                     pm="PM1" pmValue={pm1}/>
-                    <AirDataProgress color='#ADF5F3' className='progress_b' width={150} height={150}
-                                     progress={parseInt(pm25) / 100}
-                                     pm="PM2.5" pmValue={pm25}/>
-                    <AirDataProgress color='#CB3FF7' className='progress_c' width={150} height={150}
-                                     progress={parseInt(pm10) / 100}
-                                     pm="PM10" pmValue={pm10}/>
-                </div>
+            <Col className="gutter-row " md={24}>
+                <Col className="gutter-row " md={8}
+                     style={{ paddingTop: '20px' }}>
+                    <ProgressStyle className='progress_index' width={200} height={250}
+                                   progress={(parseInt(temp) / 10000)}
+                                   proressValue={"RH: " + (parseInt(rh) / 100) + "%"}
+                                   value={parseInt(temp) / 100}/>
+                </Col>
+                <Col className="gutter-row" md={16}
+                     style={{ float: 'right' }}>
+                    <div className='flex-center' style={{
+                        justifyContent: 'space-around', marginTop: '50px', marginBottom: '20px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '8px', borderRadius: '5px'
+                    }}>
+                        <AirDataProgress color='#C54AD1' className='progress_a' width={150} height={150}
+                                         progress={parseInt(pm1) / 100}
+                                         pm="PM1" pmValue={pm1}/>
+                        <AirDataProgress color='#ADF5F3' className='progress_b' width={150} height={150}
+                                         progress={parseInt(pm25) / 100}
+                                         pm="PM2.5" pmValue={pm25}/>
+                        <AirDataProgress color='#CB3FF7' className='progress_c' width={150} height={150}
+                                         progress={parseInt(pm10) / 100}
+                                         pm="PM10" pmValue={pm10}/>
+                    </div>
 
+                </Col>
             </Col>
+
             <Col className="gutter-row flex-center" md={8}>
                 <BarStyleProgress airName='TVOG' prosName1='ppb' prosName2='μg/m3'
                                   prosgress1={parseInt(tvoc)}

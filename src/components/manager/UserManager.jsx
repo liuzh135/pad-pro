@@ -17,7 +17,7 @@ class UserManager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
+            searchValue:""
         }
     }
 
@@ -30,19 +30,21 @@ class UserManager extends React.Component {
     }
 
     onSearch = (value = {}) => {
-        console.log("onSearch:" + value);
-
+        this.setState({
+            searchValue: value
+        });
     };
 
     render() {
-        //设备预警的卡片--空气
+        let searchValue = this.state.searchValue;
+
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
                 <div className="text-title">
                     <span style={{ marginLeft: "15px" }}>用户管理</span>
                 </div>
                 <SearchInput indexName="用户名" addName="添加用户" onInputClick={this.onSearch}/>
-                <UserList/>
+                <UserList searchValue={searchValue}/>
                 {
                     <style>
                         {`
@@ -73,14 +75,6 @@ class UserManager extends React.Component {
                                 }
                                 .ant-table-large {
                                     width: 100%;
-                                }
-                                .ant-spin-container {
-                                    position: relative;
-                                    display: flex;
-                                    flex-wrap: wrap;
-                                    flex-direction: column;
-                                    justify-content: center;
-                                    align-items: center;
                                 }
                         `}
                     </style>

@@ -28,7 +28,7 @@ class TopMapGeoSeries extends BaseMapGeoSeries {
         this.itemStyle = {
             normal: {
                 color: (seriesIndex, series, dataIndex, data) => {
-
+                    console.log("---seriesIndex->" + JSON.stringify(seriesIndex.data));
                     if (seriesIndex != null && seriesIndex.data != null) {
                         let pm25 = seriesIndex.data.value[5];
                         return this.getPmLevel(pm25);
@@ -43,7 +43,7 @@ class TopMapGeoSeries extends BaseMapGeoSeries {
 
     getPmLevel = (pm) => {
         let pmValue = 0;
-        if (pm => 0 && pm <= 50) {
+        if (pm >= 0 && pm <= 50) {
             pmValue = this.bgColor[0];
         } else if (pm > 50 && pm <= 100) {
             pmValue = this.bgColor[1];
@@ -56,6 +56,8 @@ class TopMapGeoSeries extends BaseMapGeoSeries {
         } else if (pm > 300) {
             pmValue = this.bgColor[5];
         }
+        console.log("--pm->" + pm);
+        console.log("--pmValue->" + pmValue);
         return pmValue
     };
 }

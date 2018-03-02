@@ -164,6 +164,25 @@ export const getRoleList = params => {
     }).then(res => res.data).catch(err => console.log(err));
 };
 
+export const getUserList = params => {
+    let search = params.search;
+    let sort = params.sort;
+    let order = params.order;
+    let url = config.BASEWYZK + '/manage/user/list?page=' + params.page + '&rows=' + params.rows;
+    if (search !== undefined && search !== "") {
+        url = url + "&search=" + search;
+    }
+    if (sort !== undefined && sort !== "") {
+        url = url + "&sort=" + sort;
+    }
+    if (order !== undefined && order !== "") {
+        url = url + "&order=" + order;
+    }
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
 
 
 

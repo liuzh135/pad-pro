@@ -36,7 +36,6 @@ class ChildAccountRoleList extends React.Component {
     };
 
     render() {
-        //设备预警的卡片--空气
         let searchValue = this.state.searchValue;
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
@@ -75,14 +74,6 @@ class ChildAccountRoleList extends React.Component {
                                 }
                                 .ant-table-large {
                                     width: 100%;
-                                }
-                                .ant-spin-container {
-                                    position: relative;
-                                    display: flex;
-                                    flex-wrap: wrap;
-                                    flex-direction: column;
-                                    justify-content: center;
-                                    align-items: center;
                                 }
                         `}
                     </style>

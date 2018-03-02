@@ -44,11 +44,22 @@ class BaseTableData {
             href={"/#/app/device/historydata?deviceId=" + row.deviceId}>历史数据</a>
         </div>;
     };
+    editRole = (row) => {
+        console.log("editRole = " + row.roleId);
+    };
+    delRole = (row) => {
+        console.log("delRole = " + row.roleId);
+    };
 
     renderOperationRole = (value, row, index) => {
+        console.log("---row" + JSON.stringify(row));
         return <div className="table-operation flex-center">
-            <span style={{ marginRight: '4px' }}>编辑</span>
-            <span style={{ marginLeft: '4px' }}>删除</span>
+            <span onClick={() => {
+                this.editRole(row)
+            }} className="table-span" style={{ marginRight: '4px' }}>编辑</span>
+            <span onClick={() => {
+                this.delRole(row)
+            }} className="table-span" style={{ marginLeft: '4px' }}>删除</span>
         </div>;
     };
 
@@ -136,66 +147,7 @@ class BaseTableData {
         }
     ];
 
-    //默认表头 适配
-    device_role_columns = [
-        {
-            title: '角色名称',
-            dataIndex: 'deviceId',
-            width: 150,
-            render: this.renderContent
-        }, {
-            title: '角色描述',
-            dataIndex: 'deviceName',
-            width: 250,
-            render: this.renderContent
-        }, {
-            title: '创建时间',
-            dataIndex: 'typeName',
-            width: 250,
-            render: this.renderContent
-        }, {
-            title: '操作',
-            dataIndex: 'operation',
-            width: 150,
-            render: this.renderOperationRole
-        }
-    ];
 
-
-    //默认表头 适配
-    device_user_columns = [
-        {
-            title: '名称',
-            dataIndex: 'deviceId',
-            width: 150,
-            render: this.renderContent
-        }, {
-            title: '手机号码',
-            dataIndex: 'deviceName',
-            width: 250,
-            render: this.renderContent
-        }, {
-            title: '角色名称',
-            dataIndex: 'typeName',
-            width: 250,
-            render: this.renderContent
-        }, {
-            title: '创建时间',
-            dataIndex: 'createDate',
-            width: 150,
-            render: this.renderContent
-        }, {
-            title: '状态',
-            dataIndex: 'status',
-            width: 150,
-            render: this.renderContent
-        }, {
-            title: '操作',
-            dataIndex: 'operation',
-            width: 150,
-            render: this.renderOperationUser
-        }
-    ];
 
     //默认表头 适配
     device_his_columns = [

@@ -17,7 +17,7 @@ class BaseSideCustom extends Component {
         this.state = {
             collapsed: false,
             mode: 'inline',
-            openKey: '',
+            openKey: [],
             selectedKey: '',
             firstHide: true,        // 点击收缩菜单，第一次隐藏展开子菜单，openMenu时恢复
         };
@@ -36,8 +36,8 @@ class BaseSideCustom extends Component {
     setMenuOpen = props => {
         const { path } = props;
         this.setState({
-            // openKey: path.substr(0, path.lastIndexOf('/')),
-            openKey: ['/app/airdata', '/app/device', '/app/manager'],
+            openKey: [path.substr(0, path.lastIndexOf('/'))],
+            // openKey: ['/app/airdata', '/app/device', '/app/manager'],
             selectedKey: path
         });
     };
@@ -59,8 +59,8 @@ class BaseSideCustom extends Component {
     openMenu = v => {
         console.log(v);
         this.setState({
-            // openKey: v[v.length - 1],
-            openKey: ['/app/airdata', '/app/device', "/app/manager"],
+            openKey: v[v.length - 1],
+            // openKey: ['/app/airdata', '/app/device', "/app/manager"],
             firstHide: false,
         })
     };
@@ -118,7 +118,8 @@ class BaseSideCustom extends Component {
                     theme="light"
                     selectedKeys={[this.state.selectedKey]}
                     openKeys={this.state.firstHide ? null : this.state.openKey}
-                    onOpenChange={this.openMenu}>
+                    onOpenChange={this.openMenu}
+                    style={{fontSize:'20px'}}>
                     {baseMenuView}
                 </Menu>
                 <style>

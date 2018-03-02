@@ -152,15 +152,16 @@ small {
   z-index: 9999;
 }
 
-.clearfloat{
-  zoom:1;
+.clearfloat {
+  zoom: 1;
 }
-.clearfloat:after{
-  display:block;
-  height:0;
-  content:"";
-  clear:both;
-  visibility:hidden;
+
+.clearfloat:after {
+  display: block;
+  height: 0;
+  content: "";
+  clear: both;
+  visibility: hidden;
 }
 
 .flex-gongge {
@@ -285,6 +286,30 @@ small {
 
 .table-operation {
   width: 100%;
+}
+
+.table-span {
+
+}
+
+.table-span:active, .table-span:hover {
+  outline: 0;
+  text-decoration: none;
+}
+
+.table-span:hover {
+  color: #719de2;
+}
+
+.table-span {
+  color: #447ED9;
+  background: transparent;
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+  -webkit-transition: color .3s ease;
+  -o-transition: color .3s ease;
+  transition: color .3s ease;
 }
 
 .input-search {
