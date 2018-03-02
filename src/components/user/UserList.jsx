@@ -18,7 +18,6 @@ export default class UserList extends React.Component {
             loading: false,
             visibleDel: false
         };
-        //默认表头 适配
         this.device_user_columns = [
             {
                 title: '用户名',
@@ -76,7 +75,7 @@ export default class UserList extends React.Component {
     }
 
     /**
-     * 角色列表查询
+     * 用户接口列表查询
      * searchValue 查询字段
      *
      */
