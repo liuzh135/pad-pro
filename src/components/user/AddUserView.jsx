@@ -37,6 +37,7 @@ export default class AddUserView extends React.Component {
 
     render() {
         const { title, visible, addLoading, submitText, cancelText } = this.props;
+        let selectArray = ["超级管理员", "管理员"];
         return (
             <Modal
                 visible={visible}
@@ -54,7 +55,7 @@ export default class AddUserView extends React.Component {
                 <InputData indexName="密码"/>
                 <InputData indexName="确认密码"/>
                 <InputData indexName="手机号"/>
-                <RadSelect/>
+                <RadSelect selectList={selectArray} selectId={1} pageName="角色选择"/>
             </Modal>
         );
     }

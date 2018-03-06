@@ -12,7 +12,7 @@ export default class RadSelect extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 1,
+            value: -1,
         }
     }
 
@@ -21,20 +21,35 @@ export default class RadSelect extends React.Component {
         this.setState({
             value: e.target.value,
         });
+        const {onChange} = this.props;
+        if (typeof onChange === "function"){
+            onChange(e.target.value);
+        }
+    };
+
+    getRadioList = () => {
+        const { selectList = [], selectId = 0 } = this.props;
+        let radioArray = [];
+        let id = this.state.value === -1 ? selectId : this.state.value;
+        selectList.map((data, index) => {
+            radioArray.push(<Radio key={index} value={index}>{data}</Radio>)
+        });
+        return <RadioGroup onChange={this.onChange} value={id}>
+            {radioArray}
+        </RadioGroup>;
     };
 
     render() {
-        const { selectList, selectId } = this.props;
+
+        let radList = this.getRadioList();
+        const { pageName} = this.props;
         return (
             <div className="gutter-example button-demo" style={{ padding: '5px', marginTop: '5px' }}>
                 <div className="role-sty">
-                    <p>角色选择</p>
+                    <p>{pageName}</p>
                 </div>
                 <div className="role-sty-t">
-                    <RadioGroup onChange={this.onChange} value={this.state.value}>
-                        <Radio value={1}>采购</Radio>
-                        <Radio value={2}>工程师</Radio>
-                    </RadioGroup>
+                    {radList}
                 </div>
             </div>
         );

@@ -14,14 +14,13 @@ export default class InputData extends React.Component {
     }
 
     render() {
-        const { indexName } = this.props;
+        const { indexName, refName } = this.props;
         return (
             <div className="gutter-example button-demo flex-center" style={{ padding: '5px', marginTop: '5px' }}>
                 <span className="require-red" style={{ margin: '0 15px', flex: '1' }}>{indexName}</span>
                 <Input
-                    ref="nameInput"
+                    ref={refName}
                     style={{ width: 200, flex: '6' }}
-                    onPressEnter={this.onSearch}
                 />
 
             </div>

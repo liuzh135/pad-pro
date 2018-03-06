@@ -57,15 +57,19 @@ class DecisionsModel {
                 submenu: [
                     {
                         subId: 1,
+                        path: "/app/manager/jurisdictionResource",
+                        title: "权限资源管理"
+                    },{
+                        subId: 2,
                         path: "/app/manager/childAccountRoleList",
                         title: "角色管理"
                     },
                     {
-                        subId: 2,
+                        subId: 3,
                         path: "/app/manager/usermanager",
                         title: "用户管理"
                     }, {
-                        subId: 3,
+                        subId: 4,
                         path: "/app/manager/devicewarning",
                         title: "设备预警"
                     }

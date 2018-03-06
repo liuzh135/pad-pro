@@ -1,18 +1,17 @@
 /**
- * @fileName: ChildAccountRoleList.jsx
+ * @fileName: JurisdictionResource.jsx
  * Created on 2017-12-20
- * 用户管理-角色管理
+ * 用户管理-权限资源管理
  */
 
 import React from "react";
-import {Layout} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 import SearchInput from "./SearchInput";
-import RoleList from "./RoleList";
+import ResourceList from "./ResourceList";
 
-class ChildAccountRoleList extends React.Component {
+class JurisdictionResource extends React.Component {
 
     constructor(props) {
         super(props);
@@ -42,8 +41,8 @@ class ChildAccountRoleList extends React.Component {
                 <div className="text-title">
                     <span style={{ marginLeft: "15px" }}>角色管理</span>
                 </div>
-                <SearchInput indexName="角色名称" addName="添加角色" isRole={1} onInputClick={this.onSearch}/>
-                <RoleList searchValue={searchValue}/>
+                <SearchInput indexName="权限资源名称" addName="添加权限资源" isRole={3} onInputClick={this.onSearch}/>
+                <ResourceList searchValue={searchValue}/>
                 {
                     <style>
                         {`
@@ -82,4 +81,4 @@ const mapDispatchToProps = dispatch => ({
     receiveData: bindActionCreators(receiveData, dispatch)
 });
 
-export default connect(mapStateToPorps, mapDispatchToProps)(ChildAccountRoleList);
+export default connect(mapStateToPorps, mapDispatchToProps)(JurisdictionResource);

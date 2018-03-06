@@ -17,7 +17,7 @@ class UserManager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchValue:""
+            searchValue: ""
         }
     }
 
@@ -43,24 +43,13 @@ class UserManager extends React.Component {
                 <div className="text-title">
                     <span style={{ marginLeft: "15px" }}>用户管理</span>
                 </div>
-                <SearchInput indexName="用户名" addName="添加用户" onInputClick={this.onSearch}/>
+                <SearchInput indexName="用户名" addName="添加用户" isRole={2} onInputClick={this.onSearch}/>
                 <UserList searchValue={searchValue}/>
                 {
                     <style>
                         {`
-                                .ant-table-row-level-0 > td:nth-child(1)
-                                ,.ant-table-row-level-0 > td:nth-child(2)
-                                ,.ant-table-row-level-0 > td:nth-child(3)
-                                ,.ant-table-row-level-0 > td:nth-child(4)
-                                ,.ant-table-row-level-0 > td:nth-child(6)
-                                ,.ant-table-row-level-0 > td:nth-child(7)
-                                , .ant-table-thead > tr > th:nth-child(1)
-                                , .ant-table-thead > tr > th:nth-child(2)
-                                , .ant-table-thead > tr > th:nth-child(3)
-                                , .ant-table-thead > tr > th:nth-child(4)
-                                , .ant-table-thead > tr > th:nth-child(5)
-                                , .ant-table-thead > tr > th:nth-child(6)
-                                , .ant-table-thead > tr > th:nth-child(7)
+                                .ant-table-row-level-0 > td
+                                , .ant-table-thead > tr > th
                                 {
                                     text-align: center;
                                 }

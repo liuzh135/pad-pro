@@ -5,14 +5,13 @@
  */
 
 import React from "react";
-import {Col, Icon, Row} from 'antd';
+import {Col, Row} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 import EchartsEffectScatter from '../charts/EchartsEffectScatter';
 import {getDeviceMapList, getDeviceRealData} from '../../axios';
 import TopMapGeoSeries from "../map/TopMapGeoSeries";
-import {Map, Marker, NavigationControl, InfoWindow} from 'react-bmap'
 import {BaiduMapView} from "../map/BaiduMapView";
 
 class RealDataAir extends React.Component {
@@ -59,7 +58,7 @@ class RealDataAir extends React.Component {
     getDeviceMap = () => {
         this.setState({ loading: true });
         getDeviceMapList().then(data => {
-            if (data.data != null && data.data.length > 1) {
+            if (data.data != null && data.data.length > 0) {
                 this.setState({
                     loading: false,
                     devicelist: data.data,
@@ -89,22 +88,14 @@ class RealDataAir extends React.Component {
 
         dataSource.map((data, index) => {
             if (data.address) {
-                if (data.deviceOnline === 1) {
-                    onlineSeries.push({
-                        name: data.address,
-                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId, data.deviceName, data.pm25]
-                    });
-                } else {
-                    offlineSeries.push({
-                        name: data.address,
-                        value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId, data.deviceName, data.pm25]
-                    });
-                }
+                onlineSeries.push({
+                    name: data.address,
+                    value: [parseFloat(data.pointX), parseFloat(data.pointY), data.deviceOnline, data.deviceId, data.deviceName, data.pm25]
+                });
             }
         });
 
         seriesList.push(new TopMapGeoSeries("空气净化器", "effectScatter", onlineSeries));//在线
-        seriesList.push(new TopMapGeoSeries("空气净化器", "effectScatter", offlineSeries));//离线
         return seriesList;
     };
 

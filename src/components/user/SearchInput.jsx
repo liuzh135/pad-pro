@@ -8,6 +8,7 @@ import {Button, Icon, Input} from "antd";
 import ReactDOM from "react-dom";
 import AddRoleView from "./AddRoleView";
 import AddUserView from "./AddUserView";
+import AddJurisdictionView from "./AddJurisdictionView";
 
 const Search = Input.Search;
 export default class SearchInput extends React.Component {
@@ -31,7 +32,6 @@ export default class SearchInput extends React.Component {
     };
 
     addRole = () => {
-        console.log("添加新角色");
         this.showModal();
     };
 
@@ -73,14 +73,20 @@ export default class SearchInput extends React.Component {
                     </div>
                 </div>
                 {
-                    isRole ? <AddRoleView
+                    (isRole === 1) ? <AddRoleView
                         title="添加角色" submitText="保存" cancelText="取消"
                         visible={this.state.visible}
                         addLoading={this.state.addLoading}
                         handleCancel={this.handleCancel}
                         handleOk={this.handleOk}
-                    /> : <AddUserView
+                    /> : (isRole === 2) ? <AddUserView
                         title="添加用户" submitText="保存" cancelText="取消"
+                        visible={this.state.visible}
+                        addLoading={this.state.addLoading}
+                        handleCancel={this.handleCancel}
+                        handleOk={this.handleOk}
+                    /> : <AddJurisdictionView
+                        title="添加权限资源" submitText="保存" cancelText="取消"
                         visible={this.state.visible}
                         addLoading={this.state.addLoading}
                         handleCancel={this.handleCancel}

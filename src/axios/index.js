@@ -46,7 +46,7 @@ export const admin = () => get({ url: config.MOCK_AUTH_ADMIN });
 export const guest = () => get({ url: config.MOCK_AUTH_VISITOR });
 
 //登录模块
-export const loginWyzk = (params={}) => {
+export const loginWyzk = (params = {}) => {
     let username = params.username;
     let password = params.password;
     let url = config.BASEWYZK + '/sso/login?username=' + username + '&password=' + password;
@@ -183,6 +183,36 @@ export const getUserList = params => {
         url: url
     }).then(res => res.data).catch(err => console.log(err));
 };
+
+export const getPermissionList = params => {
+    let search = params.search;
+    let sort = params.sort;
+    let order = params.order;
+    let url = config.BASEWYZK + '/manage/permission/list?page=' + params.page + '&rows=' + params.rows;
+    if (search !== undefined && search !== "") {
+        url = url + "&search=" + search;
+    }
+    if (sort !== undefined && sort !== "") {
+        url = url + "&sort=" + sort;
+    }
+    if (order !== undefined && order !== "") {
+        url = url + "&order=" + order;
+    }
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
+export const delPermissionList = ids => {
+    let url = config.BASEWYZK + '/manage/permission/delete/' + ids;
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
+
 
 
 

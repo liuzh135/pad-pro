@@ -17,6 +17,7 @@ import StatisticalAirData from '../components/airdata/StatisticalAirData';
 import DeviceWarning from '../components/manager/DeviceWarning';
 import UserManager from '../components/manager/UserManager';
 import ChildAccountRoleList from '../components/user/ChildAccountRoleList';
+import JurisdictionResource from '../components/user/JurisdictionResource';
 
 export default class CRouter extends Component {
     requireAuth = (permission, component) => {
@@ -47,6 +48,7 @@ export default class CRouter extends Component {
                             <Route path={'usermanager'} component={UserManager}/>
                             <Route path={'devicewarning'} components={DeviceWarning}/>
                             <Route path={'childAccountRoleList'} components={ChildAccountRoleList}/>
+                            <Route path={'jurisdictionResource'} components={JurisdictionResource}/>
                         </Route>
 
 
