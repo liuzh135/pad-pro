@@ -16,8 +16,7 @@ export default class SearchInput extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: false,
-            addLoading: false,
+            visible: false
         }
     }
 
@@ -37,19 +36,15 @@ export default class SearchInput extends React.Component {
 
     showModal = () => {
         this.setState({
-            visible: true
+            visible: !this.state.visible
         });
     };
 
-    handleOk = () => {
-        this.setState({ addLoading: true });
-        setTimeout(() => {
-            this.setState({ addLoading: false, visible: false });
-        }, 3000);
-    };
-
-    handleCancel = () => {
-        this.setState({ visible: false });
+    onRoleChange = () =>{
+        const {onDataChange} = this.props;
+        if (typeof onDataChange === "function"){
+            onDataChange();
+        }
     };
 
     render() {
@@ -76,21 +71,14 @@ export default class SearchInput extends React.Component {
                     (isRole === 1) ? <AddRoleView
                         title="添加角色" submitText="保存" cancelText="取消"
                         visible={this.state.visible}
-                        addLoading={this.state.addLoading}
-                        handleCancel={this.handleCancel}
-                        handleOk={this.handleOk}
+                        onRoleChange={this.onRoleChange}
                     /> : (isRole === 2) ? <AddUserView
                         title="添加用户" submitText="保存" cancelText="取消"
                         visible={this.state.visible}
-                        addLoading={this.state.addLoading}
-                        handleCancel={this.handleCancel}
-                        handleOk={this.handleOk}
+                        onRoleChange={this.onRoleChange}
                     /> : <AddJurisdictionView
                         title="添加权限资源" submitText="保存" cancelText="取消"
                         visible={this.state.visible}
-                        addLoading={this.state.addLoading}
-                        handleCancel={this.handleCancel}
-                        handleOk={this.handleOk}
                     />
                 }
             </div>

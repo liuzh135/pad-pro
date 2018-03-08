@@ -6,7 +6,9 @@
 import React from "react";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
 import {Modal} from 'antd';
-import {getRoleList} from "../../axios";
+import {delRoleList, getRoleList} from "../../axios";
+import EditRole from "./EditRole";
+import UpdateRoleJur from "./UpdateRoleJur";
 
 const confirm = Modal.confirm;
 export default class RoleList extends React.Component {
@@ -17,7 +19,9 @@ export default class RoleList extends React.Component {
             rolelist: [],
             pagination: {},
             loading: false,
-            visibleDel: false
+            visible: false,
+            visibleUpdate: false,
+            role: {},
         };
         this.device_role_columns = [
             {
@@ -53,13 +57,21 @@ export default class RoleList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { searchValue } = nextProps;
+        const { searchValue, addData } = nextProps;
         let search = this.props.searchValue;
+        let addDataNew = this.props.addData;
         if (search !== searchValue) {
             this.getRoleList({
                 rows: 10,
                 page: 1,
                 search: searchValue,
+            });
+        }
+        if (addDataNew !== addData) {
+            this.getRoleList({
+                rows: 10,
+                page: 1,
+                search: search,
             });
         }
     }
@@ -70,7 +82,6 @@ export default class RoleList extends React.Component {
      *
      */
     getRoleList = (params = {}) => {
-        console.log("--->" + JSON.stringify(params));
         this.setState({ loading: true });
         getRoleList(params).then(data => {
             if (data != null && data.rows != null) {
@@ -111,41 +122,99 @@ export default class RoleList extends React.Component {
     };
 
     editRole = (row) => {
-        console.log("editRole = " + row.roleId);
+        this.showEditModal(row);
+    };
+    updateRoleJur = (row) => {
+        this.showUpdateModal(row);
     };
     delRole = (row) => {
-        console.log("delRole = " + row.roleId);
         this.showDeleteConfirm(row);
     };
 
     renderOperationRole = (value, row, index) => {
-        console.log("---row" + JSON.stringify(row));
         return <div className="table-operation flex-center">
             <span onClick={() => {
                 this.editRole(row)
             }} className="table-span" style={{ marginRight: '4px' }}>编辑</span>
             <span onClick={() => {
+                this.updateRoleJur(row)
+            }} className="table-span" style={{ marginRight: '4px' }}>修改权限</span>
+            <span onClick={() => {
                 this.delRole(row)
-            }} className="table-span" style={{ marginLeft: '4px' }}>删除</span>
+            }} className="table-span">删除</span>
         </div>;
     };
 
+    delRoleUser = (ids) => {
+        this.setState({
+            loading: true
+        });
+        delRoleList(ids).then(data => {
+            this.setState({
+                loading: false
+            });
+            if (data != null && data.code === 0) {
+                const pager = { ...this.state.pagination };
+                this.getRoleList({
+                    rows: pager.pageSize,
+                    page: pager.current,
+                    search: this.props.searchValue,
+                });
+            }
+        }).catch(err => {
+            this.setState({
+                loading: false
+            });
+            console.log("err:" + err);
+        })
+    };
 
     showDeleteConfirm = (row) => {
+        let _this = this;
         confirm({
             title: '删除角色',
-            content: '确认删除' + row.title + "角色",
+            content: <span>确认删除<span style={{ color: "#ff0000", fontSize: "16px", margin: "0 3px" }}>{row.title}</span>角色</span>,
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
             onOk() {
                 console.log("确认删除角色");
+                _this.delRoleUser(row.roleId);
             },
             onCancel() {
                 console.log("取消删除角色");
             },
         });
     };
+
+    onRoleChange = () => {
+        //修改角色信息成功
+        const pager = { ...this.state.pagination };
+        this.getRoleList({
+            rows: pager.pageSize,
+            page: pager.current,
+            search: this.props.searchValue,
+        });
+    };
+    onJurChange = () => {
+        //角色权限修改成功
+        console.log("--角色权限修改成功--");
+    };
+
+    showEditModal = (role) => {
+        this.setState({
+            visible: !this.state.visible,
+            role: role
+        });
+    };
+
+    showUpdateModal = (role) => {
+        this.setState({
+            visibleUpdate: !this.state.visibleUpdate,
+            role: role
+        });
+    };
+
 
     render() {
         let devices = this.state.rolelist || [];
@@ -159,6 +228,18 @@ export default class RoleList extends React.Component {
                                 bordered={true}
                                 style={{ padding: '0 10px', clear: 'both' }}
                                 onChange={this.handleTableChange}/>
+                <EditRole
+                    title="修改角色信息" submitText="保存" cancelText="取消"
+                    visible={this.state.visible}
+                    role={this.state.role}
+                    onRoleChange={this.onRoleChange}
+                />
+                <UpdateRoleJur
+                    title="修改角色权限" submitText="保存" cancelText="取消"
+                    visible={this.state.visibleUpdate}
+                    role={this.state.role}
+                    onJurChange={this.onJurChange}
+                />
             </div>
         );
     }

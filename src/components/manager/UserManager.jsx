@@ -17,7 +17,8 @@ class UserManager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchValue: ""
+            searchValue: "",
+            addData: false,
         }
     }
 
@@ -35,6 +36,13 @@ class UserManager extends React.Component {
         });
     };
 
+    onDataChange = () => {
+        console.log("--->用户添加成功");
+        this.setState({
+            addData: !this.state.addData
+        });
+    };
+
     render() {
         let searchValue = this.state.searchValue;
 
@@ -43,8 +51,8 @@ class UserManager extends React.Component {
                 <div className="text-title">
                     <span style={{ marginLeft: "15px" }}>用户管理</span>
                 </div>
-                <SearchInput indexName="用户名" addName="添加用户" isRole={2} onInputClick={this.onSearch}/>
-                <UserList searchValue={searchValue}/>
+                <SearchInput onDataChange={this.onDataChange} indexName="用户名" addName="添加用户" isRole={2} onInputClick={this.onSearch}/>
+                <UserList addData={this.state.addData} searchValue={searchValue}/>
                 {
                     <style>
                         {`

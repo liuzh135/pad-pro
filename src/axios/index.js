@@ -212,7 +212,99 @@ export const delPermissionList = ids => {
     }).then(res => res.data).catch(err => console.log(err));
 };
 
+export const delRoleList = ids => {
+    let url = config.BASEWYZK + '/manage/role/delete/' + ids;
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
 
+export const createRole = (parm) => {
+    // let url = config.BASEWYZK + '/manage/role/create';
+    // return axios.post(url, parm).then(res => res.data).catch(err => console.log(err));
+
+    let url = config.BASEWYZK + '/manage/role/create?name=' + parm.name + "&title=" + parm.title + "&description=" + parm.description;
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
+export const updateRole = (parm) => {
+    let url = config.BASEWYZK + '/manage/role/update/' + parm.roleId + '?name=' + parm.name + "&title=" + parm.title + "&description=" + parm.description;
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
+//修改用户信息
+export const updateUser = (parm) => {
+    let url = config.BASEWYZK + '/manage/user/update/' + parm.userId + '?username=' + parm.username
+        + "&realname=" + parm.realname + "&phone=" + parm.phone
+        + "&email=" + parm.email + "&sex=" + parm.sex + "&locked=" + parm.locked;
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
+export const getRoleJurInfo = (roleId) => {
+    let url = config.BASEWYZK + '/manage/permission/role/' + roleId;
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
+export const getUserRoleInfo = (userId) => {
+    let url = config.BASEWYZK + '/manage/user/role/' + userId;
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
+
+export const userCreate = (parm) => {
+    let url = config.BASEWYZK + '/manage/user/create?username=' + parm.username
+        + "&password=" + parm.password + "&realname=" + parm.realname + "&phone=" + parm.phone + "&email=" + parm.email
+        + "&sex=" + parm.sex + "&locked=" + parm.locked;
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
+export const delUserByid = (userId) => {
+    let url = config.BASEWYZK + '/manage/user/delete/' + userId;
+    return axios({
+        method: 'get',
+        url: url
+    }).then(res => res.data).catch(err => console.log(err));
+};
+
+
+// export const updataUserByid = (userId, ids) => {
+//     let url = config.BASEWYZK + '/manage/user/role/' + userId;
+//     return axios({
+//         method: 'post',
+//         url: url,
+//         data: {
+//             roleId: ids
+//         }
+//     }).then(res => res.data).catch(err => console.log(err));
+// };
+
+
+export const updataUserByid = (userId, ids) => axios.post(config.BASEWYZK + '/manage/user/role/' + userId, {
+    roleId: ids,
+}).then(function (response) {
+    return response.data;
+}).catch(function (error) {
+    console.log(error);
+});
 
 
 

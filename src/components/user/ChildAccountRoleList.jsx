@@ -18,20 +18,19 @@ class ChildAccountRoleList extends React.Component {
         super(props);
         this.state = {
             searchValue: "",
+            addData: false,
         }
-    }
-
-    //调用action中的ajax方法，获取数据
-    componentWillMount() {
-
-    }
-
-    componentDidMount() {
     }
 
     onSearch = (value = {}) => {
         this.setState({
             searchValue: value
+        });
+    };
+
+    onDataChange = () => {
+        this.setState({
+            addData: !this.state.addData
         });
     };
 
@@ -42,8 +41,9 @@ class ChildAccountRoleList extends React.Component {
                 <div className="text-title">
                     <span style={{ marginLeft: "15px" }}>角色管理</span>
                 </div>
-                <SearchInput indexName="角色名称" addName="添加角色" isRole={1} onInputClick={this.onSearch}/>
-                <RoleList searchValue={searchValue}/>
+                <SearchInput onDataChange={this.onDataChange} indexName="角色名称" addName="添加角色" isRole={1}
+                             onInputClick={this.onSearch}/>
+                <RoleList addData={this.state.addData} searchValue={searchValue}/>
                 {
                     <style>
                         {`

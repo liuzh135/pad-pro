@@ -20,14 +20,6 @@ class JurisdictionResource extends React.Component {
         }
     }
 
-    //调用action中的ajax方法，获取数据
-    componentWillMount() {
-
-    }
-
-    componentDidMount() {
-    }
-
     onSearch = (value = {}) => {
         this.setState({
             searchValue: value

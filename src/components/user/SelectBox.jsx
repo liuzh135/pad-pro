@@ -1,5 +1,5 @@
 /**
- * @fileName: RoleList.jsx
+ * @fileName: SelectBox.jsx
  * Created on 2018-02-03
  * 选择权限
  */
@@ -17,9 +17,6 @@ export default class SelectBox extends React.Component {
             indeterminate: true,
             checkAll: false,
         }
-    }
-
-    componentDidMount() {
     }
 
     onChange = (checkedList) => {
@@ -59,20 +56,25 @@ export default class SelectBox extends React.Component {
     render() {
         let { plainOptions, checkAll } = this.props;
         return (
-            <div style={{ margin: '15px' }}>
-                <div style={{ marginTop: '5px' }}>
-                    <Checkbox
-                        indeterminate={this.state.indeterminate}
-                        onChange={this.onCheckAllChange}
-                        checked={this.state.checkAll}
-                    >
-                        {checkAll}
-                    </Checkbox>
+            <div className="gutter-example button-demo" style={{ padding: '5px', margin: '0 15px' }}>
+                <div className="role-sty">
+                    {checkAll}
                 </div>
-                <div style={{ margin: '5px' }}>
-                    <CheckboxGroup options={plainOptions} value={this.state.checkedList} onChange={this.onChange}/>
+                <div className="role-sty-t">
+                    <div style={{ marginTop: '5px' }}>
+                        <Checkbox
+                            indeterminate={this.state.indeterminate}
+                            onChange={this.onCheckAllChange}
+                            checked={this.state.checkAll}
+                        >
+                            全选
+                        </Checkbox>
+                    </div>
+                    <div style={{ margin: '5px' }}>
+                        <CheckboxGroup options={plainOptions} value={this.state.checkedList}
+                                       onChange={this.onChange}/>
+                    </div>
                 </div>
-
             </div>
         );
     }

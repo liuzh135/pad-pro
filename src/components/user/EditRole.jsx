@@ -1,12 +1,12 @@
 /**
- * @fileName: AddRoleView.jsx
+ * @fileName: EditRole.jsx
  * Created on 2018-02-03
- * 弹出框 新建角色
+ * 弹出框 修改角色信息
  */
 import React from "react";
-import {Button, Input, Modal, Form, message} from "antd";
+import {Button, Form, Input, message, Modal} from "antd";
 import {connect} from "react-redux";
-import {createRole} from "../../axios";
+import {updateRole} from "../../axios";
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -14,13 +14,12 @@ const formItemLayout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 8 },
 };
-
 const formItemLayoutArea = {
     labelCol: { span: 4 },
     wrapperCol: { span: 16 },
 };
 
-class AddRoleView extends React.Component {
+class EditRole extends React.Component {
 
     constructor(props) {
         super(props);
@@ -43,16 +42,20 @@ class AddRoleView extends React.Component {
         }
     }
 
+    /**
+     * 修改角色权限
+     */
     handleOk = () => {
         this.props.form.validateFields(
             (err, values) => {
                 if (!err) {
                     this.setState({ addLoading: true });
-                    createRole({
-                        name: "admin1111",
-                        title: values.roleName,
-                        description: values.roleDes
-                    }).then((data) => {
+                    let rolePd = this.props.role;
+                    if (rolePd !== null) {
+                        rolePd.title = values.roleName;
+                        rolePd.description = values.roleDes;
+                    }
+                    updateRole(rolePd).then((data) => {
                         this.setState({ addLoading: false, visible: false });
                         if (data !== null) {
                             const { onRoleChange } = this.props;
@@ -75,7 +78,7 @@ class AddRoleView extends React.Component {
     };
 
     render() {
-        const { title, submitText, cancelText } = this.props;
+        const { title, submitText, cancelText, role } = this.props;
         const { getFieldDecorator } = this.props.form;
         let visible = this.state.visible;
         let addLoading = this.state.addLoading;
@@ -100,6 +103,7 @@ class AddRoleView extends React.Component {
                                     required: true,
                                     message: '请输入角色名称',
                                 }],
+                                initialValue: role.title
                             })(
                                 <Input placeholder="请输入权限资源名称"/>
                             )}
@@ -110,6 +114,7 @@ class AddRoleView extends React.Component {
                                     required: true,
                                     message: '请输入角色描述',
                                 }],
+                                initialValue: role.description
                             })(
                                 <TextArea placeholder="请输入角色描述" autosize/>
                             )}
@@ -122,4 +127,4 @@ class AddRoleView extends React.Component {
 
 }
 
-export default connect()(Form.create()(AddRoleView));
+export default connect()(Form.create({})(EditRole));

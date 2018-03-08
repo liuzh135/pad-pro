@@ -1,5 +1,5 @@
 /**
- * @fileName: SearchInput.jsx
+ * @fileName: RadSelect.jsx
  * Created on 2018-02-03
  * 单选框
  */

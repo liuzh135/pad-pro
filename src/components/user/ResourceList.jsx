@@ -186,11 +186,9 @@ export default class ResourceList extends React.Component {
             okType: 'danger',
             cancelText: 'No',
             onOk() {
-                console.log("确认删除权限资源");
                 _this.delPermissionList(row.permissionId);
             },
             onCancel() {
-                console.log("取消删除权限资源");
             },
         });
     };

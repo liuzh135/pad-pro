@@ -35,12 +35,25 @@ class AddJurisdictionView extends React.Component {
             subList: [],
             pidValue: 0,
             subValue: 0,
-            radioId: 0
+            radioId: 0,
+            visible: false,
+            addLoading: false
         }
     }
 
     componentDidMount() {
     }
+
+    componentWillReceiveProps(nextProps) {
+        let visible = this.props.visible || false;
+        let visibleNew = nextProps.visible || false;
+        if (visibleNew !== visible) {
+            this.setState({
+                visible: true
+            });
+        }
+    }
+
 
     handleOk = () => {
         // const { handleOk } = this.props;
@@ -55,16 +68,17 @@ class AddJurisdictionView extends React.Component {
                     console.info('success - resName = ' + values.resName);
                     console.info('success - resValue = ' + values.resValue);
                     console.info('success - resUrl =' + values.resUrl);
+                    this.setState({ addLoading: true });
+                    setTimeout(() => {
+                        this.setState({ addLoading: false, visible: false });
+                    }, 3000);
                 }
             },
         );
     };
 
     handleCancel = () => {
-        const { handleCancel } = this.props;
-        if (typeof handleCancel === "function") {
-            handleCancel();
-        }
+        this.setState({ visible: false });
     };
 
     // 单选框选择器
@@ -98,7 +112,7 @@ class AddJurisdictionView extends React.Component {
 
 
     render() {
-        const { title, visible, addLoading, submitText, cancelText } = this.props;
+        const { title,  submitText, cancelText } = this.props;
         let rourceList = this.state.rourceList || [];
         let pidList = this.state.pidList || [];
         if (pidList.length === 0) {
@@ -121,6 +135,8 @@ class AddJurisdictionView extends React.Component {
 
         const { getFieldDecorator } = this.props.form;
 
+        let visible = this.state.visible;
+        let addLoading = this.state.addLoading;
         return (
             visible ?
                 <Modal

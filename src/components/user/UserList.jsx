@@ -5,8 +5,11 @@
  */
 import React from "react";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
-import {getUserList} from "../../axios";
+import {delRoleList, delUserByid, getUserList} from "../../axios";
 import {Modal} from 'antd';
+import EditUser from "./EditUser";
+import UpdateUserRole from "./UpdateUserRole";
+
 const confirm = Modal.confirm;
 export default class UserList extends React.Component {
 
@@ -16,7 +19,22 @@ export default class UserList extends React.Component {
             userlist: [],
             pagination: {},
             loading: false,
-            visibleDel: false
+            visibleUpdate: false,
+            user: {}
+        };
+        this.renderStateContent = (value, row, index) => {
+            return {
+                children: value === 0 ? <span className="status_nomal">正常</span> :
+                    <span className="status_lock">锁定</span>,
+                props: {},
+            };
+        };
+        this.renderSexContent = (value, row, index) => {
+            return {
+                children: value === 0 ? <span>男</span> :
+                    <span>女</span>,
+                props: {},
+            };
         };
         this.device_user_columns = [
             {
@@ -30,16 +48,21 @@ export default class UserList extends React.Component {
                 dataIndex: 'realname',
                 width: 150,
                 render: this.renderContent
-            },{
+            }, {
                 title: '手机号码',
                 dataIndex: 'phone',
                 width: 250,
                 render: this.renderContent
             }, {
-                title: '角色名称',
-                dataIndex: 'typeName',
+                title: '性别',
+                dataIndex: 'sex',
+                width: 150,
+                render: this.renderSexContent
+            }, {
+                title: '账号状态',
+                dataIndex: 'locked',
                 width: 250,
-                render: this.renderContent
+                render: this.renderStateContent
             }, {
                 title: '创建时间',
                 dataIndex: 'ctime',
@@ -63,13 +86,22 @@ export default class UserList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { searchValue } = nextProps;
+        const { searchValue, addData } = nextProps;
+        let addDataNew = this.props.addData;
         let search = this.props.searchValue;
         if (search !== searchValue) {
             this.getUserList({
                 rows: 10,
                 page: 1,
                 search: searchValue,
+            });
+        }
+
+        if (addDataNew !== addData) {
+            this.getUserList({
+                rows: 10,
+                page: 1,
+                search: search,
             });
         }
     }
@@ -121,15 +153,15 @@ export default class UserList extends React.Component {
     };
 
     editUser = (row) => {
-        console.log("editRole = " + row.userId);
+        this.showEditModal(row)
     };
     delUser = (row) => {
-        console.log("delRole = " + row.userId);
         this.showDeleteConfirm(row);
     };
     resetPwd = (row) => {
-        console.log("resetPwd = " + row.userId);
+        this.showUpdateModal(row);
     };
+
     renderOperationUser = (value, row, index) => {
         return <div className="table-operation flex-center">
             <span onClick={() => {
@@ -137,28 +169,82 @@ export default class UserList extends React.Component {
             }} className="table-span" style={{ marginRight: '4px' }}>编辑</span>
             <span onClick={() => {
                 this.resetPwd(row)
-            }} className="table-span" style={{ marginLeft: '4px' }}>重置密码</span>
+            }} className="table-span" style={{ marginLeft: '4px' }}>修改角色</span>
             <span onClick={() => {
                 this.delUser(row)
             }} className="table-span" style={{ marginLeft: '4px' }}>删除</span>
         </div>;
     };
 
+    delUserId = (ids) => {
+        this.setState({
+            loading: true
+        });
+        delUserByid(ids).then(data => {
+            this.setState({
+                loading: false
+            });
+            if (data != null && data.code === 0) {
+                const pager = { ...this.state.pagination };
+                this.getUserList({
+                    rows: pager.pageSize,
+                    page: pager.current,
+                    search: this.props.searchValue,
+                });
+            }
+        }).catch(err => {
+            this.setState({
+                loading: false
+            });
+            console.log("err:" + err);
+        })
+    };
+
 
     showDeleteConfirm = (row) => {
+        let _this = this;
         confirm({
             title: '删除用户',
-            content: '确认删除' + row.username + "用户",
+            content: <span>确认删除<span
+                style={{ color: "#ff0000", fontSize: "16px", margin: "0 3px" }}>{row.realname}</span>用户</span>,
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
             onOk() {
-                console.log("确认删除用户");
+                _this.delUserId(row.userId);
             },
             onCancel() {
                 console.log("取消删除用户");
             },
         });
+    };
+
+    onUserChange = () => {
+        //修改用户信息成功
+        const pager = { ...this.state.pagination };
+        this.getUserList({
+            rows: pager.pageSize,
+            page: pager.current,
+            search: this.props.searchValue,
+        });
+    };
+
+    showEditModal = (user) => {
+        this.setState({
+            visible: !this.state.visible,
+            user: user
+        });
+    };
+
+    showUpdateModal = (user) => {
+        this.setState({
+            visibleUpdate: !this.state.visibleUpdate,
+            user: user
+        });
+    };
+
+    onUserRoleChange = () => {
+        console.log("修改用户角色信息成功");
     };
 
     render() {
@@ -173,6 +259,19 @@ export default class UserList extends React.Component {
                                 bordered={true}
                                 style={{ padding: '0 10px', clear: 'both' }}
                                 onChange={this.handleTableChange}/>
+
+                <EditUser
+                    title="修改用户信息" submitText="保存" cancelText="取消"
+                    visible={this.state.visible}
+                    user={this.state.user}
+                    onUserChange={this.onUserChange}
+                />
+                <UpdateUserRole
+                    title="修改用户角色信息" submitText="保存" cancelText="取消"
+                    visible={this.state.visibleUpdate}
+                    user={this.state.user}
+                    onUserRoleChange={this.onUserRoleChange}
+                />
             </div>
         );
     }
