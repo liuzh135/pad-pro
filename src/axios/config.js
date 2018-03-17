@@ -10,6 +10,6 @@ export const MOCK_AUTH_ADMIN = MOCK_AUTH + '/admin';                           /
 export const MOCK_AUTH_VISITOR = MOCK_AUTH + '/visitor';                       // 访问权限接口
 
 
-export const BASEWYZK = 'http://120.77.252.48:9999';
+export const BASEWYZK = 'http://120.77.252.48';
 
 

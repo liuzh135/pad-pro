@@ -47,7 +47,7 @@ export class ProgressStyle extends React.Component {
             <div className="row" style={{}}>
                 <div className={className + " point3"} style={{ margin:'0 auto',width: width ,height: height }}>
                     <div className="point2 contentY"
-                         style={{ height: '100px', width: '100px', backgroundColor: "#9239B9", borderRadius: "100px" }}>
+                         style={{ height: '100px', width: '100px', borderRadius: "100px" }}>
                     </div>
 
                     <div className="point2 point4 contentY roratedata"

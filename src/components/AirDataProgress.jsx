@@ -4,6 +4,9 @@
  * 空气检测仪  app UI
  */
 import React from "react";
+import pm1e from '../style/imgs/pm1.png';
+import pm2 from '../style/imgs/pm2.5.png';
+import pm3 from '../style/imgs/pm10.png';
 
 export class AirDataProgress extends React.Component {
 
@@ -28,7 +31,7 @@ export class AirDataProgress extends React.Component {
     }
 
     render() {
-        const { className, pm, pmValue, color } = this.props;
+        const { className, pm, pmValue, color, pmImg } = this.props;
         return (
             <div className='air-text'>
                 <div style={{ margin: '3px 3px' }}><span>{pm}</span></div>
@@ -36,17 +39,14 @@ export class AirDataProgress extends React.Component {
                     <span><span style={{ fontSize: '30px', color: color }}>{pmValue}</span><span
                         style={{ fontSize: '8px', marginLeft: '3px' }}>μg/m3</span></span> : ""}</div>
                 <div className={className + " point3"}>
-                    <div className="loader loader5 loader5-green duration-3s-after point2 contentY"
+                    <div className={className+pmImg +  " point2 contentY"}
                          style={{ height: '90px', width: '90px', margin: '0' }}>
-                        <div className="pointer"/>
                     </div>
+
                 </div>
                 {
                     <style>
                         {`
-                            ${"." + className} .loader:before{
-                                background: ${color};
-                            }
                             ${"." + className} .loader5:after{
                                 margin-left: 0px;
                                 margin-top: 0px;
