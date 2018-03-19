@@ -37,13 +37,13 @@ class RealDeviceData extends React.Component {
     //获取网络数据 渲染UI
     componentWillReceiveProps(nextProps) {
         const { connect } = this.props;
-        console.log("mqtt connect===connect=============》" + connect);
+        // console.log("mqtt connect===connect=============》" + connect);
         //接受数据  渲染UI
         if (connect && connect.mqdata != null) {
-            console.log("mqtt connect===Client=============》" + connect.client);
-            console.log("mqtt connect===data=============》" + JSON.parse(connect.mqdata).data);
-            console.log("mqtt connect===UUID=============》" + this.state.uuid);
-            console.log("mqtt connect===dataUUID=============》" + (JSON.parse(connect.mqdata).data).uuid);
+            // console.log("mqtt connect===Client=============》" + connect.client);
+            // console.log("mqtt connect===data=============》" + JSON.parse(connect.mqdata).data);
+            // console.log("mqtt connect===UUID=============》" + this.state.uuid);
+            // console.log("mqtt connect===dataUUID=============》" + (JSON.parse(connect.mqdata).data).uuid);
             this.setState({
                 renderData: JSON.parse(connect.mqdata).data
             });
@@ -78,7 +78,7 @@ class RealDeviceData extends React.Component {
 
     getRealData = (deviceId) => {
         getDeviceRealData(deviceId).then(data => {
-            console.log("data deviceId " + deviceId + "  data=" + JSON.stringify(data));
+            // console.log("data deviceId " + deviceId + "  data=" + JSON.stringify(data));
             if (data.code === 0 && data.data !== null) {
                 this.setState({
                     renderRealData: data.data
@@ -137,7 +137,7 @@ class RealDeviceData extends React.Component {
 
 
     handOnChangeTime = (dates, dateStrings) => {
-        console.log("dateStrings" + dateStrings[0] + "  " + dateStrings[1]);
+        // console.log("dateStrings" + dateStrings[0] + "  " + dateStrings[1]);
         this.setState({
             startDate: dateStrings[0],
             endDate: dateStrings[1],
@@ -169,8 +169,8 @@ class RealDeviceData extends React.Component {
      *
      */
     getSelectDevice = (deviceId, device) => {
-        console.log("select device = " + deviceId);
-        console.log("select deviceInfo = " + JSON.stringify(device));
+        // console.log("select device = " + deviceId);
+        // console.log("select deviceInfo = " + JSON.stringify(device));
         const { connect } = this.props;
         let uuid = this.state.uuid;
         if (connect.client != null) {
@@ -184,7 +184,7 @@ class RealDeviceData extends React.Component {
                 page: 1,
                 rows: 10
             });
-            console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + device.uuid);
+            // console.log("mqtt connect===UUID=============》" + "/device/air/airmonitor/" + device.uuid);
             connect.client.subscribe("/device/air/airmonitor/" + device.uuid);
         }
         this.setState({
@@ -236,7 +236,7 @@ class RealDeviceData extends React.Component {
         };
 
         return (
-            <div className="gutter-example button-demo" style={{ backgroundColor: '#fff', height: "100%" }}>
+            <div className="gutter-example button-demo" style={{ backgroundColor: '#fff'}}>
                 <div className="gutter-box" style={{ padding: '2px 15px' }}>
                     <div className="text-title">
                         <span style={{ marginLeft: "15px" }}>设备实时采集数据</span>

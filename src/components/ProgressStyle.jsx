@@ -9,7 +9,9 @@ export class ProgressStyle extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            loader: {}
+        }
     }
 
     componentDidMount() {
@@ -30,6 +32,23 @@ export class ProgressStyle extends React.Component {
                 "transform": 'translateY(-50%) translateX(-50%) rotate(' + percentage + 'deg)'
             }
         );
+        this.setState({
+            loader: $loader
+        });
+    }
+
+    componentWillReceiveProps(nextPorps) {
+        let $loader = this.state.loader || {};
+        let progress = nextPorps.progress || 0;
+        if (nextPorps.progress !== this.props.progress) {
+            $loader.setProgress(progress);
+            $loader.setValue("Temp");
+            let percentage = progress * 315 + 160;
+            window.jQuery('.roratedata').css({
+                    "transform": 'translateY(-50%) translateX(-50%) rotate(' + percentage + 'deg)'
+                }
+            );
+        }
     }
 
     getPrograssPercentage() {
@@ -41,11 +60,12 @@ export class ProgressStyle extends React.Component {
 
     render() {
         const { proressValue, className, value, height, width } = this.props;
+        console.log("-props- " + JSON.stringify(this.props));
         let percentage = this.getPrograssPercentage();
         let percentStyle = 'translateY(-50%) translateX(-50%) ' + 'rotate(' + percentage + 'deg)';
         return (
             <div className="row" style={{}}>
-                <div className={className + " point3"} style={{ margin:'0 auto',width: width ,height: height }}>
+                <div className={className + " point3"} style={{ margin: '0 auto', width: width, height: height }}>
                     <div className="point2 contentY"
                          style={{ height: '100px', width: '100px', borderRadius: "100px" }}>
                     </div>

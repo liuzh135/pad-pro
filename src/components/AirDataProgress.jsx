@@ -12,7 +12,9 @@ export class AirDataProgress extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            loader: {}
+        }
     }
 
     componentDidMount() {
@@ -28,6 +30,19 @@ export class AirDataProgress extends React.Component {
 
         $loader.setProgress(progress);
         $loader.setValue(this.props.pm);
+
+        this.setState({
+            loader: $loader
+        });
+    }
+
+    componentWillReceiveProps(nextPorps) {
+        let $loader = this.state.loader || {};
+        let progress = nextPorps.progress || 0;
+        if (nextPorps.progress !== this.props.progress) {
+            $loader.setProgress(progress);
+            $loader.setValue(this.props.pm);
+        }
     }
 
     render() {
