@@ -66,7 +66,7 @@ export class ProgressStyle extends React.Component {
         return (
             <div className="row" style={{}}>
                 <div className={className + " point3"} style={{ margin: '0 auto', width: width, height: height }}>
-                    <div className="point2 contentY"
+                    <div className="point2 contentY bg-point"
                          style={{ height: '100px', width: '100px', borderRadius: "100px" }}>
                     </div>
 
@@ -75,7 +75,6 @@ export class ProgressStyle extends React.Component {
                              height: '80px',
                              width: '80px',
                              margin: '0',
-                             backgroundColor: "#9CDCE1"
                          }}/>
                     <div className="point2 text-center contentY"
                          style={{

@@ -50,7 +50,7 @@ export class VirtualMachineView extends React.Component {
                              style={{ float: 'right' }}>
                             <div className='flex-center ' style={{
                                 justifyContent: 'space-around', marginTop: '50px', marginBottom: '20px',
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '8px', borderRadius: '5px'
+                                backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '8px', borderRadius: '10px'
                             }}>
                                 <AirDataProgress pmImg={1} color='#C54AD1' className='progress_a' width={150} height={150}
                                                  progress={parseInt(pm1) / 100}
