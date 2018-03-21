@@ -17,12 +17,9 @@ export default class CheckBoxGradio extends React.Component {
     }
 
     componentWillReceiveProps(next) {
-
-        if (next.upmsUserRoles !== this.props.upmsUserRoles) {
-            this.setState({
-                optionsUserRoles: this.getOptionsUserRoles(next.upmsUserRoles)
-            });
-        }
+        this.setState({
+            optionsUserRoles: this.getOptionsUserRoles(next.upmsUserRoles)
+        });
     }
 
     onChange = (checkedValues) => {

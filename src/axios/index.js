@@ -298,15 +298,39 @@ export const delUserByid = (userId) => {
 // };
 
 
-export const updataUserByid = (userId, ids) => axios.post(config.BASEWYZK + '/manage/user/role/' + userId, {
-    roleId: ids,
-}).then(function (response) {
-    return response.data;
-}).catch(function (error) {
-    console.log(error);
-});
+// export const updataUserByid = (userId, ids) => axios.post(config.BASEWYZK + '/manage/user/role/' + userId, {
+//     roleId: 1,
+//     roleId: 2,
+// },{ headers: {'Content-Type':'application/x-www-form-urlencoded'}}).then(function (response) {
+//     return response.data;
+// }).catch(function (error) {
+//     console.log(error);
+// });
 
+export const updataUserByid = (userId, roleIds) => {
+    let formData = new FormData();
+    roleIds.map((data) => {
+        formData.append('roleId', data);
+    });
 
+    return fetch(config.BASEWYZK + '/manage/user/role/' + userId, {
+        method: "POST",
+        body: formData
+    }).then(response => response.json())
+        .then(json => {
+            console.log(json);
+            return json;
+        }).catch(function (error) {
+            console.log('request failed: ', error)
+        });
+};
+
+export const updataRoleByid = (roleId, permissionIds) => {
+    let url = config.BASEWYZK + '/manage/role/permission/' + roleId;
+    return axios.post(url,{
+        permissionIds
+    }).then(res => res.data).catch(err => console.log(err));
+};
 
 
 

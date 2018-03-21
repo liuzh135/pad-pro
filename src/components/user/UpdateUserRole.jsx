@@ -78,12 +78,12 @@ class UpdateUserRole extends React.Component {
         updataUserByid(user.userId, ids).then((data) => {
             console.log("---修改用户角色---");
             this.setState({ addLoading: false, visible: false });
-            if (data !== undefined && data.code === 0) {
+            if (data.code === 0) {
+                this.getUserRoleInfo(user.userId);
                 const { onUserRoleChange } = this.props;
                 if (typeof onUserRoleChange === "function") {
                     onUserRoleChange();
                 }
-                this.getUserRoleInfo(user.userId);
             }
         }).catch(err => {
             message.error(err);
@@ -91,6 +91,20 @@ class UpdateUserRole extends React.Component {
         });
 
     };
+
+    // upDataUserRole = (ids) => {
+    //     let user = this.props.user;
+    //     this.setState({ addLoading: true });
+    //     updataUserByid(user.userId, ids, () => {
+    //         console.log("---修改用户角色---");
+    //         this.setState({ addLoading: false, visible: false });
+    //         const { onUserRoleChange } = this.props;
+    //         if (typeof onUserRoleChange === "function") {
+    //             onUserRoleChange();
+    //         }
+    //         this.getUserRoleInfo(user.userId);
+    //     });
+    // };
 
     handleCancel = () => {
         this.setState({ visible: false });
@@ -108,30 +122,29 @@ class UpdateUserRole extends React.Component {
         let upmsRoles = this.state.upmsRoles;
         let upmsUserRoles = this.state.upmsUserRoles;
 
+        console.log("--- upmsUserRoles->" + JSON.stringify(upmsUserRoles));
         return (
-            visible ?
-                <Modal
-                    visible={visible}
-                    title={<span>修改<span
-                        style={{
-                            color: "#ff0000",
-                            fontSize: "16px",
-                            margin: "0 3px"
-                        }}>{user.username}</span>用户角色</span>}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    footer={[
-                        <Button key="取消" onClick={this.handleCancel}>{cancelText}</Button>,
-                        <Button key="保存" type="primary" loading={addLoading} onClick={this.handleOk}>
-                            {submitText}
-                        </Button>,
-                    ]}
-                >
-                    <CheckBoxGradio pageName="选择角色" upmsRoles={upmsRoles} upmsUserRoles={upmsUserRoles}
-                                    onChange={this.onChange}/>
+            <Modal
+                visible={visible}
+                title={<span>修改<span
+                    style={{
+                        color: "#ff0000",
+                        fontSize: "16px",
+                        margin: "0 3px"
+                    }}>{user.username}</span>用户角色</span>}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                footer={[
+                    <Button key="取消" onClick={this.handleCancel}>{cancelText}</Button>,
+                    <Button key="保存" type="primary" loading={addLoading} onClick={this.handleOk}>
+                        {submitText}
+                    </Button>,
+                ]}
+            >
+                <CheckBoxGradio pageName="选择角色" upmsRoles={upmsRoles} upmsUserRoles={upmsUserRoles}
+                                onChange={this.onChange}/>
 
-
-                </Modal> : <div></div>
+            </Modal>
         );
     }
 

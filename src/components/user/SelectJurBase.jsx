@@ -38,11 +38,11 @@ export default class SelectJurBase extends React.Component {
     setexpandKey = (list) => {
         list.map((data, index) => {
             if (data.children) {
-                expandedKeys.push(data.id.toString());
-                checkedKeys.push(data.id.toString());
+                checkedKeys.push(data.name);
                 this.setexpandKey(data.children);
             } else {
-                checkedKeys.push(data.id.toString())
+                expandedKeys.push(data.name);
+                checkedKeys.push(data.name)
             }
         })
     };
@@ -72,15 +72,15 @@ export default class SelectJurBase extends React.Component {
         this.setState({ selectedKeys });
     };
     renderTreeNodes = (data) => {
-        return data.map((item) => {
+        return data.map((item, index) => {
             if (item.children) {
                 return (
-                    <TreeNode title={item.name} key={item.id} dataRef={item}>
+                    <TreeNode title={item.name} key={item.name} dataRef={item}>
                         {this.renderTreeNodes(item.children)}
                     </TreeNode>
                 );
             } else {
-                return (<TreeNode title={item.name} key={item.id} dataRef={item}/>)
+                return (<TreeNode title={item.name} key={item.name} dataRef={item}/>)
             }
         });
     };
