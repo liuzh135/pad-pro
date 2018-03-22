@@ -8,8 +8,8 @@ import {Checkbox} from "antd";
 import {Tree} from 'antd';
 
 const TreeNode = Tree.TreeNode;
-const expandedKeys = [];
-const checkedKeys = [];
+let expandedKeys = [];
+let checkedKeys = [];
 export default class SelectJurBase extends React.Component {
 
     state = {
@@ -35,18 +35,22 @@ export default class SelectJurBase extends React.Component {
         }
     }
 
-    setexpandKey = (list) => {
-        list.map((data, index) => {
-            if (data.children) {
-                checkedKeys.push(data.name);
-                this.setexpandKey(data.children);
+    setexpandKey = (list, perentData, key) => {
+        list.map((item, index) => {
+            if (item.children) {
+                checkedKeys.push(perentData ? (key ? key + item.id : perentData.id + "-" + item.id) : item.id.toString());
+                expandedKeys.push(perentData ? (key ? key + item.id : perentData.id + "-" + item.id) : item.id.toString());
+                perentData ? this.setexpandKey(item.children, item, (key ? key + item.id + "-" : perentData.id + "-" + item.id + "-")) :
+                    this.setexpandKey(item.children, item)
+
             } else {
-                expandedKeys.push(data.name);
-                checkedKeys.push(data.name)
+                checkedKeys.push(key ? key + item.id.toString() : item.id.toString())
             }
         })
     };
     setCheckDataView = (list) => {
+        expandedKeys = [];
+        checkedKeys = [];
         this.setexpandKey(list);
         this.setState({
             roleJurList: list,
@@ -61,6 +65,7 @@ export default class SelectJurBase extends React.Component {
             autoExpandParent: false,
         });
     };
+
     onCheck = (checkedKeys) => {
         this.setState({ checkedKeys });
         const { selectOk } = this.props;
@@ -71,16 +76,20 @@ export default class SelectJurBase extends React.Component {
     onSelect = (selectedKeys, info) => {
         this.setState({ selectedKeys });
     };
-    renderTreeNodes = (data) => {
+    renderTreeNodes = (data, perentData, key) => {
         return data.map((item, index) => {
             if (item.children) {
                 return (
-                    <TreeNode title={item.name} key={item.name} dataRef={item}>
-                        {this.renderTreeNodes(item.children)}
+                    <TreeNode title={item.name}
+                              key={perentData ? (key ? key + item.id : perentData.id + "-" + item.id) : item.id.toString()}
+                              dataRef={item}>
+                        {perentData ? this.renderTreeNodes(item.children, item, (key ? key + item.id + "-" : perentData.id + "-" + item.id + "-")) :
+                            this.renderTreeNodes(item.children, item)}
                     </TreeNode>
                 );
             } else {
-                return (<TreeNode title={item.name} key={item.name} dataRef={item}/>)
+                return (<TreeNode title={item.name} key={key ? key + item.id.toString() : item.id.toString()}
+                                  dataRef={item}/>)
             }
         });
     };

@@ -230,8 +230,8 @@ class RealDataAir extends React.Component {
             <EchartsEffectScatter onEventClick={this.onChartClick}
                                   onEventGeoClick={this.onGeoClick}
                                   dataSource={series}
-                                  subtitle="空气检测仪全国分布图"
-                                  title="全国空气详情信息"/>;
+                                  subtitle="空气检测仪全球分布图"
+                                  title="全球空气详情信息"/>;
 
         return (
             <Row gutter={16} style={{ height: '100%' }}>

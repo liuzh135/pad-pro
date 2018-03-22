@@ -88,17 +88,12 @@ class UpdateRoleJur extends React.Component {
         this.setState({ visible: false });
     };
 
+
+
     getPremissList = (checkedKeys) => {
         let roleJurInfo = this.state.roleJurInfo || {};
-        let targetList = [];
-        roleJurInfo.map((data, index) => {
-            if (data.children) {
-
-            } else {
-
-            }
-        });
-        return targetList;
+        console.log("---permissList--" + JSON.stringify(roleJurInfo));
+        return [];
     };
 
     selectOk = (checkedKeys) => {

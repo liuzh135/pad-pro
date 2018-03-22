@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import ReactEcharts from 'echarts-for-react';
 
 require('echarts/map/js/china.js');
+require('echarts/map/js/world.js');
 
 class EchartsEffectScatter extends Component {
     onChartClick = (params) => {
@@ -50,15 +51,15 @@ class EchartsEffectScatter extends Component {
                 }
             },
             geo: {
-                map: 'china',
+                map: 'world',
                 label: {
                     emphasis: {
                         show: false
                     }
                 },
                 scaleLimit: {
-                    min: 0.5,
-                    max: 4
+                    min: 1.3,
+                    max: 6
                 },
                 roam: true,
                 itemStyle: {
