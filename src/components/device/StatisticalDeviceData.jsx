@@ -11,6 +11,7 @@ import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 import HistoryEcharView from "./HistoryEcharView";
 import SelectCityAndDevice from "./SelectCityAndDevice";
+import {FormattedMessage} from "react-intl";
 
 
 class StatisticalDeviceData extends React.Component {
@@ -44,7 +45,7 @@ class StatisticalDeviceData extends React.Component {
                         <div className="gutter-box ">
                             <div className="gutter-box" style={{ padding: '2px 15px' }}>
                                 <div className="text-title">
-                                    <span style={{ marginLeft: "15px" }}>设备历史数据</span>
+                                    <span style={{ marginLeft: "15px" }}><FormattedMessage id="equipment_history_data"/></span>
                                 </div>
                                 <div style={{ border: '1px solid #C7D3E3' }}>
                                     <SelectCityAndDevice selectDevice={this.getSelectDevice} showDevice={true}/>

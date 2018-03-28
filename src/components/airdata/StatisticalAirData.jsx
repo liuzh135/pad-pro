@@ -16,6 +16,7 @@ import {getDeviceByCityAndDate, getDeviceByCityAndMonth} from "../../axios";
 import EcharBar from "../bar/EcharBar";
 import {OnlineDeviceInfo} from "./OnlineDeviceInfo";
 import {BaseComponent} from "../BaseComponent";
+import {FormattedMessage, injectIntl} from "react-intl";
 
 class StatisticalAirData extends BaseComponent {
 
@@ -128,6 +129,8 @@ class StatisticalAirData extends BaseComponent {
         let monthData = this.getChars(this.state.echarsMonthData, "line");
 
         let addr = this.state.addr;
+
+        let language = this.props.language;
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
 
@@ -137,7 +140,7 @@ class StatisticalAirData extends BaseComponent {
                         <div className="gutter-box ">
                             <div className="gutter-box" style={{ padding: '2px 15px' }}>
                                 <div className="text-title">
-                                    <span style={{ marginLeft: "15px" }}>空气趋势城市数据</span>
+                                    <span style={{ marginLeft: "15px" }}><FormattedMessage id="airTrend"/></span>
                                 </div>
                                 <div style={{ border: '1px solid #C7D3E3', padding: '10px 10px' }}>
                                     <SelectCityAndDevice
@@ -155,10 +158,10 @@ class StatisticalAirData extends BaseComponent {
                             </div>
                         </div>
                     </Col>
-                    <AirEchars mainTitle="空气质量趋势" title={addr.cityName + "24小时空气质量"}
+                    <AirEchars mainTitle="air_quality_trend" title={addr.cityName + (language.data === "zhLanguage"? "24小时空气质量":"24 hour air quality")}
                                xlist={hourData.xlist}
                                datalist={hourData.dataList}/>
-                    <AirEchars mainTitle="月空气质量" title={addr.cityName + "月空气质量"}
+                    <AirEchars mainTitle="month_quality_air" title={addr.cityName + (language.data === "zhLanguage"? "月空气质量":"Monthly air quality")}
                                xlist={monthData.xlist}
                                datalist={monthData.dataList}/>
                 </Row>
@@ -171,8 +174,8 @@ class StatisticalAirData extends BaseComponent {
 }
 
 const mapStateToPorps = state => {
-    const { auth } = state.httpData;
-    return { auth };
+    const { auth ,language = 'zhLanguage'} = state.httpData;
+    return { auth ,language};
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -181,4 +184,4 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-export default connect(mapStateToPorps, mapDispatchToProps)(StatisticalAirData);
+export default connect(mapStateToPorps, mapDispatchToProps)(injectIntl(StatisticalAirData));

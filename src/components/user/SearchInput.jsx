@@ -9,6 +9,7 @@ import ReactDOM from "react-dom";
 import AddRoleView from "./AddRoleView";
 import AddUserView from "./AddUserView";
 import AddJurisdictionView from "./AddJurisdictionView";
+import {FormattedMessage} from "react-intl";
 
 const Search = Input.Search;
 export default class SearchInput extends React.Component {
@@ -40,9 +41,9 @@ export default class SearchInput extends React.Component {
         });
     };
 
-    onRoleChange = () =>{
-        const {onDataChange} = this.props;
-        if (typeof onDataChange === "function"){
+    onRoleChange = () => {
+        const { onDataChange } = this.props;
+        if (typeof onDataChange === "function") {
             onDataChange();
         }
     };
@@ -64,20 +65,26 @@ export default class SearchInput extends React.Component {
                             onPressEnter={this.onSearch}
                         />
                         <Button type="primary" icon="search" onClick={this.onSearch}
-                                style={{ margin: '0 15px' }}>查询</Button>
+                                style={{ margin: '0 15px' }}><FormattedMessage id="query"/> </Button>
                     </div>
                 </div>
                 {
                     (isRole === 1) ? <AddRoleView
-                        title="添加角色" submitText="保存" cancelText="取消"
+                        title={<FormattedMessage id="role_add"/>}
+                        submitText={<FormattedMessage id="save_e"/>}
+                        cancelText={<FormattedMessage id="cancel"/>}
                         visible={this.state.visible}
                         onRoleChange={this.onRoleChange}
                     /> : (isRole === 2) ? <AddUserView
-                        title="添加用户" submitText="保存" cancelText="取消"
+                        title={<FormattedMessage id="user_add"/>}
+                        submitText={<FormattedMessage id="save_e"/>}
+                        cancelText={<FormattedMessage id="cancel"/>}
                         visible={this.state.visible}
                         onRoleChange={this.onRoleChange}
                     /> : <AddJurisdictionView
-                        title="添加权限资源" submitText="保存" cancelText="取消"
+                        title={<FormattedMessage id="jurisdiction_add"/>}
+                        submitText={<FormattedMessage id="save_e"/>}
+                        cancelText={<FormattedMessage id="cancel"/>}
                         visible={this.state.visible}
                     />
                 }

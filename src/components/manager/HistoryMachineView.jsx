@@ -7,7 +7,7 @@ import React from "react";
 import {Col, DatePicker} from "antd";
 import moment from "moment/moment";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
-import BaseTableData from "../data/BaseTableData";
+import {FormattedMessage} from "react-intl";
 
 const { RangePicker } = DatePicker;
 
@@ -16,6 +16,76 @@ export class HistoryMachineView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {}
+
+        //默认表头 适配
+        this.device_his_columns = [
+            {
+                title: <FormattedMessage id="device_id"/>,
+                dataIndex: 'deviceId',
+                width: 120,
+                render: this.renderContent
+            }, {
+                title: 'ECO2',
+                dataIndex: 'eco2',
+                width: 100,
+                render: this.renderContent
+            }, {
+                title: 'ECO2Mg',
+                dataIndex: 'eco2Mg',
+                width: 100,
+                render: this.renderContent
+            }, {
+                title: 'HCHO',
+                width: 100,
+                dataIndex: 'hcho',
+                render: this.renderContent
+            }, {
+                title: 'HCHOUg',
+                width: 100,
+                dataIndex: 'hchoUg',
+                render: this.renderContent
+            }, {
+                title: 'PM1',
+                width: 100,
+                dataIndex: 'pm1',
+                render: this.renderContent
+            }, {
+                title: 'PM10',
+                width: 100,
+                dataIndex: 'pm10',
+                render: this.renderContent
+            }, {
+                title: 'RH',
+                width: 100,
+                dataIndex: 'rh',
+                render: this.renderContent
+            }, {
+                title: 'PM25',
+                width: 100,
+                dataIndex: 'pm25',
+                render: this.renderContent
+            }, {
+                title: 'T',
+                width: 100,
+                dataIndex: 't',
+                render: this.renderContent
+            }, {
+                title: 'TVOC',
+                width: 100,
+                dataIndex: 'tvoc',
+                render: this.renderContent
+            }, {
+                title: 'TVOCUg',
+                width: 100,
+                dataIndex: 'tvocUg',
+                render: this.renderContent
+            }, {
+                title: <FormattedMessage id="upload_time"/>,
+                width: 150,
+                dataIndex: 'createTime',
+                render: this.renderContent
+            }
+        ];
     }
 
     handOnChangeTime = (dates, dateStrings) => {
@@ -38,7 +108,6 @@ export class HistoryMachineView extends React.Component {
         const dateFormat = dataSource.dateFormat;
         let startDate = dataSource.startDate;
         let endDate = dataSource.endDate;
-        let tableComs = new BaseTableData();
         let histroyData = dataSource.histroyData;
         let loadingHis = dataSource.loadingHis;
         let paginationHis = dataSource.paginationHis;
@@ -48,10 +117,11 @@ export class HistoryMachineView extends React.Component {
             <div className="gutter-box ">
                 <div className="gutter-box" style={{ padding: '2px 15px' }}>
                     <div className="text-title">
-                        <span style={{ marginLeft: "15px" }}>设备历史采集数据</span>
+                        <span style={{ marginLeft: "15px" }}><FormattedMessage id="history_data_equipment"/></span>
                     </div>
                     <div className='device_text'>
-                        <span className="device_text" style={{ marginRight: '20px' }}>选择时间</span>
+                        <span className="device_text" style={{ marginRight: '20px' }}><FormattedMessage
+                            id="select_time"/></span>
                         <RangePicker
                             defaultValue={[moment(startDate, dateFormat), moment(endDate, dateFormat)]}
                             format={dateFormat}
@@ -71,7 +141,7 @@ export class HistoryMachineView extends React.Component {
                         />
                     </div>
 
-                    <ExtBaseicTable columns={tableComs.device_his_columns}
+                    <ExtBaseicTable columns={this.device_his_columns}
                                     data={histroyData}
                                     pagination={paginationHis}
                                     loading={loadingHis}

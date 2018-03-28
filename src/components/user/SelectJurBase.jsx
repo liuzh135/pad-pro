@@ -6,6 +6,7 @@
 import React from "react";
 import {Checkbox} from "antd";
 import {Tree} from 'antd';
+import {FormattedMessage} from "react-intl";
 
 const TreeNode = Tree.TreeNode;
 let expandedKeys = [];
@@ -118,7 +119,7 @@ export default class SelectJurBase extends React.Component {
         return (
             <div className="gutter-example button-demo" style={{ padding: '5px', margin: '0 15px' }}>
                 <div className="role-sty">
-                    权限选择
+                    <FormattedMessage id="permissions_select"/>
                 </div>
                 <div className="role-sty-t">
                     {roleView}

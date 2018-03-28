@@ -9,9 +9,12 @@ import {Modal} from 'antd';
 import {delRoleList, getRoleList} from "../../axios";
 import EditRole from "./EditRole";
 import UpdateRoleJur from "./UpdateRoleJur";
+import {FormattedMessage} from "react-intl";
+import {connect} from "react-redux";
 
 const confirm = Modal.confirm;
-export default class RoleList extends React.Component {
+
+class RoleList extends React.Component {
 
     constructor(props) {
         super(props);
@@ -25,24 +28,21 @@ export default class RoleList extends React.Component {
         };
         this.device_role_columns = [
             {
-                title: '角色名称',
+                title: <FormattedMessage id="role_name"/>,
                 dataIndex: 'title',
                 width: 150,
-                render: this.renderContent
             }, {
-                title: '角色描述',
+                title: <FormattedMessage id="role_description"/>,
                 dataIndex: 'description',
                 width: 250,
-                render: this.renderContent
             }, {
-                title: '创建时间',
+                title: <FormattedMessage id="create_time"/>,
                 dataIndex: 'ctime',
                 width: 250,
-                render: this.renderContent
             }, {
-                title: '操作',
+                title: <FormattedMessage id="operation"/>,
                 dataIndex: 'operation',
-                width: 150,
+                width: 250,
                 render: this.renderOperationRole
             }
         ];
@@ -135,13 +135,13 @@ export default class RoleList extends React.Component {
         return <div className="table-operation flex-center">
             <span onClick={() => {
                 this.editRole(row)
-            }} className="table-span" style={{ marginRight: '4px' }}>编辑</span>
+            }} className="table-span" style={{ marginRight: '4px' }}><FormattedMessage id="edit"/></span>
             <span onClick={() => {
                 this.updateRoleJur(row)
-            }} className="table-span" style={{ marginRight: '4px' }}>修改权限</span>
+            }} className="table-span" style={{ marginRight: '4px' }}><FormattedMessage id="modify_permissions"/></span>
             <span onClick={() => {
                 this.delRole(row)
-            }} className="table-span">删除</span>
+            }} className="table-span"><FormattedMessage id="delete"/></span>
         </div>;
     };
 
@@ -171,9 +171,15 @@ export default class RoleList extends React.Component {
 
     showDeleteConfirm = (row) => {
         let _this = this;
+        let { language } = this.props;
+        let title = language.data === 'zhLanguage' ? "删除角色" : "Delete Role";
+        let content_sava = language.data === 'zhLanguage' ? "确认删除" : "confirm deletion";
+        let content_user = language.data === 'zhLanguage' ? "角色" : "role";
+
         confirm({
-            title: '删除角色',
-            content: <span>确认删除<span style={{ color: "#ff0000", fontSize: "16px", margin: "0 3px" }}>{row.title}</span>角色</span>,
+            title: title,
+            content: <span>{content_sava} {content_user} <span
+                style={{ color: "#ff0000", fontSize: "16px", margin: "0 3px" }}>{row.title}</span> ?</span>,
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
@@ -229,13 +235,17 @@ export default class RoleList extends React.Component {
                                 style={{ padding: '0 10px', clear: 'both' }}
                                 onChange={this.handleTableChange}/>
                 <EditRole
-                    title="修改角色信息" submitText="保存" cancelText="取消"
+                    title={<FormattedMessage id="modify_user_role_info"/>}
+                    submitText={<FormattedMessage id="save_e"/>}
+                    cancelText={<FormattedMessage id="cancel"/>}
                     visible={this.state.visible}
                     role={this.state.role}
                     onRoleChange={this.onRoleChange}
                 />
                 <UpdateRoleJur
-                    title="修改角色权限" submitText="保存" cancelText="取消"
+                    title={<FormattedMessage id="modify_role_permissions"/>}
+                    submitText={<FormattedMessage id="save_e"/>}
+                    cancelText={<FormattedMessage id="cancel"/>}
                     visible={this.state.visibleUpdate}
                     role={this.state.role}
                     onJurChange={this.onJurChange}
@@ -245,3 +255,10 @@ export default class RoleList extends React.Component {
     }
 
 }
+
+const mapStateToPorps = state => {
+    const { auth, language = 'zhLanguage' } = state.httpData;
+    return { auth, language };
+};
+
+export default connect(mapStateToPorps)(RoleList);

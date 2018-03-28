@@ -325,12 +325,33 @@ export const updataUserByid = (userId, roleIds) => {
         });
 };
 
-export const updataRoleByid = (roleId, permissionIds) => {
-    let url = config.BASEWYZK + '/manage/role/permission/' + roleId;
-    return axios.post(url,{
-        permissionIds
-    }).then(res => res.data).catch(err => console.log(err));
+export const updataRoleByid = (roleId, datas) => {
+    let formData = new FormData();
+    formData.append('roleId', roleId);
+    formData.append("datas", datas);
+    return fetch(config.BASEWYZK + '/manage/role/permission/' + roleId, {
+        method: "POST",
+        body: formData,
+    }).then(response => response.json())
+        .then(json => {
+            console.log(json);
+            return json;
+        }).catch(function (error) {
+            console.log('request failed: ', error)
+        });
 };
 
 
+export const updataRoleByids = (roleId, datas) => {
+    let formData = new FormData();
+    formData.append('roleId', roleId);
+    formData.append("datas", datas);
+    console.log("--formData-" + formData);
+    let headerConfig = {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    };
+    return axios.post(config.BASEWYZK + '/manage/role/permission/' + roleId,
+        formData, headerConfig
+    ).then(res => res.data).catch(err => console.log(err));
+};
 

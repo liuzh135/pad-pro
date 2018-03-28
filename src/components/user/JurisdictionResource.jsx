@@ -10,6 +10,7 @@ import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 import SearchInput from "./SearchInput";
 import ResourceList from "./ResourceList";
+import {FormattedMessage} from "react-intl";
 
 class JurisdictionResource extends React.Component {
 
@@ -28,12 +29,13 @@ class JurisdictionResource extends React.Component {
 
     render() {
         let searchValue = this.state.searchValue;
+
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
                 <div className="text-title">
-                    <span style={{ marginLeft: "15px" }}>角色管理</span>
+                    <span style={{ marginLeft: "15px" }}><FormattedMessage id="role_manager"/></span>
                 </div>
-                <SearchInput indexName="权限资源名称" addName="添加权限资源" isRole={3} onInputClick={this.onSearch}/>
+                <SearchInput indexName={<FormattedMessage id="jurisdiction_name"/>} addName={<FormattedMessage id="jurisdiction_add"/>} isRole={3} onInputClick={this.onSearch}/>
                 <ResourceList searchValue={searchValue}/>
                 {
                     <style>

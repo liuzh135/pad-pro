@@ -7,6 +7,8 @@ import React from "react";
 import {Button, Input, Modal, Form, message} from "antd";
 import {connect} from "react-redux";
 import {createRole} from "../../axios";
+import enUS from "../../locale/en_US";
+import zhCN from "../../locale/zh_CN";
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -79,6 +81,9 @@ class AddRoleView extends React.Component {
         const { getFieldDecorator } = this.props.form;
         let visible = this.state.visible;
         let addLoading = this.state.addLoading;
+
+        let { language } = this.props;
+        let messagesStr = language.data === 'zhLanguage' ? zhCN : enUS;
         return (
             visible ?
                 <Modal
@@ -94,24 +99,24 @@ class AddRoleView extends React.Component {
                     ]}
                 >
                     <div>
-                        <FormItem {...formItemLayout} label="角色名称">
+                        <FormItem {...formItemLayout} label={messagesStr.role_name}>
                             {getFieldDecorator('roleName', {
                                 rules: [{
                                     required: true,
-                                    message: '请输入角色名称',
+                                    message: messagesStr.input_role_name,
                                 }],
                             })(
-                                <Input placeholder="请输入权限资源名称"/>
+                                <Input placeholder={messagesStr.input_role_name}/>
                             )}
                         </FormItem>
-                        <FormItem {...formItemLayoutArea} label="角色描述">
+                        <FormItem {...formItemLayoutArea} label={messagesStr.role_description}>
                             {getFieldDecorator('roleDes', {
                                 rules: [{
                                     required: true,
-                                    message: '请输入角色描述',
+                                    message: messagesStr.input_role_description,
                                 }],
                             })(
-                                <TextArea placeholder="请输入角色描述" autosize/>
+                                <TextArea placeholder={messagesStr.input_role_description} autosize/>
                             )}
                         </FormItem>
                     </div>
@@ -122,4 +127,11 @@ class AddRoleView extends React.Component {
 
 }
 
-export default connect()(Form.create()(AddRoleView));
+
+const mapStateToPorps = state => {
+    const { auth, language = 'zhLanguage' } = state.httpData;
+    return { auth, language };
+};
+
+
+export default connect(mapStateToPorps)(Form.create()(AddRoleView));

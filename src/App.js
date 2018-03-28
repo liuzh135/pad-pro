@@ -8,6 +8,14 @@ import {mqttConnect, receiveData, mqttData} from '@/action';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
+import en from 'react-intl/locale-data/en';
+import zh from 'react-intl/locale-data/zh';
+import {addLocaleData, IntlProvider} from 'react-intl';
+
+import enUS from "./locale/en_US";
+import zhCN from "./locale/zh_CN";
+
+addLocaleData([...en, ...zh]);
 const { Content } = Layout;
 
 class App extends Component {
@@ -89,6 +97,9 @@ class App extends Component {
             side_view = <BaseSideCustom menus={de.data[patharry[1]]} path={this.props.location.pathname}
                                         collapsed={this.state.collapsed}/>;
         }
+        const { language } = this.props;
+        let localeStr = language.data === 'zhLanguage' ? 'zh' : 'en';
+        let messagesStr = language.data === 'zhLanguage' ? zhCN : enUS;
 
         return (
             <Layout>
@@ -101,7 +112,10 @@ class App extends Component {
                     <Layout>
                         <Content
                             style={{ margin: '0 10px', backgroundColor: '#fff', overflow: 'initial', height: '100%' }}>
-                            {this.props.children}
+                            <IntlProvider locale={localeStr} messages={messagesStr}>
+                                {this.props.children}
+                            </IntlProvider>
+
                         </Content>
 
 
@@ -131,8 +145,8 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-    const { connect = { client: {} }, auth = { data: {} }, responsive = { data: {} } } = state.httpData;
-    return { connect, auth, responsive };
+    const { connect = { client: {} }, auth = { data: {} }, responsive = { data: {} }, language = 'zhLanguage' } = state.httpData;
+    return { connect, auth, responsive, language };
 };
 const mapDispatchToProps = dispatch => ({
     receiveData: bindActionCreators(receiveData, dispatch),

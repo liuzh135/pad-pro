@@ -2,6 +2,7 @@ import React from "react";
 import {message, Button, Dropdown, Icon, Menu, Cascader} from "antd";
 import {getCityList, getDeivceList, getProvinceList} from "../../axios";
 import {BaseComponent} from "../BaseComponent";
+import {FormattedMessage} from "react-intl";
 
 export default class SelectCityAndDevice extends BaseComponent {
 
@@ -294,7 +295,7 @@ export default class SelectCityAndDevice extends BaseComponent {
         let menu = this.getMenuJon() || '';
         let mac = this.state.mac;
         return <span>
-            <span style={{ margin: '0 10px' }} className="device_text">设备名称</span>
+            <span style={{ margin: '0 10px' }} className="device_text"><FormattedMessage id="device_name"/></span>
             <Dropdown overlay={menu} trigger={['click']}>
                 <Button style={{ margin: 10 }}>
                     {mac} <Icon type="down"/>
@@ -309,7 +310,7 @@ export default class SelectCityAndDevice extends BaseComponent {
         let address = this.state.address || '';
         const { showDevice } = this.props;
         return <div>
-            <span className="device_text" style={{ margin: '0 10px' }}>设备位置</span>
+            <span className="device_text" style={{ margin: '0 10px' }}><FormattedMessage id="device_postion"/></span>
             <Cascader
                 style={{ width: '250px' }}
                 options={options}

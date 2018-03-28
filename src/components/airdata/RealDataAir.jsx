@@ -13,6 +13,7 @@ import EchartsEffectScatter from '../charts/EchartsEffectScatter';
 import {getDeviceMapList, getDeviceRealData} from '../../axios';
 import TopMapGeoSeries from "../map/TopMapGeoSeries";
 import {BaiduMapView} from "../map/BaiduMapView";
+import {FormattedMessage, injectIntl} from "react-intl";
 
 class RealDataAir extends React.Component {
 
@@ -172,14 +173,16 @@ class RealDataAir extends React.Component {
         let upTime = this.getTextView("upTime", this.state.params.upTime);
         let createTime = this.getTextView("createTime", this.state.params.createTime);
 
+        let language = this.props.language;
+
 
         if (params !== {} && params.value != null) {
             let deviceIdString = params.value[3];
-            let deviceId = this.getTextView("设备ID", deviceIdString);
+            let deviceId = this.getTextView(language.data === "zhLanguage" ? "设备ID" : "deviceId", deviceIdString);
             let deviceNameString = params.value[4];
-            let deviceName = this.getTextView("设备名称", deviceNameString);
-            let deviceStatusString = params.value[2] === 0 ? "离线" : "在线";
-            let deviceStatus = this.getTextView("设备状态", deviceStatusString);
+            let deviceName = this.getTextView(language.data === "zhLanguage" ? "设备名称" : "deviceName", deviceNameString);
+            let deviceStatusString = params.value[2] === 0 ? language.data === "zhLanguage" ? "离线" : "offline" : language.data === "zhLanguage" ? "在线" : "online";
+            let deviceStatus = this.getTextView(language.data === "zhLanguage" ? "设备状态" : "deviceStatus", deviceStatusString);
             tostView = <div className="anim_fade_image toast_base toast_text">
                 {deviceId}
                 {deviceName}
@@ -199,12 +202,12 @@ class RealDataAir extends React.Component {
 
     getPmView = () => {
         return <div className="toast_base_bottom ">
-            <div className='width-auto pm-1'><span className='text_pm'>优</span></div>
-            <div className='width-auto pm-2'><span className='text_pm'>良</span></div>
-            <div className='width-auto pm-3'><span className='text_pm'>轻度污染</span></div>
-            <div className='width-auto pm-4'><span className='text_pm'>中度污染</span></div>
-            <div className='width-auto pm-5'><span className='text_pm'>重度污染</span></div>
-            <div className='width-auto pm-6'><span className='text_pm'>严重污染</span></div>
+            <div className='width-auto pm-1'><span className='text_pm'><FormattedMessage id="level_1"/></span></div>
+            <div className='width-auto pm-2'><span className='text_pm'><FormattedMessage id="level_2" /></span></div>
+            <div className='width-auto pm-3'><span className='text_pm'><FormattedMessage id="level_3" /></span></div>
+            <div className='width-auto pm-4'><span className='text_pm'><FormattedMessage id="level_4" /></span></div>
+            <div className='width-auto pm-5'><span className='text_pm'><FormattedMessage id="level_5" /></span></div>
+            <div className='width-auto pm-6'><span className='text_pm'><FormattedMessage id="level_6" /></span></div>
         </div>
     };
 
@@ -224,14 +227,16 @@ class RealDataAir extends React.Component {
         //组合地图数据 series []
         let series = this.getSeries();
 
+        let language = this.props.language;
+
         //刷新2次  解决echars 的宽度问题
         let first = this.state.first || false;
         let ecahrs = !first ? "" :
             <EchartsEffectScatter onEventClick={this.onChartClick}
                                   onEventGeoClick={this.onGeoClick}
                                   dataSource={series}
-                                  subtitle="空气检测仪全球分布图"
-                                  title="全球空气详情信息"/>;
+                                  subtitle={language.data === "zhLanguage" ? "空气检测仪全球分布图" : "Global distribution map of air detector"}
+                                  title={language.data === "zhLanguage" ? "全球空气详情信息" : "Global air details"}/>;
 
         return (
             <Row gutter={16} style={{ height: '100%' }}>
@@ -253,8 +258,8 @@ class RealDataAir extends React.Component {
 }
 
 const mapStateToPorps = state => {
-    const { auth } = state.httpData;
-    return { auth };
+    const { auth, language = 'zhLanguage' } = state.httpData;
+    return { auth, language };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -263,4 +268,4 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-export default connect(mapStateToPorps, mapDispatchToProps)(RealDataAir);
+export default connect(mapStateToPorps, mapDispatchToProps)(injectIntl(RealDataAir));

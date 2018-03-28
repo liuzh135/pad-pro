@@ -12,6 +12,7 @@ import {fetchData, receiveData} from '@/action';
 import BaseTableData from "../data/BaseTableData";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
 import {getDeivceList} from '../../axios';
+import {FormattedMessage} from "react-intl";
 
 class DeviceManager extends React.Component {
 
@@ -21,8 +22,59 @@ class DeviceManager extends React.Component {
             devicelist: [],
             pagination: {},
             loading: false
-        }
+        };
+
+        this.renderStateContent = (value, row, index) => {
+            return {
+                children: value === 1 ? <span className="status_nomal"><FormattedMessage id="online"/></span> :
+                    <span className="status_lock"><FormattedMessage id="offline"/></span>,
+                props: {},
+            };
+        };
+
+        //默认表头 适配
+        this.device_columns = [
+            {
+                title: <FormattedMessage id="device_id"/>,
+                dataIndex: 'deviceId',
+                width: 150,
+            }, {
+                title: <FormattedMessage id="device_name"/>,
+                dataIndex: 'deviceName',
+                width: 150,
+            }, {
+                title: <FormattedMessage id="device_type"/>,
+                dataIndex: 'typeName',
+                width: 150,
+            }, {
+                title: <FormattedMessage id="create_time"/>,
+                width: 150,
+                dataIndex: 'updateTime',
+            }, {
+                title: <FormattedMessage id="device_address"/>,
+                width: 150,
+                dataIndex: 'address',
+            }, {
+                title: <FormattedMessage id="online_state"/> ,
+                width: 150,
+                dataIndex: 'deviceOnline',
+                render: this.renderStateContent
+            }, {
+                title: <FormattedMessage id="operation"/>,
+                width: 150,
+                dataIndex: 'operation',
+                render: this.renderOperationContent
+            }
+        ];
     }
+
+    renderOperationContent = (value, row, index) => {
+        return <div className="table-operation flex-center">
+            <a href={"/#/app/device/realdevicedata?deviceId=" + row.deviceId} style={{ marginRight: '4px' }}><FormattedMessage id="real_time_data"/></a><a
+            style={{ marginLeft: '4px' }}
+            href={"/#/app/device/historydata?deviceId=" + row.deviceId}> <FormattedMessage id="history_time_data"/></a>
+        </div>;
+    };
 
     componentDidMount() {
         this.getDevices({
@@ -34,7 +86,7 @@ class DeviceManager extends React.Component {
     getDevices = (params = {}) => {
         this.setState({ loading: true });
         getDeivceList(params).then(data => {
-            if (data != null && data.rows != null){
+            if (data != null && data.rows != null) {
                 this.setState({
                     loading: false,
                     devicelist: data.rows,
@@ -44,7 +96,7 @@ class DeviceManager extends React.Component {
                         current: data.page
                     }
                 });
-            }else {
+            } else {
                 this.setState({
                     loading: false
                 });
@@ -84,15 +136,10 @@ class DeviceManager extends React.Component {
                         <div className="gutter-box ">
                             <div className="gutter-box" style={{ padding: '2px 15px' }}>
                                 <div className="text-title">
-                                    <span style={{ marginLeft: "15px" }}>设备管理</span>
+                                    <span style={{ marginLeft: "15px" }}><FormattedMessage id="device_manager"/></span>
                                 </div>
-                                <ExtBaseicTable columns={tableComs.device_columns}
+                                <ExtBaseicTable columns={this.device_columns}
                                                 data={devices}
-                                                rowKey={rowkey => {
-                                                    if (rowkey.deviceOnline === 1) rowkey.deviceOnline = '在线';
-                                                    if (rowkey.deviceOnline === 0) rowkey.deviceOnline = '离线';
-                                                    return rowkey.deviceId;
-                                                }}
                                                 pagination={this.state.pagination}
                                                 loading={this.state.loading}
                                                 bordered={true}

@@ -2,12 +2,11 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import React from 'react';
-import {Menu, Button, Checkbox, Form, Icon, Input, Layout, Dropdown, Alert} from 'antd';
+import {Alert, Button, Checkbox, Dropdown, Form, Icon, Input, Layout, Menu} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import {message} from "antd/lib/index";
 import zhCN from "../../locale/zh_CN";
 import enUS from "../../locale/en_US";
 

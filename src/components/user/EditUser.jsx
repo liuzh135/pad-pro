@@ -7,6 +7,8 @@ import React from "react";
 import {Button, Form, Icon, Input, message, Modal, Radio, Select} from "antd";
 import {connect} from "react-redux";
 import {updateUser} from "../../axios";
+import enUS from "../../locale/en_US";
+import zhCN from "../../locale/zh_CN";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -90,6 +92,8 @@ class EditUser extends React.Component {
                 <Option value="87">+87</Option>
             </Select>
         );
+        let { language } = this.props;
+        let messagesStr = language.data === 'zhLanguage' ? zhCN : enUS;
 
         return (
             visible ?
@@ -106,87 +110,88 @@ class EditUser extends React.Component {
                     ]}
                 >
                     <div>
-                        <FormItem {...formItemLayout} label="用户名称">
+                        <FormItem {...formItemLayout} label={messagesStr.user_name_1}>
                             {getFieldDecorator('username', {
                                 rules: [{
                                     required: true,
-                                    message: '请输入用户名称',
+                                    message: messagesStr.input_user_name_1,
                                 }],
                                 initialValue: user.username
                             })(
                                 <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>}
-                                       placeholder="请输入用户名称"/>
+                                       placeholder={messagesStr.input_user_name_1}/>
                             )}
                         </FormItem>
-                        <FormItem {...formItemLayout} label="用户昵称">
+                        <FormItem {...formItemLayout} label={messagesStr.user_nickname}>
                             {getFieldDecorator('realname', {
                                 rules: [{
                                     required: true,
-                                    message: '请输入用户昵称',
+                                    message: messagesStr.input_user_nickname,
                                 }],
                                 initialValue: user.realname
                             })(
-                                <Input placeholder="请输入用户昵称"/>
+                                <Input placeholder={messagesStr.input_user_nickname}/>
                             )}
                         </FormItem>
-                        <FormItem {...formItemLayout} label="电话号码">
+                        <FormItem {...formItemLayout} label={messagesStr.phone}>
                             {getFieldDecorator('phone', {
                                 rules: [{
                                     required: true,
-                                    message: '请输入电话号码',
+                                    message: messagesStr.input_user_phone,
                                 }],
                                 initialValue: user.phone
                             })(
-                                <Input addonBefore={prefixSelector} style={{ width: '100%' }} placeholder="请输入电话号码"/>
+                                <Input addonBefore={prefixSelector} style={{ width: '100%' }}
+                                       placeholder={messagesStr.input_user_phone}/>
                             )}
                         </FormItem>
 
-                        <FormItem {...formItemLayout} label="电子邮件">
+                        <FormItem {...formItemLayout} label={messagesStr.user_email}>
                             {getFieldDecorator('email', {
                                 rules: [{
-                                    type: 'email', message: '请输入正确的电子邮件!',
+                                    type: 'email', message: messagesStr.input_user_email,
                                 }, {
                                     required: true,
-                                    message: '请输入电子邮件',
+                                    message: messagesStr.input_user_email,
                                 }],
                                 initialValue: user.email
                             })(
-                                <Input placeholder="请输入电子邮件"/>
+                                <Input placeholder={messagesStr.input_user_email}/>
                             )}
                         </FormItem>
 
                         <FormItem
                             {...formItemLayout}
-                            label="性别"
+                            label={messagesStr.sex}
                         >
                             {getFieldDecorator('sex', {
                                 rules: [{
                                     required: true,
-                                    message: '请选择性别',
+                                    message: messagesStr.select_sex,
                                 }],
                                 initialValue: user.sex
                             })(
                                 <RadioGroup>
-                                    <Radio value={0}>男</Radio>
-                                    <Radio value={1}>女</Radio>
+                                    <Radio value={0}>{messagesStr.man}</Radio>
+                                    <Radio value={1}>{messagesStr.woman}</Radio>
                                 </RadioGroup>
                             )}
                         </FormItem>
 
                         <FormItem
                             {...formItemLayout}
-                            label="状态"
+                            label={messagesStr.status}
                         >
                             {getFieldDecorator('locked', {
                                 rules: [{
                                     required: true,
-                                    message: '请账号状态',
+                                    message: messagesStr.select_state,
                                 }],
                                 initialValue: user.locked
                             })(
                                 <RadioGroup>
-                                    <Radio value={0}>正常</Radio>
-                                    <Radio value={1}>锁定</Radio>
+                                    <Radio value={0}>{messagesStr.normal}</Radio>
+                                    <Radio value={1}>{messagesStr.locked}</Radio>
                                 </RadioGroup>
                             )}
                         </FormItem>
@@ -197,4 +202,9 @@ class EditUser extends React.Component {
     }
 }
 
-export default connect()(Form.create({})(EditUser));
+const mapStateToPorps = state => {
+    const { auth, language = 'zhLanguage' } = state.httpData;
+    return { auth, language };
+};
+
+export default connect(mapStateToPorps)(Form.create({})(EditUser));

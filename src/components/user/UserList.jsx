@@ -5,13 +5,16 @@
  */
 import React from "react";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
-import {delRoleList, delUserByid, getUserList} from "../../axios";
+import {delUserByid, getUserList} from "../../axios";
 import {Modal} from 'antd';
 import EditUser from "./EditUser";
 import UpdateUserRole from "./UpdateUserRole";
+import {FormattedMessage} from "react-intl";
+import {connect} from "react-redux";
 
 const confirm = Modal.confirm;
-export default class UserList extends React.Component {
+
+class UserList extends React.Component {
 
     constructor(props) {
         super(props);
@@ -24,54 +27,50 @@ export default class UserList extends React.Component {
         };
         this.renderStateContent = (value, row, index) => {
             return {
-                children: value === 0 ? <span className="status_nomal">正常</span> :
-                    <span className="status_lock">锁定</span>,
+                children: value === 0 ? <span className="status_nomal"><FormattedMessage id="normal"/></span> :
+                    <span className="status_lock"><FormattedMessage id="locked"/></span>,
                 props: {},
             };
         };
         this.renderSexContent = (value, row, index) => {
             return {
-                children: value === 0 ? <span>男</span> :
-                    <span>女</span>,
+                children: value === 0 ? <span><FormattedMessage id="man"/></span> :
+                    <span><FormattedMessage id="woman"/></span>,
                 props: {},
             };
         };
         this.device_user_columns = [
             {
-                title: '用户名',
+                title: <FormattedMessage id="user_name"/>,
                 dataIndex: 'username',
                 width: 150,
-                render: this.renderContent
             },
             {
-                title: '昵称',
+                title: <FormattedMessage id="nickname"/>,
                 dataIndex: 'realname',
                 width: 150,
-                render: this.renderContent
             }, {
-                title: '手机号码',
+                title: <FormattedMessage id="phone"/>,
                 dataIndex: 'phone',
                 width: 250,
-                render: this.renderContent
             }, {
-                title: '性别',
+                title: <FormattedMessage id="sex"/>,
                 dataIndex: 'sex',
                 width: 150,
                 render: this.renderSexContent
             }, {
-                title: '账号状态',
+                title: <FormattedMessage id="user_state"/>,
                 dataIndex: 'locked',
                 width: 250,
                 render: this.renderStateContent
             }, {
-                title: '创建时间',
+                title: <FormattedMessage id="create_time"/>,
                 dataIndex: 'ctime',
                 width: 150,
-                render: this.renderContent
             }, {
-                title: '操作',
+                title: <FormattedMessage id="operation"/>,
                 dataIndex: 'operation',
-                width: 150,
+                width: 250,
                 render: this.renderOperationUser
             }
         ];
@@ -166,13 +165,13 @@ export default class UserList extends React.Component {
         return <div className="table-operation flex-center">
             <span onClick={() => {
                 this.editUser(row)
-            }} className="table-span" style={{ marginRight: '4px' }}>编辑</span>
+            }} className="table-span" style={{ marginRight: '4px' }}><FormattedMessage id="edit"/></span>
             <span onClick={() => {
                 this.resetPwd(row)
-            }} className="table-span" style={{ marginLeft: '4px' }}>修改角色</span>
+            }} className="table-span" style={{ marginLeft: '4px' }}><FormattedMessage id="modify_user_role"/></span>
             <span onClick={() => {
                 this.delUser(row)
-            }} className="table-span" style={{ marginLeft: '4px' }}>删除</span>
+            }} className="table-span" style={{ marginLeft: '4px' }}><FormattedMessage id="delete"/></span>
         </div>;
     };
 
@@ -203,10 +202,14 @@ export default class UserList extends React.Component {
 
     showDeleteConfirm = (row) => {
         let _this = this;
+        let { language } = this.props;
+        let title = language.data === 'zhLanguage' ? "删除用户" : "Delete User";
+        let content_sava = language.data === 'zhLanguage' ? "确认删除" : "confirm deletion";
+        let content_user = language.data === 'zhLanguage' ? "用户" : "user";
         confirm({
-            title: '删除用户',
-            content: <span>确认删除<span
-                style={{ color: "#ff0000", fontSize: "16px", margin: "0 3px" }}>{row.realname}</span>用户</span>,
+            title: title,
+            content: <span>{content_sava} {content_user} <span
+                style={{ color: "#ff0000", fontSize: "16px", margin: "0 3px" }}>{row.realname}</span> ?</span>,
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
@@ -261,13 +264,17 @@ export default class UserList extends React.Component {
                                 onChange={this.handleTableChange}/>
 
                 <EditUser
-                    title="修改用户信息" submitText="保存" cancelText="取消"
+                    title={<FormattedMessage id="modifying_user_information"/>}
+                    submitText={<FormattedMessage id="save_e"/>}
+                    cancelText={<FormattedMessage id="cancel"/>}
                     visible={this.state.visible}
                     user={this.state.user}
                     onUserChange={this.onUserChange}
                 />
                 <UpdateUserRole
-                    title="修改用户角色信息" submitText="保存" cancelText="取消"
+                    title={<FormattedMessage id="modifying_user_role_information"/>}
+                    submitText={<FormattedMessage id="save_e"/>}
+                    cancelText={<FormattedMessage id="cancel"/>}
                     visible={this.state.visibleUpdate}
                     user={this.state.user}
                     onUserRoleChange={this.onUserRoleChange}
@@ -277,3 +284,11 @@ export default class UserList extends React.Component {
     }
 
 }
+
+
+const mapStateToPorps = state => {
+    const { auth, language = 'zhLanguage' } = state.httpData;
+    return { auth, language };
+};
+
+export default connect(mapStateToPorps)(UserList);

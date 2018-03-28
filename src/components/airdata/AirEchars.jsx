@@ -9,6 +9,7 @@ import {Alert, Button, Col, InputNumber} from 'antd';
 import BaseTableData from "../data/BaseTableData";
 import EcharCom from "../bar/EcharCom";
 import BaseEcharView from "../bar/BaseEcharView";
+import {FormattedMessage} from "react-intl";
 
 
 export class AirEchars extends React.Component {
@@ -43,7 +44,7 @@ export class AirEchars extends React.Component {
         return (<Col className="gutter-row" md={24} style={{ paddingRight: '30px' }}>
             <div className="gutter-box" style={{ padding: '2px 15px' }}>
                 <div className="text-title" style={{ paddingTop: '2px' }}>
-                    <span style={{ marginLeft: "15px" }}>{mainTitle}</span>
+                    <span style={{ marginLeft: "15px" }}><FormattedMessage id={mainTitle}/></span>
                 </div>
                 {ecahrs}
             </div>

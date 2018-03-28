@@ -7,6 +7,7 @@ import React from "react";
 import {Button, Card, Select} from "antd";
 import {InputSelectPm} from "./InputSelectPm";
 import {SketchPicker} from 'react-color';
+import {FormattedMessage} from "react-intl";
 
 const Option = Select.Option;
 
@@ -69,7 +70,8 @@ export class PM1WarningCards extends React.Component {
         return (menu && menu.length > 1) ?
             <Select defaultValue={unit} style={{ width: 120, margin: "10px 20px" }} onChange={this.handleChange}>
                 {optionView}
-            </Select> : menu.length > 0 ? <div><span>单位: </span><span>{menu[0]}</span></div> : "";
+            </Select> : menu.length > 0 ?
+                <div><span><FormattedMessage id="unit"/>:  </span><span>{menu[0]}</span></div> : "";
     };
 
     PmonClick = () => {
@@ -199,7 +201,7 @@ export class PM1WarningCards extends React.Component {
             <div style={{ marginTop: '10px', padding: '10px' }}
                  className="flex-space-between">
                 {this.getUnit()}
-                <Button type="primary" onClick={this.PmonClick}>确认设置</Button>
+                <Button type="primary" onClick={this.PmonClick}><FormattedMessage id="save"/></Button>
             </div>
             {displayColorPicker &&
             <div className={isRight ? "fix-center-right" : "fix-center"} onClick={this.onColorPickClick}>

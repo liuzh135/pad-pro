@@ -6,6 +6,7 @@
 import React, {Component} from 'react';
 import {Layout, Menu, Icon} from 'antd';
 import {Link} from 'react-router';
+import {connect} from "react-redux";
 
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -67,6 +68,7 @@ class BaseSideCustom extends Component {
 
     createMenu = v => {
         let submenu = [];
+        let { language } = this.props;
 
         this.menu = [];
         if (v != null) {
@@ -80,16 +82,16 @@ class BaseSideCustom extends Component {
                     for (let suni in submenu) {
                         let subItem = submenu[suni];
                         submenuView.push(<Menu.Item key={subItem.path}><Link
-                            to={subItem.path}>{subItem.title}</Link></Menu.Item>);
+                            to={subItem.path}>{language.data === 'zhLanguage' ?subItem.title:subItem.enTitle}</Link></Menu.Item>);
                     }
                     this.menu.push(<SubMenu
                         key={menuitem.menu}
-                        title={<span><Icon type={icon}/><span className="nav-text">{menuitem.title}</span></span>}
+                        title={<span><Icon type={icon}/><span className="nav-text">{language.data === 'zhLanguage' ?menuitem.title:menuitem.enTitle}</span></span>}
                     >{submenuView}</SubMenu>);
                 } else {
                     this.menu.push(<Menu.Item key={menuitem.menu}>
                         <Link to={menuitem.menu}><Icon type={icon}/><span
-                            className="nav-text">{menuitem.title}</span></Link>
+                            className="nav-text">{language.data === 'zhLanguage' ?menuitem.title:menuitem.enTitle}</span></Link>
                     </Menu.Item>);
                 }
             }
@@ -135,5 +137,11 @@ class BaseSideCustom extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    const { responsive = { data: {} }, language = 'zhLanguage' } = state.httpData;
+    return { responsive, language };
+};
 
-export default BaseSideCustom;
+
+export default connect(mapStateToProps)(BaseSideCustom);
+

@@ -12,6 +12,7 @@ import BaseEcharView from "../bar/BaseEcharView";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
 import {getDeviceDataByCityName} from "../../axios";
 import {BaseComponent} from "../BaseComponent";
+import {FormattedMessage} from "react-intl";
 
 
 export class OnlineDeviceInfo extends BaseComponent {
@@ -24,6 +25,46 @@ export class OnlineDeviceInfo extends BaseComponent {
             pagination: {},
             loading: false
         }
+
+        //默认表头 适配
+        this.comIssue_columns = [
+            {
+                title: <FormattedMessage id="monitoring_site_id"/>,
+                dataIndex: 'deviceId',
+                width: 100,
+                render: this.renderContent
+            }, {
+                title: <FormattedMessage id="pm1"/>,
+                Entitle: 'PM1',
+                width: 100,
+                dataIndex: 'pm1',
+                render: this.renderContent
+            }, {
+                title: <FormattedMessage id="pm10"/>,
+                Entitle: 'PM10',
+                width: 100,
+                dataIndex: 'pm10',
+                render: this.renderContent
+            }, {
+                title: <FormattedMessage id="pm25"/>,
+                Entitle: 'PM25',
+                width: 100,
+                dataIndex: 'pm25',
+                render: this.renderContent
+            }, {
+                title: <FormattedMessage id="primary_pollutants"/>,
+                Entitle: 'Primary Pollutants',
+                width: 100,
+                dataIndex: 'mainPm',
+                render: this.renderContent
+            }, {
+                title: <FormattedMessage id="upload_time"/>,
+                Entitle: 'Upload Time',
+                width: 150,
+                dataIndex: 'upTime',
+                render: this.renderContent
+            }
+        ];
     }
 
     componentDidMount() {
@@ -123,7 +164,7 @@ export class OnlineDeviceInfo extends BaseComponent {
         let tableComs = new BaseTableData();
         let devices = this.state.devicelist || [];
 
-        return (<ExtBaseicTable columns={tableComs.comIssue_columns}
+        return (<ExtBaseicTable columns={this.comIssue_columns}
                                 data={devices}
                                 pagination={this.state.pagination}
                                 loading={this.state.loading}

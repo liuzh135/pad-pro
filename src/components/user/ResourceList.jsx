@@ -7,6 +7,7 @@ import React from "react";
 import ExtBaseicTable from "../tables/ExtBaseicTable";
 import {Modal} from 'antd';
 import {delPermissionList, getPermissionList} from "../../axios";
+import {FormattedMessage} from "react-intl";
 
 const confirm = Modal.confirm;
 export default class ResourceList extends React.Component {
@@ -19,56 +20,58 @@ export default class ResourceList extends React.Component {
             loading: false,
             visibleDel: false
         };
+
+        this.renderStateContent = (value, row, index) => {
+            return {
+                children: value === 1 ? <span className="status_nomal"><FormattedMessage id="normal"/></span> :
+                    <span className="status_lock"><FormattedMessage id="locked"/></span>,
+                props: {},
+            };
+        };
+
         this.device_resource_columns = [
             {
-                title: '编号',
+                title: <FormattedMessage id="permissionId"/>,
                 dataIndex: 'permissionId',
                 width: 150,
-                render: this.renderContent
             }, {
-                title: '所属系统',
+                title: <FormattedMessage id="systemId"/>,
                 dataIndex: 'systemId',
                 width: 150,
-                render: this.renderContent
             }, {
-                title: '所属上级',
+                title: <FormattedMessage id="pid"/>,
                 dataIndex: 'pid',
                 width: 150,
-                render: this.renderContent
             }, {
-                title: '权限名称',
+                title: <FormattedMessage id="name"/>,
                 dataIndex: 'name',
-                width: 150,
-                render: this.renderContent
+                width: 250,
             }, {
-                title: '权限值',
+                title: <FormattedMessage id="permissionValue"/>,
                 dataIndex: 'permissionValue',
                 width: 350,
-                render: this.renderContent
             }, {
-                title: '路径',
+                title: <FormattedMessage id="uri"/>,
                 dataIndex: 'uri',
                 width: 250,
-                render: this.renderContent
-            },{
-                title: '状态',
+            }, {
+                title: <FormattedMessage id="status"/>,
                 dataIndex: 'status',
                 width: 150,
-                render: this.renderContent
+                render: this.renderStateContent
             }, {
-                title: '创建时间',
+                title: <FormattedMessage id="ctime"/>,
                 dataIndex: 'ctime',
                 width: 250,
-                render: this.renderContent
             }, {
-                title: '操作',
+                title: <FormattedMessage id="operation"/>,
                 dataIndex: 'operation',
                 width: 150,
                 render: this.renderOperationRole
             }
         ];
-
     }
+
 
     componentDidMount() {
         this.getPermissionList({
@@ -146,10 +149,10 @@ export default class ResourceList extends React.Component {
         return <div className="table-operation flex-center">
             <span onClick={() => {
                 this.editRole(row)
-            }} className="table-span" style={{ marginRight: '4px' }}>编辑</span>
+            }} className="table-span" style={{ marginRight: '4px' }}> <FormattedMessage id="edit"/></span>
             <span onClick={() => {
                 this.delRole(row)
-            }} className="table-span" style={{ marginLeft: '4px' }}>删除</span>
+            }} className="table-span" style={{ marginLeft: '4px' }}> <FormattedMessage id="delete"/></span>
         </div>;
     };
 
@@ -200,10 +203,6 @@ export default class ResourceList extends React.Component {
             <div className="input-search" style={{ marginTop: '0' }}>
                 <ExtBaseicTable columns={this.device_resource_columns}
                                 data={devices}
-                                rowKey={rowkey => {
-                                    if (rowkey.status === 1) rowkey.status = <span className="status_nomal">正常</span>;
-                                    return rowkey.permissionId;
-                                }}
                                 pagination={this.state.pagination}
                                 loading={this.state.loading}
                                 bordered={true}

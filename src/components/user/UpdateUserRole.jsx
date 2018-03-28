@@ -9,6 +9,8 @@ import {connect} from "react-redux";
 import {getUserRoleInfo, updataUserByid} from "../../axios";
 import CheckBoxGradio from "./CheckBoxGradio";
 import {message} from "antd/lib/index";
+import enUS from "../../locale/en_US";
+import zhCN from "../../locale/zh_CN";
 
 class UpdateUserRole extends React.Component {
 
@@ -122,16 +124,19 @@ class UpdateUserRole extends React.Component {
         let upmsRoles = this.state.upmsRoles;
         let upmsUserRoles = this.state.upmsUserRoles;
 
+        let { language } = this.props;
+        let messagesStr = language.data === 'zhLanguage' ? zhCN : enUS;
+
         console.log("--- upmsUserRoles->" + JSON.stringify(upmsUserRoles));
         return (
             <Modal
                 visible={visible}
-                title={<span>修改<span
+                title={<span>{messagesStr.modify}<span
                     style={{
                         color: "#ff0000",
                         fontSize: "16px",
                         margin: "0 3px"
-                    }}>{user.username}</span>用户角色</span>}
+                    }}>{user.username}</span>{messagesStr.user_role}</span>}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 footer={[
@@ -141,7 +146,7 @@ class UpdateUserRole extends React.Component {
                     </Button>,
                 ]}
             >
-                <CheckBoxGradio pageName="选择角色" upmsRoles={upmsRoles} upmsUserRoles={upmsUserRoles}
+                <CheckBoxGradio pageName={messagesStr.select_role} upmsRoles={upmsRoles} upmsUserRoles={upmsUserRoles}
                                 onChange={this.onChange}/>
 
             </Modal>
@@ -150,4 +155,10 @@ class UpdateUserRole extends React.Component {
 
 }
 
-export default connect()(Form.create({})(UpdateUserRole));
+const mapStateToPorps = state => {
+    const { auth, language = 'zhLanguage' } = state.httpData;
+    return { auth, language };
+};
+
+
+export default connect(mapStateToPorps)(Form.create({})(UpdateUserRole));

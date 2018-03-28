@@ -12,6 +12,7 @@ import {getDeviceDataHistoryByDeviceId, getDeviceRealData} from '../../axios';
 import {VirtualMachineView} from "./VirtualMachineView";
 import {HistoryMachineView} from "../manager/HistoryMachineView";
 import SelectCityAndDevice from "./SelectCityAndDevice";
+import {FormattedMessage} from "react-intl";
 
 class RealDeviceData extends React.Component {
 
@@ -239,7 +240,7 @@ class RealDeviceData extends React.Component {
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff'}}>
                 <div className="gutter-box" style={{ padding: '2px 15px' }}>
                     <div className="text-title">
-                        <span style={{ marginLeft: "15px" }}>设备实时采集数据</span>
+                        <span style={{ marginLeft: "15px" }}><FormattedMessage id="real_data_acquisition"/></span>
                     </div>
                     <div style={{ border: '1px solid #C7D3E3' }}>
                         <SelectCityAndDevice selectDevice={this.getSelectDevice} showDevice={true}/>

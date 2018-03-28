@@ -11,6 +11,7 @@ import {bindActionCreators} from 'redux';
 import {fetchData, receiveData} from '@/action';
 import {PM1WarningCards} from "./PM1WarningCards";
 import {TempWarningCards} from "./TempWarningCards";
+import {FormattedMessage} from "react-intl";
 
 class DeviceWarning extends React.Component {
 
@@ -62,19 +63,19 @@ class DeviceWarning extends React.Component {
 
     getAirWarningData = () => {
         let pm1 = [];
-        pm1.push(this.createPm1(0, 0, 50, 0, 50, 0, 50, "#55C300", "优"));
-        pm1.push(this.createPm1(1, 50, 100, 50, 100, 50, 100, "#F3CB00", "良"));
-        pm1.push(this.createPm1(2, 100, 150, 100, 150, 100, 150, "#FF9200", "轻度"));
-        pm1.push(this.createPm1(3, 150, 200, 150, 200, 150, 200, "#FF2C1A", "中度"));
-        pm1.push(this.createPm1(4, 200, 300, 200, 300, 200, 300, "#ED2FA6", "重度"));
+        pm1.push(this.createPm1(0, 0, 50, 0, 50, 0, 50, "#55C300", <FormattedMessage id="level_excellent"/>));
+        pm1.push(this.createPm1(1, 50, 100, 50, 100, 50, 100, "#F3CB00", <FormattedMessage id="level_good"/>));
+        pm1.push(this.createPm1(2, 100, 150, 100, 150, 100, 150, "#FF9200", <FormattedMessage id="level_light"/>));
+        pm1.push(this.createPm1(3, 150, 200, 150, 200, 150, 200, "#FF2C1A", <FormattedMessage id="level_moderate"/>));
+        pm1.push(this.createPm1(4, 200, 300, 200, 300, 200, 300, "#ED2FA6", <FormattedMessage id="level_severe"/>));
         return pm1;
     };
 
     getTempWarningData = () => {
         let pm1 = [];
-        pm1.push(this.createPm2(0, 50, 0, 50, "#5fbec3", "上限"));
-        pm1.push(this.createPm2(0, 0, 0, 50, "#55C300", "下限"));
-        pm1.push(this.createPm1(0, 0, 50, 0, 50, 0, 50, "#55C300", "正常"));
+        pm1.push(this.createPm2(0, 50, 0, 50, "#5fbec3", <FormattedMessage id="upper_limit"/>));
+        pm1.push(this.createPm2(0, 0, 0, 50, "#55C300", <FormattedMessage id="lower_limit"/>));
+        pm1.push(this.createPm1(0, 0, 50, 0, 50, 0, 50, "#55C300", <FormattedMessage id="normal"/>));
         return pm1;
     };
 
@@ -86,22 +87,37 @@ class DeviceWarning extends React.Component {
         const siUnit = ["%"];
         let cards = [];
         let color = this.state.color + 1;
-        cards.push(<PM1WarningCards showColor={color} title="pm1空气指数" key={0} menu={menu}
+        cards.push(<PM1WarningCards showColor={color} title={<span>PM1 <FormattedMessage id="air_index"/></span>}
+                                    key={0}
+                                    menu={menu}
                                     warnData={this.getAirWarningData()}/>);
-        cards.push(<PM1WarningCards showColor={color} title="PM2.5空气指数" key={1} menu={menu}
+        cards.push(<PM1WarningCards showColor={color} title={<span>PM2.5 <FormattedMessage id="air_index"/></span>}
+                                    key={1}
+                                    menu={menu}
                                     warnData={this.getAirWarningData()}/>);
-        cards.push(<PM1WarningCards showColor={color} title="PM10空气指数" key={2} menu={menu}
+        cards.push(<PM1WarningCards showColor={color} title={<span>PM10 <FormattedMessage id="air_index"/></span>}
+                                    key={2}
+                                    menu={menu}
                                     warnData={this.getAirWarningData()}/>);
-        cards.push(<PM1WarningCards showColor={color} title="TVOG空气指数" key={3} menu={menu} isRight={true}
+        cards.push(<PM1WarningCards showColor={color} title={<span>TVOG <FormattedMessage id="air_index"/></span>}
+                                    key={3}
+                                    menu={menu} isRight={true}
                                     warnData={this.getAirWarningData()}/>);
-        cards.push(<PM1WarningCards showColor={color} title="HCHO空气指数" key={4} menu={menu1}
+        cards.push(<PM1WarningCards showColor={color} title={<span>HCHO <FormattedMessage id="air_index"/></span>}
+                                    key={4}
+                                    menu={menu1}
                                     warnData={this.getAirWarningData()}/>);
-        cards.push(<PM1WarningCards showColor={color} title="ECO2空气指数" key={5} menu={menu1}
+        cards.push(<PM1WarningCards showColor={color} title={<span>ECO2 <FormattedMessage id="air_index"/></span>}
+                                    key={5}
+                                    menu={menu1}
                                     warnData={this.getAirWarningData()}/>);
 
-        cards.push(<TempWarningCards showColor={color} title="TEMP参数范围" key={6} menu={tempUnit}
+        cards.push(<TempWarningCards showColor={color}
+                                     title={<span>TEMP <FormattedMessage id="parameter_range"/></span>}
+                                     key={6} menu={tempUnit}
                                      warnData={this.getTempWarningData()}/>);
-        cards.push(<TempWarningCards showColor={color} title="湿度参数范围" key={7} menu={siUnit} isRight={true}
+        cards.push(<TempWarningCards showColor={color} title={<span><FormattedMessage id="humidity"/> <FormattedMessage
+            id="parameter_range"/></span>} key={7} menu={siUnit} isRight={true}
                                      warnData={this.getTempWarningData()}/>);
         this.setState({
             cards: cards,
@@ -120,7 +136,7 @@ class DeviceWarning extends React.Component {
         return (
             <Layout style={{ backgroundColor: "#fff" }} onClick={this.onWindowClick}>
                 <div className="text-title">
-                    <span style={{ marginLeft: "15px" }}>设备预警</span>
+                    <span style={{ marginLeft: "15px" }}><FormattedMessage id="device_warning"/></span>
                 </div>
                 <section className="flex flex-gongge">
                     {airCards}

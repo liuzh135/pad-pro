@@ -11,6 +11,7 @@ import {fetchData, receiveData} from '@/action';
 import SearchInput from "../user/SearchInput";
 import RoleList from "../user/RoleList";
 import UserList from "../user/UserList";
+import {FormattedMessage} from "react-intl";
 
 class UserManager extends React.Component {
 
@@ -49,9 +50,10 @@ class UserManager extends React.Component {
         return (
             <div className="gutter-example button-demo" style={{ backgroundColor: '#fff' }}>
                 <div className="text-title">
-                    <span style={{ marginLeft: "15px" }}>用户管理</span>
+                    <span style={{ marginLeft: "15px" }}><FormattedMessage id="user_manager"/></span>
                 </div>
-                <SearchInput onDataChange={this.onDataChange} indexName="用户名" addName="添加用户" isRole={2} onInputClick={this.onSearch}/>
+                <SearchInput onDataChange={this.onDataChange} indexName={<FormattedMessage id="user_name"/>}
+                             addName={<FormattedMessage id="user_add"/>} isRole={2} onInputClick={this.onSearch}/>
                 <UserList addData={this.state.addData} searchValue={searchValue}/>
                 {
                     <style>

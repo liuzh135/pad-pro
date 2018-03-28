@@ -6,10 +6,12 @@
 import React from "react";
 import {Button, Form, Modal} from "antd";
 import {connect} from "react-redux";
-import {getRoleJurInfo, updataRoleByid} from "../../axios";
+import {getRoleJurInfo, updataRoleByid, updataRoleByids} from "../../axios";
 import SelectBox from "./SelectBox";
 import SelectJurBase from "./SelectJurBase";
 import {message} from "antd/lib/index";
+import enUS from "../../locale/en_US";
+import zhCN from "../../locale/zh_CN";
 
 class UpdateRoleJur extends React.Component {
 
@@ -67,6 +69,8 @@ class UpdateRoleJur extends React.Component {
         console.log("---修改角色权限---");
         let checkedKeys = this.updateRole;
         let premisslist = this.getPremissList(checkedKeys) || [];
+
+        console.log('getPremissList = ', JSON.stringify(premisslist));
         //提交权限列表
         const { role } = this.props;
         updataRoleByid(role.roleId, premisslist).then((data) => {
@@ -89,11 +93,19 @@ class UpdateRoleJur extends React.Component {
     };
 
 
-
     getPremissList = (checkedKeys) => {
-        let roleJurInfo = this.state.roleJurInfo || {};
-        console.log("---permissList--" + JSON.stringify(roleJurInfo));
-        return [];
+        let permissListCheck = [];
+        checkedKeys.map((data, index) => {
+            let arr = data.split("-");
+            if (arr && arr.length > 0) {
+                permissListCheck.push({
+                    id: arr[arr.length - 1],
+                    checked: true
+                })
+            }
+
+        });
+        return permissListCheck;
     };
 
     selectOk = (checkedKeys) => {
@@ -107,11 +119,18 @@ class UpdateRoleJur extends React.Component {
         let visible = this.state.visible;
         let addLoading = this.state.addLoading;
         let roleJurInfo = this.state.roleJurInfo;
+
+        let { language } = this.props;
+        let messagesStr = language.data === 'zhLanguage' ? zhCN : enUS;
         return (
             <Modal
                 visible={visible}
-                title={<span>修改<span
-                    style={{ color: "#ff0000", fontSize: "16px", margin: "0 3px" }}>{role.title}</span>角色权限</span>}
+                title={<span>{messagesStr.modify}<span
+                    style={{
+                        color: "#ff0000",
+                        fontSize: "16px",
+                        margin: "0 3px"
+                    }}>{role.title}</span>{messagesStr.role_permissions}</span>}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 footer={[
@@ -129,4 +148,9 @@ class UpdateRoleJur extends React.Component {
 
 }
 
-export default connect()(Form.create({})(UpdateRoleJur));
+const mapStateToPorps = state => {
+    const { auth, language = 'zhLanguage' } = state.httpData;
+    return { auth, language };
+};
+
+export default connect(mapStateToPorps)(Form.create({})(UpdateRoleJur));

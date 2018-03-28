@@ -13,10 +13,12 @@ import BaseEcharView from "../bar/BaseEcharView";
 import EcharCom from "../bar/EcharCom";
 import EcharBar from "../bar/EcharBar";
 import {getDeviceByDate, getDeviceByHour} from '../../axios';
+import {connect} from "react-redux";
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-export default class HistoryEcharView extends React.Component {
+
+class HistoryEcharView extends React.Component {
 
     constructor(props) {
         super(props);
@@ -205,9 +207,14 @@ export default class HistoryEcharView extends React.Component {
             }
         }
 
+
         let title = (echarsData && echarsData.data && echarsData.data.title) || "设备历史数据";
 
-        let subtitle = type === 1 ? "按小时查看" : type === 2 ? "按天每小时查看" : "按月每天查看";
+        let language = this.props.language;
+        let subtitle = type === 1 ? language.data === "zhLanguage"?"按小时每分钟查看":"check by hourly"
+            : type === 2 ? language.data === "zhLanguage"?"按天每小时查看":"check by day"
+                : language.data === "zhLanguage"?"按月每天查看":"check by month";
+
         //刷新2次  解决echars 的宽度问题
         let first = this.state.first || false;
         let ecahrs = !first ? "" :
@@ -239,3 +246,11 @@ export default class HistoryEcharView extends React.Component {
         </Col>);
     }
 }
+
+
+const mapStateToPorps = state => {
+    const { auth, language = 'zhLanguage' } = state.httpData;
+    return { auth, language };
+};
+
+export default connect(mapStateToPorps)(HistoryEcharView);

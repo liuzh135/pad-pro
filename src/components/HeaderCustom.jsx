@@ -6,7 +6,7 @@ import {Dropdown, Layout, Menu, message} from 'antd';
 import {gitOauthInfo, gitOauthToken} from '../axios';
 import {queryString} from '../utils';
 import avater from '../style/imgs/short_ico.png';
-
+import {FormattedMessage, injectIntl} from 'react-intl';
 import {connect} from 'react-redux';
 import {receiveData} from '@/action';
 import {bindActionCreators} from 'redux';
@@ -46,6 +46,7 @@ class HeaderCustom extends Component {
     onClick = ({ key }) => {
         const { receiveData } = this.props;
         receiveData && receiveData(key, 'language');
+        this.logout();
     };
 
     menu = (
@@ -57,7 +58,10 @@ class HeaderCustom extends Component {
 
     menuUser = (
         <Menu onClick={this.logout}>
-            <Menu.Item key="logout">退出登录</Menu.Item>
+            <Menu.Item key="logout"> <FormattedMessage
+                id="logout"
+                defaultMessage={'Logout'}
+            /></Menu.Item>
         </Menu>
     );
 
@@ -88,7 +92,10 @@ class HeaderCustom extends Component {
                     padding: '5px',
                     marginLeft: '5px',
                     marginBottom: '8px'
-                }}>空气管理系统</span>
+                }}><FormattedMessage
+                    id="erpName"
+                    defaultMessage={'Air inspection management system'}
+                /></span>
                 {/*<Dropdown overlay={this.menu} trigger={['click']}>*/}
                 {/*<a className="ant-dropdown-link" href="#"*/}
                 {/*style={{ color: "#fff", fontSize: '14px', padding: '5px', marginLeft: '5px' }}>*/}
@@ -100,7 +107,10 @@ class HeaderCustom extends Component {
                     <Dropdown overlay={this.menuUser}>
                         <a className="ant-dropdown-link" href="javascript:void(0);"
                            style={{ color: "#fff", fontSize: '14px', padding: '5px', marginLeft: '5px' }}>
-                            系统管理员
+                            <FormattedMessage
+                                id="user"
+                                defaultMessage={'Administrators'}
+                            />
                         </a>
                     </Dropdown>
                 </div>
@@ -136,4 +146,4 @@ const mapDispatchToProps = dispatch => ({
     receiveData: bindActionCreators(receiveData, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderCustom);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(HeaderCustom));
