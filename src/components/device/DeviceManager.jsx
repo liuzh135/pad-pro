@@ -63,6 +63,13 @@ class DeviceManager extends React.Component {
         ];
     }
 
+    componentDidMount() {
+        this.getDevices({
+            rows: 10,
+            page: 1
+        });
+    }
+
     renderOperationContent = (value, row, index) => {
         return <div className="table-operation flex-center">
             <a href={"/#/app/device/realdevicedata?deviceId=" + row.deviceId} style={{ marginRight: '4px' }}><FormattedMessage id="real_time_data"/></a><a
@@ -70,13 +77,6 @@ class DeviceManager extends React.Component {
             href={"/#/app/device/historydata?deviceId=" + row.deviceId}> <FormattedMessage id="history_time_data"/></a>
         </div>;
     };
-
-    componentDidMount() {
-        this.getDevices({
-            rows: 10,
-            page: 1
-        });
-    }
 
     getDevices = (params = {}) => {
         this.setState({ loading: true });
@@ -119,7 +119,6 @@ class DeviceManager extends React.Component {
     };
 
     render() {
-        let tableComs = new BaseTableData();
         let devices = this.state.devicelist || [];
         // console.log("devicelist :" + JSON.stringify(devices));
         return (
