@@ -33,12 +33,7 @@ class DeviceManager extends React.Component {
         };
 
         //默认表头 适配
-        this.device_columns = [
-            {
-                title: <FormattedMessage id="device_id"/>,
-                dataIndex: 'deviceId',
-                width: 150,
-            }, {
+        this.device_columns = [{
                 title: <FormattedMessage id="device_name"/>,
                 dataIndex: 'deviceName',
                 width: 150,
@@ -156,6 +151,7 @@ class DeviceManager extends React.Component {
                                 ,.ant-table-row-level-0 > td:nth-child(2)
                                 ,.ant-table-row-level-0 > td:nth-child(3)
                                 ,.ant-table-row-level-0 > td:nth-child(4)
+                                ,.ant-table-row-level-0 > td:nth-child(5)
                                 ,.ant-table-row-level-0 > td:nth-child(6)
                                 ,.ant-table-row-level-0 > td:nth-child(7)
                                 , .ant-table-thead > tr > th:nth-child(1)

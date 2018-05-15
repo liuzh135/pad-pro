@@ -39,12 +39,14 @@ export default class SelectJurBase extends React.Component {
     setexpandKey = (list, perentData, key) => {
         list.map((item, index) => {
             if (item.children) {
-                checkedKeys.push(perentData ? (key ? key + item.id : perentData.id + "-" + item.id) : item.id.toString());
+                if (!!item.checked) {
+                    checkedKeys.push(perentData ? (key ? key + item.id : perentData.id + "-" + item.id) : item.id.toString());
+                }
                 expandedKeys.push(perentData ? (key ? key + item.id : perentData.id + "-" + item.id) : item.id.toString());
                 perentData ? this.setexpandKey(item.children, item, (key ? key + item.id + "-" : perentData.id + "-" + item.id + "-")) :
                     this.setexpandKey(item.children, item)
 
-            } else {
+            } else if (!!item.checked) {
                 checkedKeys.push(key ? key + item.id.toString() : item.id.toString())
             }
         })
@@ -81,7 +83,8 @@ export default class SelectJurBase extends React.Component {
         return data.map((item, index) => {
             if (item.children) {
                 return (
-                    <TreeNode title={item.name}
+                    <TreeNode disableCheckbox={item.nocheck}
+                              title={item.name}
                               key={perentData ? (key ? key + item.id : perentData.id + "-" + item.id) : item.id.toString()}
                               dataRef={item}>
                         {perentData ? this.renderTreeNodes(item.children, item, (key ? key + item.id + "-" : perentData.id + "-" + item.id + "-")) :
@@ -89,7 +92,8 @@ export default class SelectJurBase extends React.Component {
                     </TreeNode>
                 );
             } else {
-                return (<TreeNode title={item.name} key={key ? key + item.id.toString() : item.id.toString()}
+                return (<TreeNode disableCheckbox={item.nocheck} title={item.name}
+                                  key={key ? key + item.id.toString() : item.id.toString()}
                                   dataRef={item}/>)
             }
         });

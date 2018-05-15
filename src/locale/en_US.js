@@ -113,5 +113,11 @@ const en_US = {
     select_role: 'Select Role',
     input_role_name: 'Please input the role name',
     permissions_select: 'Select Permissions',
+    permissions_name: 'Name',
+    input_permissions_name: 'Please enter the name of the privilege resource',
+    permissions_value: 'Permissions Value',
+    input_permissions_value: 'Please enter the permissions value',
+    route: 'Route',
+    input_route: 'Please enter the path',
 };
 export default en_US;

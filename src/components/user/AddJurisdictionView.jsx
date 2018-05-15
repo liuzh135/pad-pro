@@ -8,6 +8,8 @@ import {Button, Form, Input, Modal} from "antd";
 import RadSelect from "./RadSelect";
 import SelectResource from "./SelectResource";
 import {connect} from "react-redux";
+import zhCN from "../../locale/zh_CN";
+import enUS from "../../locale/en_US";
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -62,7 +64,7 @@ class AddJurisdictionView extends React.Component {
         // }
         console.log("--save-->");
         this.props.form.validateFields(
-            (err,values) => {
+            (err, values) => {
                 if (!err) {
                     console.info('success');
                     console.info('success - resName = ' + values.resName);
@@ -112,7 +114,7 @@ class AddJurisdictionView extends React.Component {
 
 
     render() {
-        const { title,  submitText, cancelText } = this.props;
+        const { title, submitText, cancelText } = this.props;
         let rourceList = this.state.rourceList || [];
         let pidList = this.state.pidList || [];
         if (pidList.length === 0) {
@@ -137,6 +139,9 @@ class AddJurisdictionView extends React.Component {
 
         let visible = this.state.visible;
         let addLoading = this.state.addLoading;
+
+        let { language } = this.props;
+        let messagesStr = language.data === 'zhLanguage' ? zhCN : enUS;
         return (
             visible ?
                 <Modal
@@ -151,7 +156,8 @@ class AddJurisdictionView extends React.Component {
                         </Button>,
                     ]}
                 >
-                    <RadSelect onChange={this.onChange} selectList={selectArray} selectId={radioId} pageName="权限选择"/>
+                    <RadSelect onChange={this.onChange} selectList={selectArray} selectId={radioId}
+                               pageName={messagesStr.permissions_select}/>
 
                     <div className="role-sty-t" style={{ margin: 5, borderTop: "#C7D3E3 solid 1px" }}>
                         <SelectResource valueSelect={this.state.pidValue} handleChange={this.handleChange}
@@ -160,34 +166,34 @@ class AddJurisdictionView extends React.Component {
                         {radView}
 
                         <div style={{ marginTop: 20 }}>
-                            <FormItem {...formItemLayout} label="名称">
+                            <FormItem {...formItemLayout} label={messagesStr.permissions_name}>
                                 {getFieldDecorator('resName', {
                                     rules: [{
                                         required: true,
-                                        message: '请输入权限资源名称',
+                                        message: messagesStr.input_permissions_name,
                                     }],
                                 })(
-                                    <Input placeholder="请输入权限资源名称"/>
+                                    <Input placeholder={messagesStr.input_permissions_name}/>
                                 )}
                             </FormItem>
-                            {radioId !== 0 ? <FormItem {...formItemLayout} label="权限值">
+                            {radioId !== 0 ? <FormItem {...formItemLayout} label={messagesStr.permissions_value}>
                                 {getFieldDecorator('resValue', {
                                     rules: [{
                                         required: true,
-                                        message: '请输入权限值',
+                                        message: messagesStr.input_permissions_value,
                                     }],
                                 })(
-                                    <Input placeholder="请输入权限值"/>
+                                    <Input placeholder={messagesStr.input_permissions_value}/>
                                 )}
                             </FormItem> : ""}
-                            {radioId !== 0 ? <FormItem {...formItemLayout} label="路径">
+                            {radioId !== 0 ? <FormItem {...formItemLayout} label={messagesStr.route}>
                                 {getFieldDecorator('resUrl', {
                                     rules: [{
                                         required: true,
-                                        message: '请输入路径',
+                                        message: messagesStr.input_route,
                                     }],
                                 })(
-                                    <Input placeholder="请输入路径"/>
+                                    <Input placeholder={messagesStr.input_route}/>
                                 )}
                             </FormItem> : ""}
                         </div>
@@ -199,4 +205,10 @@ class AddJurisdictionView extends React.Component {
 
 }
 
-export default connect()(Form.create()(AddJurisdictionView));
+const mapStateToPorps = state => {
+    const { auth, language = 'zhLanguage' } = state.httpData;
+    return { auth, language };
+};
+
+
+export default connect(mapStateToPorps)(Form.create()(AddJurisdictionView));

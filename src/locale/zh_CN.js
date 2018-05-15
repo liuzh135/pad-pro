@@ -113,5 +113,12 @@ const zh_CN = {
     select_role: '选择角色',
     input_role_name: '请输入角色名称',
     permissions_select: '权限选择',
+    permissions_name: '名称',
+    input_permissions_name: '请输入权限资源名称',
+    permissions_value: '权限值',
+    input_permissions_value: '请输入权限值',
+    route: '路径',
+    input_route: '请输入路径',
+
 };
 export default zh_CN;

@@ -31,6 +31,7 @@ class RealDataAir extends React.Component {
             params: {}
         };
         this.timer = {};
+        this.timerMap = {};
 
     }
 
@@ -47,11 +48,20 @@ class RealDataAir extends React.Component {
                 first: true
             });
         }
+        this.startGetData();
     }
 
     componentWillUnmount() {
         this.timer && clearTimeout(this.timer);
+        this.timerMap && clearTimeout(this.timerMap);
     }
+
+    //循环请求地图数据
+    startGetData = () => {
+        this.timerMap = setInterval(() => {
+            this.getDeviceMap();
+        }, 5000)
+    };
 
     /**
      *  获取地图设备数据 展示UI
@@ -123,10 +133,12 @@ class RealDataAir extends React.Component {
             showToast: true
         });
         this.timer && clearTimeout(this.timer);
+        this.timerMap && clearTimeout(this.timerMap);
         this.timer = setTimeout(() => {
             this.setState({
                 showToast: false
             });
+            this.startGetData();
         }, 8000)
     };
 
@@ -203,11 +215,11 @@ class RealDataAir extends React.Component {
     getPmView = () => {
         return <div className="toast_base_bottom ">
             <div className='width-auto pm-1'><span className='text_pm'><FormattedMessage id="level_1"/></span></div>
-            <div className='width-auto pm-2'><span className='text_pm'><FormattedMessage id="level_2" /></span></div>
-            <div className='width-auto pm-3'><span className='text_pm'><FormattedMessage id="level_3" /></span></div>
-            <div className='width-auto pm-4'><span className='text_pm'><FormattedMessage id="level_4" /></span></div>
-            <div className='width-auto pm-5'><span className='text_pm'><FormattedMessage id="level_5" /></span></div>
-            <div className='width-auto pm-6'><span className='text_pm'><FormattedMessage id="level_6" /></span></div>
+            <div className='width-auto pm-2'><span className='text_pm'><FormattedMessage id="level_2"/></span></div>
+            <div className='width-auto pm-3'><span className='text_pm'><FormattedMessage id="level_3"/></span></div>
+            <div className='width-auto pm-4'><span className='text_pm'><FormattedMessage id="level_4"/></span></div>
+            <div className='width-auto pm-5'><span className='text_pm'><FormattedMessage id="level_5"/></span></div>
+            <div className='width-auto pm-6'><span className='text_pm'><FormattedMessage id="level_6"/></span></div>
         </div>
     };
 
